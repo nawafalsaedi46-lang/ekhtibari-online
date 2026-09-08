@@ -52,6 +52,11 @@ async function loadAccount(){
   try{
     const me=await api("/api/me");
     currentAccountTeacher=me.teacher;
+
+    if(typeof window.useTeacherWorkspace === "function"){
+      window.useTeacherWorkspace(me.teacher.id);
+    }
+
     document.getElementById("accountTeacherName").textContent=me.teacher.name;
     document.getElementById("accountLicense").textContent=me.teacher.license;
     await loadExamList();

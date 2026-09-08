@@ -2,7 +2,7 @@ let questions = [];
 let editingQuestionIndex = -1;
 let editingItemIndex = -1;
 let currentVersion = "student";
-const AUTO_SAVE_KEY = "ekhtibari_print_pro_v1";
+let AUTO_SAVE_KEY = null;
 
 const $ = id => document.getElementById(id);
 const questionType = $("questionType");
@@ -589,6 +589,7 @@ function resizeImage(file,maxSize,cb){
 }
 
 function save(){
+  if(!AUTO_SAVE_KEY)return;
   const form={};
   formIds.forEach(id=>form[id]=$(id)?.value??"");
   try{
@@ -597,6 +598,7 @@ function save(){
 }
 
 function load(){
+  if(!AUTO_SAVE_KEY)return;
   try{
     const s=localStorage.getItem(AUTO_SAVE_KEY);
     if(!s)return;
@@ -607,6 +609,30 @@ function load(){
     currentVersion=d.currentVersion==="answer"?"answer":"student";
   }catch(e){console.warn(e)}
 }
+
+function useTeacherWorkspace(teacherId){
+  if(!teacherId)return;
+
+  AUTO_SAVE_KEY = "ekhtibari_teacher_" + teacherId;
+
+  questions = [];
+  schoolLogoData = "";
+  currentVersion = "student";
+
+  load();
+
+  renderQuestionsList();
+  renderPreview();
+
+  if(versionBadge){
+    versionBadge.textContent =
+      currentVersion === "answer"
+        ? "نموذج الإجابة"
+        : "نسخة الطالب";
+  }
+}
+
+window.useTeacherWorkspace = useTeacherWorkspace;
 
 function refreshAll(){
   renderQuestionsList();
@@ -846,7 +872,6 @@ window.addEventListener("beforeprint",()=>{
   if(!printRoot.children.length) buildPrintPages();
 });
 
-load();
 activateType("mcq");
 questionTitle.value=defaultTitle("mcq");
 renderSpecialFields();
