@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3000;
 const PUBLIC_DIR = path.join(__dirname, "public");
 
 if (!process.env.DATABASE_URL) {
-  console.error("❌ DATABASE_URL غير موجود. اربط قاعدة PostgreSQL أولًا.");
+  console.error("â‌Œ DATABASE_URL ط؛ظٹط± ظ…ظˆط¬ظˆط¯. ط§ط±ط¨ط· ظ‚ط§ط¹ط¯ط© PostgreSQL ط£ظˆظ„ظ‹ط§.");
   process.exit(1);
 }
 
@@ -102,7 +102,7 @@ app.use(session({
 async function requireTeacher(req, res, next) {
   try {
     if (req.session.role !== "teacher" || !req.session.teacherId) {
-      return res.status(401).json({ error: "يجب تسجيل الدخول." });
+      return res.status(401).json({ error: "ظٹط¬ط¨ طھط³ط¬ظٹظ„ ط§ظ„ط¯ط®ظˆظ„." });
     }
 
     const { rows } = await pool.query(
@@ -118,20 +118,20 @@ async function requireTeacher(req, res, next) {
 
     if (!teacher || !teacher.active || teacherExpired(teacher)) {
       req.session.destroy(() => {});
-      return res.status(403).json({ error: "الحساب موقوف أو منتهي." });
+      return res.status(403).json({ error: "ط§ظ„ط­ط³ط§ط¨ ظ…ظˆظ‚ظˆظپ ط£ظˆ ظ…ظ†طھظ‡ظٹ." });
     }
 
     req.teacher = teacher;
     next();
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "خطأ في الخادم." });
+    res.status(500).json({ error: "ط®ط·ط£ ظپظٹ ط§ظ„ط®ط§ط¯ظ…." });
   }
 }
 
 function requireAdmin(req, res, next) {
   if (req.session.role !== "admin") {
-    return res.status(401).json({ error: "دخول الإدارة مطلوب." });
+    return res.status(401).json({ error: "ط¯ط®ظˆظ„ ط§ظ„ط¥ط¯ط§ط±ط© ظ…ط·ظ„ظˆط¨." });
   }
   next();
 }
@@ -168,7 +168,7 @@ function adminPage(req, res, next) {
 }
 
 /* =========================
-   تسجيل الدخول
+   طھط³ط¬ظٹظ„ ط§ظ„ط¯ط®ظˆظ„
 ========================= */
 
 app.post("/api/auth/teacher-login", async (req, res) => {
@@ -189,21 +189,21 @@ app.post("/api/auth/teacher-login", async (req, res) => {
 
     if (!teacher || !(await bcrypt.compare(password, teacher.password_hash))) {
       return res.status(401).json({
-        error: "رقم الترخيص أو كلمة المرور غير صحيحة."
+        error: "ط±ظ‚ظ… ط§ظ„طھط±ط®ظٹطµ ط£ظˆ ظƒظ„ظ…ط© ط§ظ„ظ…ط±ظˆط± ط؛ظٹط± طµط­ظٹط­ط©."
       });
     }
 
     if (!teacher.active) {
-      return res.status(403).json({ error: "هذا الترخيص موقوف." });
+      return res.status(403).json({ error: "ظ‡ط°ط§ ط§ظ„طھط±ط®ظٹطµ ظ…ظˆظ‚ظˆظپ." });
     }
 
     if (teacherExpired(teacher)) {
-      return res.status(403).json({ error: "انتهت مدة هذا الترخيص." });
+      return res.status(403).json({ error: "ط§ظ†طھظ‡طھ ظ…ط¯ط© ظ‡ط°ط§ ط§ظ„طھط±ط®ظٹطµ." });
     }
 
     req.session.regenerate(err => {
       if (err) {
-        return res.status(500).json({ error: "تعذر بدء الجلسة." });
+        return res.status(500).json({ error: "طھط¹ط°ط± ط¨ط¯ط، ط§ظ„ط¬ظ„ط³ط©." });
       }
 
       req.session.role = "teacher";
@@ -212,7 +212,7 @@ app.post("/api/auth/teacher-login", async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "خطأ في الخادم." });
+    res.status(500).json({ error: "ط®ط·ط£ ظپظٹ ط§ظ„ط®ط§ط¯ظ…." });
   }
 });
 
@@ -224,12 +224,12 @@ app.post("/api/auth/admin-login", (req, res) => {
   const adminPass = process.env.ADMIN_PASSWORD || "ChangeMe123!";
 
   if (username !== adminUser || password !== adminPass) {
-    return res.status(401).json({ error: "بيانات الإدارة غير صحيحة." });
+    return res.status(401).json({ error: "ط¨ظٹط§ظ†ط§طھ ط§ظ„ط¥ط¯ط§ط±ط© ط؛ظٹط± طµط­ظٹط­ط©." });
   }
 
   req.session.regenerate(err => {
     if (err) {
-      return res.status(500).json({ error: "تعذر بدء الجلسة." });
+      return res.status(500).json({ error: "طھط¹ط°ط± ط¨ط¯ط، ط§ظ„ط¬ظ„ط³ط©." });
     }
 
     req.session.role = "admin";
@@ -242,7 +242,7 @@ app.post("/api/auth/logout", (req, res) => {
 });
 
 /* =========================
-   بيانات المعلم
+   ط¨ظٹط§ظ†ط§طھ ط§ظ„ظ…ط¹ظ„ظ…
 ========================= */
 
 app.get("/api/me", requireTeacher, (req, res) => {
@@ -257,9 +257,9 @@ app.get("/api/me", requireTeacher, (req, res) => {
 });
 
 /* =========================
-   اختبارات المعلم
-   العزل يتم دائمًا بـ teacher_id
-   المأخوذ من جلسة الدخول
+   ط§ط®طھط¨ط§ط±ط§طھ ط§ظ„ظ…ط¹ظ„ظ…
+   ط§ظ„ط¹ط²ظ„ ظٹطھظ… ط¯ط§ط¦ظ…ظ‹ط§ ط¨ظ€ teacher_id
+   ط§ظ„ظ…ط£ط®ظˆط° ظ…ظ† ط¬ظ„ط³ط© ط§ظ„ط¯ط®ظˆظ„
 ========================= */
 
 app.get("/api/exams", requireTeacher, async (req, res) => {
@@ -277,7 +277,7 @@ app.get("/api/exams", requireTeacher, async (req, res) => {
     res.json({ exams: rows });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "تعذر تحميل الاختبارات." });
+    res.status(500).json({ error: "طھط¹ط°ط± طھط­ظ…ظٹظ„ ط§ظ„ط§ط®طھط¨ط§ط±ط§طھ." });
   }
 });
 
@@ -285,7 +285,7 @@ app.post("/api/exams", requireTeacher, async (req, res) => {
   try {
     const name = String(req.body.name || "").trim();
     if (!name) {
-      return res.status(400).json({ error: "اسم الاختبار مطلوب." });
+      return res.status(400).json({ error: "ط§ط³ظ… ط§ظ„ط§ط®طھط¨ط§ط± ظ…ط·ظ„ظˆط¨." });
     }
 
     const id = newId("exam");
@@ -303,7 +303,7 @@ app.post("/api/exams", requireTeacher, async (req, res) => {
     res.json({ exam: rows[0] });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "تعذر حفظ الاختبار." });
+    res.status(500).json({ error: "طھط¹ط°ط± ط­ظپط¸ ط§ظ„ط§ط®طھط¨ط§ط±." });
   }
 });
 
@@ -320,13 +320,13 @@ app.get("/api/exams/:id", requireTeacher, async (req, res) => {
     );
 
     if (!rows[0]) {
-      return res.status(404).json({ error: "الاختبار غير موجود." });
+      return res.status(404).json({ error: "ط§ظ„ط§ط®طھط¨ط§ط± ط؛ظٹط± ظ…ظˆط¬ظˆط¯." });
     }
 
     res.json({ exam: rows[0] });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "تعذر فتح الاختبار." });
+    res.status(500).json({ error: "طھط¹ط°ط± ظپطھط­ ط§ظ„ط§ط®طھط¨ط§ط±." });
   }
 });
 
@@ -334,7 +334,7 @@ app.put("/api/exams/:id", requireTeacher, async (req, res) => {
   try {
     const name = String(req.body.name || "").trim();
     if (!name) {
-      return res.status(400).json({ error: "اسم الاختبار مطلوب." });
+      return res.status(400).json({ error: "ط§ط³ظ… ط§ظ„ط§ط®طھط¨ط§ط± ظ…ط·ظ„ظˆط¨." });
     }
 
     const data = req.body.data || {};
@@ -352,13 +352,13 @@ app.put("/api/exams/:id", requireTeacher, async (req, res) => {
     );
 
     if (!rows[0]) {
-      return res.status(404).json({ error: "الاختبار غير موجود." });
+      return res.status(404).json({ error: "ط§ظ„ط§ط®طھط¨ط§ط± ط؛ظٹط± ظ…ظˆط¬ظˆط¯." });
     }
 
     res.json({ exam: rows[0] });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "تعذر تحديث الاختبار." });
+    res.status(500).json({ error: "طھط¹ط°ط± طھط­ط¯ظٹط« ط§ظ„ط§ط®طھط¨ط§ط±." });
   }
 });
 
@@ -371,18 +371,18 @@ app.delete("/api/exams/:id", requireTeacher, async (req, res) => {
     );
 
     if (!result.rowCount) {
-      return res.status(404).json({ error: "الاختبار غير موجود." });
+      return res.status(404).json({ error: "ط§ظ„ط§ط®طھط¨ط§ط± ط؛ظٹط± ظ…ظˆط¬ظˆط¯." });
     }
 
     res.json({ ok: true });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "تعذر حذف الاختبار." });
+    res.status(500).json({ error: "طھط¹ط°ط± ط­ط°ظپ ط§ظ„ط§ط®طھط¨ط§ط±." });
   }
 });
 
 /* =========================
-   لوحة الإدارة
+   ظ„ظˆط­ط© ط§ظ„ط¥ط¯ط§ط±ط©
 ========================= */
 
 app.get("/api/admin/teachers", requireAdmin, async (req, res) => {
@@ -405,7 +405,7 @@ app.get("/api/admin/teachers", requireAdmin, async (req, res) => {
     res.json({ teachers: rows });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "تعذر تحميل المعلمين." });
+    res.status(500).json({ error: "طھط¹ط°ط± طھط­ظ…ظٹظ„ ط§ظ„ظ…ط¹ظ„ظ…ظٹظ†." });
   }
 });
 
@@ -416,12 +416,12 @@ app.post("/api/admin/teachers", requireAdmin, async (req, res) => {
     const expiresAt = req.body.expiresAt || null;
 
     if (!name) {
-      return res.status(400).json({ error: "اسم المعلم مطلوب." });
+      return res.status(400).json({ error: "ط§ط³ظ… ط§ظ„ظ…ط¹ظ„ظ… ظ…ط·ظ„ظˆط¨." });
     }
 
     if (password.length < 6) {
       return res.status(400).json({
-        error: "كلمة المرور يجب أن تكون 6 أحرف على الأقل."
+        error: "ظƒظ„ظ…ط© ط§ظ„ظ…ط±ظˆط± ظٹط¬ط¨ ط£ظ† طھظƒظˆظ† 6 ط£ط­ط±ظپ ط¹ظ„ظ‰ ط§ظ„ط£ظ‚ظ„."
       });
     }
 
@@ -441,7 +441,7 @@ app.post("/api/admin/teachers", requireAdmin, async (req, res) => {
     res.json({ teacher: rows[0] });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "تعذر إنشاء المعلم." });
+    res.status(500).json({ error: "طھط¹ط°ط± ط¥ظ†ط´ط§ط، ط§ظ„ظ…ط¹ظ„ظ…." });
   }
 });
 
@@ -456,7 +456,7 @@ app.patch("/api/admin/teachers/:id", requireAdmin, async (req, res) => {
     );
 
     if (!rows[0]) {
-      return res.status(404).json({ error: "المعلم غير موجود." });
+      return res.status(404).json({ error: "ط§ظ„ظ…ط¹ظ„ظ… ط؛ظٹط± ظ…ظˆط¬ظˆط¯." });
     }
 
     if (typeof req.body.active === "boolean") {
@@ -477,7 +477,7 @@ app.patch("/api/admin/teachers/:id", requireAdmin, async (req, res) => {
       const password = String(req.body.password);
       if (password.length < 6) {
         return res.status(400).json({
-          error: "كلمة المرور يجب أن تكون 6 أحرف على الأقل."
+          error: "ظƒظ„ظ…ط© ط§ظ„ظ…ط±ظˆط± ظٹط¬ط¨ ط£ظ† طھظƒظˆظ† 6 ط£ط­ط±ظپ ط¹ظ„ظ‰ ط§ظ„ط£ظ‚ظ„."
         });
       }
 
@@ -494,13 +494,52 @@ app.patch("/api/admin/teachers/:id", requireAdmin, async (req, res) => {
     res.json({ ok: true });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "تعذر تحديث المعلم." });
+    res.status(500).json({ error: "طھط¹ط°ط± طھط­ط¯ظٹط« ط§ظ„ظ…ط¹ظ„ظ…." });
   }
 });
 
 /* =========================
-   الصفحات
+   ط§ظ„طµظپط­ط§طھ
 ========================= */
+
+app.delete("/api/admin/teachers/:id", requireAdmin, async (req, res) => {
+  try {
+    const { rows } = await pool.query(
+      `SELECT id, active
+       FROM teachers
+       WHERE id = $1
+       LIMIT 1`,
+      [req.params.id]
+    );
+
+    const teacher = rows[0];
+
+    if (!teacher) {
+      return res.status(404).json({
+        error: "\u0627\u0644\u0645\u0639\u0644\u0645 \u063a\u064a\u0631 \u0645\u0648\u062c\u0648\u062f."
+      });
+    }
+
+    if (teacher.active) {
+      return res.status(409).json({
+        error: "\u064a\u062c\u0628 \u0625\u064a\u0642\u0627\u0641 \u0627\u0644\u0645\u0639\u0644\u0645 \u0623\u0648\u0644\u064b\u0627 \u0642\u0628\u0644 \u0627\u0644\u062d\u0630\u0641."
+      });
+    }
+
+    await pool.query(
+      `DELETE FROM teachers WHERE id = $1`,
+      [req.params.id]
+    );
+
+    res.json({ ok: true });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      error: "\u062a\u0639\u0630\u0631 \u062d\u0630\u0641 \u0627\u0644\u0645\u0639\u0644\u0645."
+    });
+  }
+});
 
 app.get("/teacher", teacherPage, (req, res) => {
   res.sendFile(path.join(PUBLIC_DIR, "teacher.html"));
@@ -524,13 +563,13 @@ initDb()
   .then(() => {
     app.listen(PORT, () => {
       console.log("==========================================");
-      console.log("✅ اختباري - النسخة الأونلاين تعمل");
-      console.log(`🌐 PORT: ${PORT}`);
-      console.log("🗄️ PostgreSQL متصل");
+      console.log("âœ… ط§ط®طھط¨ط§ط±ظٹ - ط§ظ„ظ†ط³ط®ط© ط§ظ„ط£ظˆظ†ظ„ط§ظٹظ† طھط¹ظ…ظ„");
+      console.log(`ًںŒگ PORT: ${PORT}`);
+      console.log("ًں—„ï¸ڈ PostgreSQL ظ…طھطµظ„");
       console.log("==========================================");
     });
   })
   .catch(err => {
-    console.error("❌ تعذر تهيئة قاعدة البيانات:", err);
+    console.error("â‌Œ طھط¹ط°ط± طھظ‡ظٹط¦ط© ظ‚ط§ط¹ط¯ط© ط§ظ„ط¨ظٹط§ظ†ط§طھ:", err);
     process.exit(1);
   });
