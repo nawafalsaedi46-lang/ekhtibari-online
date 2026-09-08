@@ -52,7 +52,7 @@ async function loadDashboard(){
           </span>
         </div>
 
-        <a href="/teacher">فتح</a>
+        <a href="/teacher?exam=${encodeURIComponent(ex.id)}">فتح</a>
       </div>
     `).join("");
 
@@ -70,9 +70,6 @@ function escapeHtml(value=""){
     .replaceAll("'","&#039;");
 }
 
-document.getElementById("settingsBtn").addEventListener("click",()=>{
-  alert("قسم الإعدادات بنضيفه في الخطوة القادمة.");
-});
 
 document.getElementById("logoutBtn").addEventListener("click",async()=>{
   await fetch("/api/auth/logout",{method:"POST"});

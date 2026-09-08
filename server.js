@@ -58,6 +58,7 @@ async function initDb() {
     );
   `);
 
+  await pool.query("ALTER TABLE teachers ADD COLUMN IF NOT EXISTS gender TEXT NOT NULL DEFAULT 'معلم'");
   await pool.query(`
     CREATE TABLE IF NOT EXISTS exams (
       id TEXT PRIMARY KEY,
@@ -106,7 +107,7 @@ async function requireTeacher(req, res, next) {
     }
 
     const { rows } = await pool.query(
-      `SELECT id, name, license, active,
+      `SELECT id, name, license, active, gender,
               expires_at::text AS expires_at
        FROM teachers
        WHERE id = $1
@@ -250,10 +251,85 @@ app.get("/api/me", requireTeacher, (req, res) => {
     teacher: {
       id: req.teacher.id,
       name: req.teacher.name,
+      gender: req.teacher.gender || "معلم",
       license: req.teacher.license,
+      active: req.teacher.active,
       expiresAt: req.teacher.expires_at || null
     }
   });
+});
+
+
+app.patch("/api/me", requireTeacher, async (req, res) => {
+  try {
+    const name = String(req.body.name || "").trim();
+    const gender = String(req.body.gender || "معلم");
+
+    if (name.length < 2) {
+      return res.status(400).json({ error: "اكتب الاسم بشكل صحيح." });
+    }
+
+    if (!["معلم","معلمة"].includes(gender)) {
+      return res.status(400).json({ error: "الصفة غير صحيحة." });
+    }
+
+    const { rows } = await pool.query(
+      "UPDATE teachers SET name = $1, gender = $2 WHERE id = $3 RETURNING id, name, gender, license, active, expires_at::text AS \"expiresAt\"",
+      [name, gender, req.teacher.id]
+    );
+
+    res.json({ teacher: rows[0] });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "تعذر حفظ بيانات المعلم." });
+  }
+});
+
+app.patch("/api/me/password", requireTeacher, async (req, res) => {
+  try {
+    const currentPassword = String(req.body.currentPassword || "");
+    const newPassword = String(req.body.newPassword || "");
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({
+        error: "كلمة المرور الجديدة 6 أحرف على الأقل."
+      });
+    }
+
+    const { rows } = await pool.query(
+      "SELECT password_hash FROM teachers WHERE id = $1 LIMIT 1",
+      [req.teacher.id]
+    );
+
+    if (!rows[0]) {
+      return res.status(404).json({ error: "الحساب غير موجود." });
+    }
+
+    const valid = await bcrypt.compare(
+      currentPassword,
+      rows[0].password_hash
+    );
+
+    if (!valid) {
+      return res.status(400).json({
+        error: "كلمة المرور الحالية غير صحيحة."
+      });
+    }
+
+    const passwordHash = await bcrypt.hash(newPassword,12);
+
+    await pool.query(
+      "UPDATE teachers SET password_hash = $1 WHERE id = $2",
+      [passwordHash, req.teacher.id]
+    );
+
+    res.json({ ok:true });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "تعذر تغيير كلمة المرور." });
+  }
 });
 
 /* =========================
@@ -537,6 +613,14 @@ app.delete("/api/admin/teachers/:id", requireAdmin, async (req, res) => {
       error: "\u062a\u0639\u0630\u0631 \u062d\u0630\u0641 \u0627\u0644\u0645\u0639\u0644\u0645."
     });
   }
+});
+
+app.get("/exams", teacherPage, (req, res) => {
+  res.sendFile(path.join(PUBLIC_DIR, "exams.html"));
+});
+
+app.get("/settings", teacherPage, (req, res) => {
+  res.sendFile(path.join(PUBLIC_DIR, "settings.html"));
 });
 
 app.get("/dashboard", teacherPage, (req, res) => {

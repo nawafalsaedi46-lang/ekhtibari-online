@@ -1,0 +1,238 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>الإعدادات - اختباري</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family:Tahoma,Arial,sans-serif;
+background:#f5f8fc;
+color:#152238
+}
+
+.page{
+max-width:900px;
+margin:auto;
+padding:30px
+}
+
+.back{
+display:inline-block;
+margin-bottom:20px;
+text-decoration:none;
+color:#1769e8;
+font-weight:bold
+}
+
+h1{margin:0 0 8px}
+
+.subtitle{
+margin:0 0 25px;
+color:#8793a5
+}
+
+.card{
+background:white;
+border:1px solid #e7ecf3;
+border-radius:18px;
+padding:25px;
+margin-bottom:20px
+}
+
+.card h2{
+margin:0 0 20px;
+font-size:20px
+}
+
+.form{
+display:grid;
+gap:16px;
+max-width:600px
+}
+
+label{
+display:grid;
+gap:7px;
+font-weight:bold;
+font-size:14px
+}
+
+input,select{
+width:100%;
+padding:13px;
+border:1px solid #dce3ec;
+border-radius:10px;
+font-family:inherit;
+font-size:15px;
+background:white
+}
+
+button{
+border:0;
+border-radius:10px;
+padding:13px 20px;
+background:#1769e8;
+color:white;
+font-family:inherit;
+font-weight:bold;
+cursor:pointer;
+width:max-content
+}
+
+.account-info{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px
+}
+
+.info{
+background:#f7f9fc;
+border-radius:13px;
+padding:18px
+}
+
+.info span{
+display:block;
+color:#8793a5;
+font-size:12px;
+margin-bottom:7px
+}
+
+.info strong{
+font-size:17px
+}
+
+.message{
+min-height:20px;
+font-size:13px
+}
+
+.success{color:#087f5b}
+.error{color:#c62828}
+
+@media(max-width:700px){
+
+.page{
+padding:18px
+}
+
+.account-info{
+grid-template-columns:1fr
+}
+
+button{
+width:100%
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+<a class="back" href="/dashboard">← الرجوع للرئيسية</a>
+
+<h1>⚙️ الإعدادات</h1>
+<p class="subtitle">إدارة بيانات حساب المعلم</p>
+
+
+<div class="card">
+
+<h2>بيانات المعلم</h2>
+
+<form id="profileForm" class="form">
+
+<label>
+الاسم
+<input id="profileName" required>
+</label>
+
+<label>
+الصفة
+<select id="profileGender">
+<option value="معلم">معلم</option>
+<option value="معلمة">معلمة</option>
+</select>
+</label>
+
+<button type="submit">
+حفظ البيانات
+</button>
+
+<div id="profileMessage" class="message"></div>
+
+</form>
+
+</div>
+
+
+<div class="card">
+
+<h2>معلومات الحساب</h2>
+
+<div class="account-info">
+
+<div class="info">
+<span>رقم الترخيص</span>
+<strong id="settingsLicense">...</strong>
+</div>
+
+<div class="info">
+<span>حالة الحساب</span>
+<strong id="settingsStatus">نشط</strong>
+</div>
+
+<div class="info">
+<span>تاريخ انتهاء الاشتراك</span>
+<strong id="settingsExpiry">غير محدد</strong>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>تغيير كلمة المرور</h2>
+
+<form id="passwordForm" class="form">
+
+<label>
+كلمة المرور الحالية
+<input id="currentPassword" type="password" required>
+</label>
+
+<label>
+كلمة المرور الجديدة
+<input id="newPassword" type="password" minlength="6" required>
+</label>
+
+<label>
+تأكيد كلمة المرور الجديدة
+<input id="confirmPassword" type="password" minlength="6" required>
+</label>
+
+<button type="submit">
+تغيير كلمة المرور
+</button>
+
+<div id="passwordMessage" class="message"></div>
+
+</form>
+
+</div>
+
+</div>
+
+<script src="/settings.js"></script>
+
+</body>
+</html>

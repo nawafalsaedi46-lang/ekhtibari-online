@@ -60,6 +60,14 @@ async function loadAccount(){
     document.getElementById("accountTeacherName").textContent=me.teacher.name;
     document.getElementById("accountLicense").textContent=me.teacher.license;
     await loadExamList();
+
+    const requestedExamId =
+      new URLSearchParams(location.search).get("exam");
+
+    if(requestedExamId){
+      await openAccountExam(requestedExamId);
+    }
+
   }catch(e){}
 }
 
