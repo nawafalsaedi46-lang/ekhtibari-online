@@ -23,6 +23,7 @@ async function loadTeachers(){
       <td>
         <button class="mini-btn ${t.active?"delete":"edit"}" onclick="toggleTeacher('${t.id}',${!t.active})">${t.active?"إيقاف":"تفعيل"}</button>
         <button class="mini-btn edit" onclick="resetTeacherPassword('${t.id}','${t.name.replaceAll("'","")}')">تغيير كلمة المرور</button>
+        <button class="mini-btn delete" ${t.active?'disabled title="Stop teacher first"':''} onclick="deleteTeacher('${t.id}',${t.active})">\u062d\u0630\u0641</button>
       </td>
     </tr>`).join("");
 }
@@ -49,8 +50,32 @@ async function resetTeacherPassword(id,name){
   try{await adminApi(`/api/admin/teachers/${id}`,{method:"PATCH",body:JSON.stringify({password})});msg("تم تغيير كلمة المرور ✅")}
   catch(e){msg(e.message,true)}
 }
+
+async function deleteTeacher(id,active){
+  if(active){
+    alert("\u0623\u0648\u0642\u0641 \u0627\u0644\u0645\u0639\u0644\u0645 \u0623\u0648\u0644\u0627\u064b \u0642\u0628\u0644 \u0627\u0644\u062d\u0630\u0641.");
+    return;
+  }
+
+  if(!confirm("\u0647\u0644 \u062a\u0631\u064a\u062f \u062d\u0630\u0641 \u0627\u0644\u0645\u0639\u0644\u0645 \u0646\u0647\u0627\u0626\u064a\u0627\u064b\u061f")){
+    return;
+  }
+
+  try{
+    await adminApi(`/api/admin/teachers/${id}`,{
+      method:"DELETE"
+    });
+
+    msg("\u062a\u0645 \u062d\u0630\u0641 \u0627\u0644\u0645\u0639\u0644\u0645 \u2705");
+    await loadTeachers();
+
+  }catch(e){
+    msg(e.message,true);
+  }
+}
+
 document.getElementById("adminLogoutBtn").addEventListener("click",async()=>{
   await fetch("/api/auth/logout",{method:"POST"});location.href="/admin-login";
 });
-window.toggleTeacher=toggleTeacher;window.resetTeacherPassword=resetTeacherPassword;
+window.toggleTeacher=toggleTeacher;window.resetTeacherPassword=resetTeacherPassword;window.deleteTeacher=deleteTeacher;
 loadTeachers().catch(()=>{});

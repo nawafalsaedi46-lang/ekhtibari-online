@@ -502,6 +502,43 @@ app.patch("/api/admin/teachers/:id", requireAdmin, async (req, res) => {
    الصفحات
 ========================= */
 
+
+app.delete("/api/admin/teachers/:id", requireAdmin, async (req, res) => {
+  try {
+    const { rows } = await pool.query(
+      "SELECT id, active FROM teachers WHERE id = $1 LIMIT 1",
+      [req.params.id]
+    );
+
+    const teacher = rows[0];
+
+    if (!teacher) {
+      return res.status(404).json({
+        error: "\u0627\u0644\u0645\u0639\u0644\u0645 \u063a\u064a\u0631 \u0645\u0648\u062c\u0648\u062f."
+      });
+    }
+
+    if (teacher.active) {
+      return res.status(409).json({
+        error: "\u0623\u0648\u0642\u0641 \u0627\u0644\u0645\u0639\u0644\u0645 \u0623\u0648\u0644\u0627\u064b \u0642\u0628\u0644 \u0627\u0644\u062d\u0630\u0641."
+      });
+    }
+
+    await pool.query(
+      "DELETE FROM teachers WHERE id = $1",
+      [req.params.id]
+    );
+
+    res.json({ ok: true });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      error: "\u062a\u0639\u0630\u0631 \u062d\u0630\u0641 \u0627\u0644\u0645\u0639\u0644\u0645."
+    });
+  }
+});
+
 app.get("/teacher", teacherPage, (req, res) => {
   res.sendFile(path.join(PUBLIC_DIR, "teacher.html"));
 });
