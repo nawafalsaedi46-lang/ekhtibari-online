@@ -1,0 +1,142 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>الرئيسية - اختباري</title>
+<link rel="stylesheet" href="/dashboard.css">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+  <aside class="sidebar">
+
+    <div class="brand">
+      <div class="brand-icon">📄</div>
+      <div>
+        <h2>اختباري</h2>
+        <span>منصة المعلم</span>
+      </div>
+    </div>
+
+    <nav>
+      <a class="nav-item active" href="/dashboard">
+        <span>🏠</span>
+        الرئيسية
+      </a>
+
+      <a class="nav-item" href="/teacher">
+        <span>📝</span>
+        إنشاء اختبار جديد
+      </a>
+
+      <a class="nav-item" href="/teacher#savedExamsList">
+        <span>📁</span>
+        اختباراتي
+      </a>
+
+      <button class="nav-item settings-btn" type="button" id="settingsBtn">
+        <span>⚙️</span>
+        الإعدادات
+      </button>
+    </nav>
+
+    <button id="logoutBtn" class="logout-btn">
+      <span>🚪</span>
+      تسجيل الخروج
+    </button>
+
+  </aside>
+
+
+  <main class="main">
+
+    <header class="top">
+
+      <div>
+        <p class="welcome">مرحبًا بك 👋</p>
+        <h1 id="teacherName">المعلم</h1>
+      </div>
+
+      <div class="account-box">
+        <span>رقم الترخيص</span>
+        <strong id="teacherLicense">...</strong>
+      </div>
+
+    </header>
+
+
+    <section class="hero">
+
+      <div>
+        <span class="hero-small">منصة اختباري</span>
+        <h2>أنشئ اختبارك بسهولة واحترافية</h2>
+        <p>
+          أنشئ اختباراتك، احفظها في حسابك وارجع لها في أي وقت.
+        </p>
+
+        <a href="/teacher" class="primary-btn">
+          + إنشاء اختبار جديد
+        </a>
+      </div>
+
+      <div class="hero-icon">📝</div>
+
+    </section>
+
+
+    <section class="stats">
+
+      <div class="stat-card">
+        <div class="stat-icon">📚</div>
+        <div>
+          <span>اختباراتي</span>
+          <strong id="examCount">0</strong>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <div>
+          <span>حالة الحساب</span>
+          <strong>نشط</strong>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">📅</div>
+        <div>
+          <span>انتهاء الترخيص</span>
+          <strong id="expiresAt">غير محدد</strong>
+        </div>
+      </div>
+
+    </section>
+
+
+    <section class="recent">
+
+      <div class="section-head">
+        <div>
+          <h2>آخر الاختبارات</h2>
+          <p>أحدث الاختبارات المحفوظة في حسابك</p>
+        </div>
+
+        <a href="/teacher#savedExamsList">عرض اختباراتي</a>
+      </div>
+
+      <div id="recentExams" class="recent-list">
+        <div class="empty">جاري تحميل اختباراتك...</div>
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+<script src="/dashboard.js"></script>
+</body>
+</html>

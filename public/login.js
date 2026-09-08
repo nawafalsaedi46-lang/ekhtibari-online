@@ -8,6 +8,6 @@ form.addEventListener("submit",async e=>{
     const r=await fetch("/api/auth/teacher-login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({license,password})});
     const d=await r.json();
     if(!r.ok) throw new Error(d.error||"تعذر تسجيل الدخول");
-    location.href="/teacher";
+    location.href="/dashboard";
   }catch(err){errorBox.textContent=err.message}
 });

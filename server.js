@@ -539,6 +539,10 @@ app.delete("/api/admin/teachers/:id", requireAdmin, async (req, res) => {
   }
 });
 
+app.get("/dashboard", teacherPage, (req, res) => {
+  res.sendFile(path.join(PUBLIC_DIR, "dashboard.html"));
+});
+
 app.get("/teacher", teacherPage, (req, res) => {
   res.sendFile(path.join(PUBLIC_DIR, "teacher.html"));
 });
