@@ -151,10 +151,6 @@ function newAccountExam(){
 
 document.getElementById("saveToAccountBtn").addEventListener("click",saveAccountExam);
 document.getElementById("newExamBtn").addEventListener("click",newAccountExam);
-document.getElementById("logoutBtn").addEventListener("click",async()=>{
-  await fetch("/api/auth/logout",{method:"POST"});
-  location.href="/";
-});
 
 window.openAccountExam=openAccountExam;
 window.deleteAccountExam=deleteAccountExam;
