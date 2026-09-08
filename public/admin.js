@@ -22,6 +22,7 @@ async function loadTeachers(){
       <td>${t.examCount}</td>
       <td>
         <button class="mini-btn ${t.active?"delete":"edit"}" onclick="toggleTeacher('${t.id}',${!t.active})">${t.active?"إيقاف":"تفعيل"}</button>
+        <button class="mini-btn edit" onclick="renewTeacher('${t.id}','${t.expiresAt||""}')">🔄 تجديد</button>
         <button class="mini-btn edit" onclick="resetTeacherPassword('${t.id}','${t.name.replaceAll("'","")}')">تغيير كلمة المرور</button>
         <button class="mini-btn delete" ${t.active?'disabled title="Stop teacher first"':''} onclick="deleteTeacher('${t.id}',${t.active})">\u062d\u0630\u0641</button>
       </td>
@@ -43,6 +44,100 @@ async function toggleTeacher(id,active){
   try{await adminApi(`/api/admin/teachers/${id}`,{method:"PATCH",body:JSON.stringify({active})});await loadTeachers()}
   catch(e){msg(e.message,true)}
 }
+
+function dateOnly(date){
+  const y=date.getFullYear();
+  const m=String(date.getMonth()+1).padStart(2,"0");
+  const d=String(date.getDate()).padStart(2,"0");
+  return `${y}-${m}-${d}`;
+}
+
+function addMonthsClamped(date,months){
+  const originalDay=date.getDate();
+
+  const result=new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    1,
+    12,0,0
+  );
+
+  result.setMonth(result.getMonth()+months);
+
+  const lastDay=new Date(
+    result.getFullYear(),
+    result.getMonth()+1,
+    0
+  ).getDate();
+
+  result.setDate(Math.min(originalDay,lastDay));
+
+  return result;
+}
+
+async function renewTeacher(id,currentExpiry){
+
+  const value=prompt(
+    "اكتب عدد الأشهر للتجديد:\n\nمثال:\n1 = شهر\n3 = 3 أشهر\n6 = 6 أشهر\n12 = سنة"
+  );
+
+  if(value===null)return;
+
+  const months=Number(value);
+
+  if(!Number.isInteger(months) || months<1 || months>120){
+    alert("اكتب عدد أشهر صحيح من 1 إلى 120.");
+    return;
+  }
+
+  const today=new Date();
+  today.setHours(12,0,0,0);
+
+  let base=today;
+
+  if(currentExpiry){
+    const parts=currentExpiry.split("-").map(Number);
+
+    if(parts.length===3){
+      const expiry=new Date(
+        parts[0],
+        parts[1]-1,
+        parts[2],
+        12,0,0
+      );
+
+      if(expiry>today){
+        base=expiry;
+      }
+    }
+  }
+
+  const newExpiry=addMonthsClamped(base,months);
+  const expiresAt=dateOnly(newExpiry);
+
+  const ok=confirm(
+    "تاريخ انتهاء الاشتراك الجديد:\n"+expiresAt+
+    "\n\nهل تريد تأكيد التجديد؟"
+  );
+
+  if(!ok)return;
+
+  try{
+
+    await adminApi(`/api/admin/teachers/${id}`,{
+      method:"PATCH",
+      body:JSON.stringify({expiresAt})
+    });
+
+    msg("تم تجديد الاشتراك حتى "+expiresAt+" ✅");
+
+    await loadTeachers();
+
+  }catch(e){
+    msg(e.message,true);
+  }
+}
+
 async function resetTeacherPassword(id,name){
   const password=prompt(`اكتب كلمة المرور الجديدة للمعلم: ${name}`);
   if(!password)return;
@@ -77,5 +172,8 @@ async function deleteTeacher(id,active){
 document.getElementById("adminLogoutBtn").addEventListener("click",async()=>{
   await fetch("/api/auth/logout",{method:"POST"});location.href="/admin-login";
 });
-window.toggleTeacher=toggleTeacher;window.resetTeacherPassword=resetTeacherPassword;window.deleteTeacher=deleteTeacher;
+window.toggleTeacher=toggleTeacher;
+window.renewTeacher=renewTeacher;
+window.resetTeacherPassword=resetTeacherPassword;
+window.deleteTeacher=deleteTeacher;
 loadTeachers().catch(()=>{});
