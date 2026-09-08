@@ -1,0 +1,14 @@
+
+.auth-body{min-height:100vh;display:grid;place-items:center;background:linear-gradient(135deg,#e8f4f1,#f8fafc)}
+.auth-shell{width:min(430px,92%);margin:30px auto}
+.auth-card{background:#fff;border:1px solid #e5e7eb;border-radius:22px;padding:28px;box-shadow:0 18px 50px rgba(0,0,0,.1)}
+.auth-logo{display:inline-block;background:#075e54;color:#fff;padding:10px 16px;border-radius:12px;font-size:24px;font-weight:900;margin-bottom:12px}
+.auth-card h1{margin:8px 0;color:#075e54}.auth-card p{color:#64748b;line-height:1.7}
+.auth-card form{display:grid;gap:14px;margin-top:20px}.auth-submit{width:100%;margin-top:5px;font-size:16px}
+.auth-error{margin-top:12px;color:#b91c1c;font-weight:700;min-height:22px}.admin-link{display:block;text-align:center;margin-top:16px;color:#075e54}
+.account-bar{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid #e5e7eb;padding:10px max(20px,calc((100% - 1140px)/2));display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 3px 15px rgba(0,0,0,.05)}
+.account-license{display:inline-block;margin-right:10px;background:#eefaf8;color:#075e54;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:800}
+.exam-save-row{display:flex;align-items:end;gap:10px;flex-wrap:wrap}.exam-name-field{flex:1;min-width:280px}.account-save-status{margin-top:10px;min-height:20px;color:#075e54;font-weight:700}
+.saved-exams-list{display:grid;gap:10px;margin-top:14px}.saved-exam-card{border:1px solid #dfe5e4;border-radius:13px;padding:13px;display:flex;align-items:center;justify-content:space-between;gap:12px}.saved-exam-meta{color:#64748b;font-size:12px;margin-top:4px}.saved-exam-actions{display:flex;gap:7px;flex-wrap:wrap}
+.admin-top{display:flex;justify-content:space-between;align-items:center;gap:15px}.admin-create-button{justify-content:end}.admin-table-wrap{overflow:auto;margin-top:18px}.admin-table{width:100%;border-collapse:collapse;min-width:850px}.admin-table th,.admin-table td{padding:10px;border:1px solid #dfe5e4;text-align:center}.admin-table th{background:#f8fafc;color:#075e54}.status-active{color:#166534;font-weight:900}.status-disabled{color:#b91c1c;font-weight:900}
+@media(max-width:700px){.account-bar{align-items:flex-start}.saved-exam-card{flex-direction:column;align-items:stretch}.admin-top{align-items:flex-start}}

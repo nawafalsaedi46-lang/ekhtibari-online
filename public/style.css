@@ -1,0 +1,277 @@
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;direction:rtl;font-family:Tahoma,Arial,sans-serif;background:#f3f6f5;color:#1f2937}
+button,input,textarea,select{font-family:inherit}
+button{touch-action:manipulation}
+.topbar{background:linear-gradient(135deg,#075e54,#0f766e);color:#fff;padding:22px 20px;box-shadow:0 4px 20px rgba(0,0,0,.12)}
+.topbar-inner{width:min(1200px,95%);margin:auto}
+.topbar h1{margin:0 0 5px}.topbar p{margin:0;opacity:.9}
+.container{width:min(1200px,95%);margin:25px auto 60px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:22px;margin-bottom:22px;box-shadow:0 8px 30px rgba(0,0,0,.07)}
+.section-title{margin-bottom:20px}
+.section-title h2,.questions-header h2{margin:0 0 7px;color:#075e54}
+.section-title p,.questions-header p{margin:0;color:#6b7280;line-height:1.7}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.field{display:flex;flex-direction:column;gap:7px}.field label{font-weight:700;font-size:14px}
+.field input,.field textarea,.field select{width:100%;border:1px solid #d1d5db;border-radius:10px;padding:11px 12px;background:#fff;font-size:14px;outline:none}
+.field textarea{resize:vertical}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:#0f766e;box-shadow:0 0 0 3px rgba(15,118,110,.12)}
+.type-label{font-weight:800;margin-bottom:12px}
+.question-types{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.type-card{min-height:100px;border:2px solid #e5e7eb;background:#fff;border-radius:16px;cursor:pointer;padding:14px 10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-weight:800;color:#374151}
+.type-card:hover{border-color:#0f766e}.type-card.active{border-color:#075e54;background:#eaf8f5;color:#075e54}.type-icon{font-size:29px}
+.editor-top-grid{display:grid;grid-template-columns:300px minmax(0,1fr);gap:15px;align-items:end;margin-top:20px}
+.paragraph-count-box{padding:15px;background:#f8fafc;border:1px solid #dbe3e8;border-radius:13px}
+.paragraph-count-box label{display:block;font-weight:900;color:#075e54;margin-bottom:8px}
+.paragraph-count-box input{width:100%;border:2px solid #d1d5db;border-radius:10px;padding:12px;font-size:16px;font-weight:800}
+.paragraph-count-box small{display:block;margin-top:7px;color:#64748b}
+.question-title-field{padding:15px;background:#f8fafc;border:1px solid #dbe3ea;border-radius:14px}
+.question-title-field label{color:#075e54}.question-title-field input{font-size:16px;font-weight:700;padding:13px}
+.special-box{margin-top:15px;padding:15px;background:#f8fafc;border:1px solid #d8e2e8;border-radius:14px}
+.special-box-title{font-weight:900;color:#075e54;margin-bottom:10px}
+#questionScore{max-width:180px;font-size:16px;font-weight:800;text-align:center}
+.question-editor{display:grid;gap:13px;margin-top:20px}
+.question-item-editor{background:#fff;border:1px solid #d8e1e8;border-radius:16px;padding:17px;box-shadow:0 4px 14px rgba(0,0,0,.04)}
+.question-item-editor:hover{border-color:#94a3b8}.question-item-editor.editing-item{border:2px solid #2563eb;background:#f8fbff}
+.item-editor-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}
+.item-number{width:34px;height:34px;border-radius:50%;background:#075e54;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900}
+.item-fields{display:grid;gap:12px}
+.item-text{min-height:70px;padding:13px 14px!important;font-size:16px!important;font-weight:700;line-height:1.7;border:2px solid #d7dee5!important}
+.item-text:focus{border-color:#075e54!important}
+.options-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.options-grid .field{padding:10px;border-radius:11px;background:#f8fafc;border:1px solid #e1e7ec}
+.item-answer{border:2px solid #86c9a3!important;background:#f0fdf4!important;color:#166534!important;font-weight:800!important}
+.order-list-editor{display:grid;gap:8px}.table-editor-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.image-preview-editor{max-width:300px;max-height:200px;object-fit:contain;display:block;margin-top:10px}
+.editor-actions,.preview-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.editor-actions{position:sticky;bottom:8px;z-index:10;background:rgba(255,255,255,.96);border:1px solid #dbe3e8;padding:12px;border-radius:13px;box-shadow:0 8px 25px rgba(0,0,0,.1)}
+.btn{border:0;border-radius:10px;padding:11px 17px;cursor:pointer;font-weight:800}
+.btn.primary{background:#075e54;color:#fff}.btn.secondary{background:#2563eb;color:#fff}.btn.dark{background:#111827;color:#fff}.btn.danger{background:#dc2626;color:#fff}.btn.light{background:#e5e7eb}
+.mini-btn{border:0;border-radius:8px;padding:7px 10px;cursor:pointer;font-size:12px;font-weight:700}.mini-btn.edit{background:#2563eb;color:#fff}.mini-btn.delete{background:#dc2626;color:#fff}
+.remove-editor-item{background:#fff1f2!important;color:#be123c!important;border:1px solid #fecdd3!important}
+.questions-header{display:flex;justify-content:space-between;gap:15px}.question-count{background:#eefaf8;color:#075e54;border-radius:25px;padding:9px 16px;font-weight:800}
+.score-summary{margin-top:15px;padding:10px 14px;background:#f0f9ff;border-radius:10px;color:#075985}
+.saved-question{border:1px solid #dfe5e4;border-radius:14px;padding:16px;margin-top:15px}.saved-question-header,.saved-item-top{display:flex;justify-content:space-between;gap:12px}
+.saved-question-title{font-weight:800;color:#075e54}.saved-question-actions,.saved-item-actions{display:flex;gap:6px;flex-wrap:wrap}.saved-item{padding:10px 0;border-top:1px solid #e5e7eb}
+.empty-questions{margin-top:15px;min-height:100px;border:1px dashed #b8c2c0;border-radius:12px;display:grid;place-items:center;color:#9ca3af}
+
+/* معاينة متصلة */
+.paper-wrapper{overflow-x:auto;padding:20px 0}.paper{width:210mm;min-height:297mm;margin:auto;background:#fff;color:#111;padding:7mm;box-shadow:0 8px 30px rgba(0,0,0,.15)}
+.paper-inner-border{min-height:283mm;padding:6mm}.frame-none .paper-inner-border{border:none}.frame-simple .paper-inner-border{border:1px solid #222}.frame-official .paper-inner-border{border:2px solid #111}
+.version-badge{text-align:center;font-weight:800;margin-bottom:6px}
+.exam-header{display:grid;grid-template-columns:minmax(0,1fr) 150px minmax(0,1fr);min-height:102px;border:1px solid #111}
+.ministry-info{border-left:1px solid #111;padding:6px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px;text-align:center;font-size:11px}
+.ministry-logo{display:flex;align-items:center;justify-content:center;border-left:1px solid #111}.ministry-logo img{width:118px;max-height:72px;object-fit:contain}
+.moe-fallback{font-size:15px;font-weight:900;color:#075e54;text-align:center;line-height:1.5}
+.exam-info table{width:100%;height:100%;border-collapse:collapse}.exam-info th,.exam-info td{border:1px solid #222;padding:3px;text-align:center;font-size:10px}.exam-info th{background:#f7f7f7}
+.school-logo-area{text-align:center;padding:5px}.school-logo-area img{max-width:90px;max-height:55px;object-fit:contain}
+.exam-title{border:1px solid #111;border-top:0;padding:6px;text-align:center;font-weight:800;font-size:13px}
+.student-info{display:grid;grid-template-columns:1.5fr 1fr;border:1px solid #111;margin-top:6px}.student-info>div{padding:6px;font-size:11px}.student-info>div+div{border-right:1px solid #111}
+.paper-questions{margin-top:8px}.paper-empty{min-height:250px;border:1px dashed #aaa;display:grid;place-items:center;color:#999}
+.paper-question{margin:0 0 9px}.paper-question-title{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 0 4px;padding:4px 6px;border:1px solid #333;background:#f5f5f5;font-size:11px;font-weight:800}
+.question-score-box{min-width:30px;height:20px;border:1px solid #333;background:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:800}
+.paper-question-item{margin:0 0 3px;padding:1px 4px;line-height:1.35}.paper-item-question{font-size:10.5px;font-weight:700;margin-bottom:1px}
+.paper-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px 9px;width:calc(100% - 22px);margin:0 22px 2px 0;font-size:9.5px;line-height:1.25}
+.paper-options>div{display:flex;gap:3px;align-items:center;min-width:0;padding:1px 3px;border-radius:3px;overflow-wrap:anywhere}.option-letter{font-weight:800}
+.correct-choice{background:#dbeafe!important;color:#1e3a8a!important;border:1px solid #93c5fd!important;font-weight:800}
+.inline-correct-answer,.inline-model-answer,.table-correct-answer{background:#dbeafe!important;color:#1e3a8a!important;border:1px solid #bfdbfe!important}
+.inline-correct-answer{padding:2px 5px;border-radius:3px}.inline-model-answer{margin-top:3px;padding:5px}
+.truefalse-options{display:flex;gap:18px;margin-right:22px;font-size:9.5px}.student-answer-lines{margin:3px 20px 4px 0;line-height:1.7;font-size:9px}
+.order-answer-area{margin:3px 20px 0 0;line-height:1.7}.reading-passage{border:1px solid #555;padding:8px;margin:5px 0 7px;line-height:1.6;background:#fafafa}
+.exam-table{width:100%;border-collapse:collapse;margin-top:4px}.exam-table th,.exam-table td{border:1px solid #222;padding:4px;text-align:center;font-size:9px}
+.paper-image{display:block;max-width:330px;max-height:190px;object-fit:contain;margin:6px auto}.exam-end-message{margin-top:8px;padding-top:5px;border-top:1px solid #333;text-align:center;font-size:9px;font-weight:800}
+.teacher-footer{display:flex;gap:4px;margin-top:5px;font-size:8.5px;font-weight:700}
+
+/* =========================================================
+   نظام صفحات A4 الحقيقية للطباعة
+========================================================= */
+.print-root{display:none}
+.print-root.measure{display:block;position:absolute;top:0;left:-100000px;width:210mm;visibility:hidden;pointer-events:none}
+.print-page{width:210mm;height:297mm;padding:6mm;background:#fff;direction:rtl;break-after:page;page-break-after:always}
+.print-page:last-child{break-after:auto;page-break-after:auto}
+.print-page-inner{height:285mm;padding:5mm;display:flex;flex-direction:column;background:#fff}
+.print-page.frame-none .print-page-inner{border:none}
+.print-page.frame-simple .print-page-inner{border:1px solid #222}
+.print-page.frame-official .print-page-inner{border:2px solid #111}
+.print-page-body{flex:1;min-height:0;overflow:hidden}
+.print-page-number{flex:0 0 auto;text-align:center;border-top:1px solid #aaa;margin-top:3mm;padding-top:1.7mm;font-size:8.5px;font-weight:700;color:#444}
+.print-continuation-head{display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid #777;padding-bottom:3px;margin-bottom:5px;font-size:9px;font-weight:700}
+.print-question{margin:0 0 7px}
+.print-question-title{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 0 4px;padding:4px 6px;border:1px solid #333;background:#f5f5f5;font-size:10px;font-weight:800;line-height:1.3}
+.print-question-title.continued{background:#fafafa;border-style:dashed}
+.print-score-box{min-width:28px;height:18px;border:1px solid #333;background:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;flex-shrink:0}
+.print-question-item{margin:0 0 2px;padding:0 3px;line-height:1.25;break-inside:avoid;page-break-inside:avoid}
+.print-question-item .paper-item-question{font-size:9px;line-height:1.2}
+.print-question-item .paper-options{font-size:8.5px;line-height:1.15;margin-right:18px;width:calc(100% - 18px);gap:0 7px}
+.print-question-item .paper-options>div{padding:1px 2px}
+.print-question-item .truefalse-options{font-size:8.5px;margin-right:18px}
+.print-question-item .student-answer-lines{font-size:8.5px;line-height:1.5;margin:2px 18px 3px 0}
+.print-question-item .exam-table th,.print-question-item .exam-table td{font-size:8.5px;padding:3px}
+.print-question-item .paper-image{max-width:280px;max-height:150px}
+.print-reading-passage{border:1px solid #555;padding:6px;margin:4px 0 6px;font-size:8.7px;line-height:1.45;background:#fafafa}
+.print-end-block{margin-top:5px;break-inside:avoid;page-break-inside:avoid}
+.print-end-message{border-top:1px solid #333;padding-top:4px;text-align:center;font-size:9px;font-weight:800}
+.print-teacher{margin-top:4px;font-size:8.5px;font-weight:700}
+.print-header-wrap .version-badge{font-size:10px;margin-bottom:4px}
+.print-header-wrap .exam-header{grid-template-columns:minmax(0,1fr) 135px minmax(0,1fr);min-height:88px}
+.print-header-wrap .ministry-info{font-size:8.5px;padding:3px;gap:2px}
+.print-header-wrap .ministry-info strong{font-size:9.5px}
+.print-header-wrap .ministry-logo img{width:100px;max-height:58px}
+.print-header-wrap .exam-info th,.print-header-wrap .exam-info td{font-size:7.8px;padding:2px}
+.print-header-wrap .exam-title{font-size:9.5px;padding:4px}
+.print-header-wrap .student-info{margin-top:4px}.print-header-wrap .student-info>div{font-size:8.5px;padding:4px}
+.print-header-wrap .school-logo-area{padding:3px}.print-header-wrap .school-logo-area img{max-width:70px;max-height:42px}
+
+@media(max-width:800px){
+  .form-grid{grid-template-columns:1fr}
+  .question-types{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .editor-top-grid{grid-template-columns:1fr}
+  .options-grid{grid-template-columns:1fr}
+  .saved-question-header,.saved-item-top,.questions-header{flex-direction:column}
+  .editor-actions{flex-direction:column}.editor-actions .btn{width:100%}
+}
+
+@page{size:A4 portrait;margin:0}
+
+@media print{
+  html,body{margin:0!important;padding:0!important;background:#fff!important;width:210mm!important}
+  body>*:not(#printRoot){display:none!important}
+  #printRoot{display:block!important;width:210mm!important;margin:0!important;padding:0!important}
+  .print-page{margin:0!important;box-shadow:none!important}
+  .correct-choice,.inline-correct-answer,.inline-model-answer,.table-correct-answer{
+    -webkit-print-color-adjust:exact!important;
+    print-color-adjust:exact!important
+  }
+}
+
+
+/* =========================================================
+   خيارات متعددة مرنة: 2 أو 3 أو 4 أو أكثر
+========================================================= */
+.mcq-options-editor{
+  border:1px solid #e1e7ec;
+  background:#f8fafc;
+  border-radius:12px;
+  padding:12px;
+}
+.mcq-options-toolbar,
+.mcq-option-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.mcq-options-toolbar{
+  margin-bottom:10px;
+}
+.mcq-option-head label{
+  margin:0;
+}
+.mcq-option-row{
+  padding:10px;
+  border:1px solid #e1e7ec;
+  background:#fff;
+  border-radius:10px;
+}
+.remove-mcq-option{
+  padding:5px 8px;
+  font-size:11px;
+}
+
+/* عدد الأعمدة يتوافق مع عدد الخيارات */
+.paper-options.options-count-2{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+.paper-options.options-count-3{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+}
+.paper-options.options-count-4{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+}
+.paper-options.options-count-5{
+  grid-template-columns:repeat(5,minmax(0,1fr));
+}
+.paper-options.options-count-6{
+  grid-template-columns:repeat(6,minmax(0,1fr));
+}
+
+.print-question-item .paper-options.options-count-2{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+.print-question-item .paper-options.options-count-3{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+}
+.print-question-item .paper-options.options-count-4{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+}
+.print-question-item .paper-options.options-count-5{
+  grid-template-columns:repeat(5,minmax(0,1fr));
+}
+.print-question-item .paper-options.options-count-6{
+  grid-template-columns:repeat(6,minmax(0,1fr));
+}
+
+@media(max-width:800px){
+  .paper-options.options-count-5,
+  .paper-options.options-count-6{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+
+/* =========================================================
+   شعار وزارة التعليم - ضبط احترافي
+========================================================= */
+.ministry-logo{
+  position:relative;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  overflow:hidden;
+  background:#fff !important;
+  padding:8px 12px !important;
+  min-width:145px;
+}
+
+.ministry-logo img{
+  display:block !important;
+  width:132px !important;
+  height:auto !important;
+  max-width:100% !important;
+  max-height:84px !important;
+  object-fit:contain !important;
+  object-position:center center !important;
+  margin:auto !important;
+}
+
+.moe-fallback{
+  display:none;
+  text-align:center;
+  font-size:14px;
+  font-weight:900;
+  color:#159f91;
+}
+
+/* مساحة بيضاء حول الشعار وعدم ملامسته للحدود */
+.exam-header .ministry-logo{
+  padding-inline:14px !important;
+}
+
+/* في رأس الطباعة: حجم متوازن ولا يطغى على البيانات */
+.print-header-wrap .ministry-logo{
+  min-width:128px !important;
+  padding:5px 10px !important;
+}
+
+.print-header-wrap .ministry-logo img{
+  width:112px !important;
+  max-height:66px !important;
+}
+
+@media print{
+  .ministry-logo,
+  .ministry-logo img{
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+  }
+}

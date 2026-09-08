@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>دخول المعلم - اختباري</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body class="auth-body">
+  <main class="auth-shell">
+    <section class="auth-card">
+      <div class="auth-logo">اختباري</div>
+      <h1>دخول المعلم</h1>
+      <p>استخدم رقم الترخيص وكلمة المرور الخاصة بك.</p>
+
+      <form id="teacherLoginForm">
+        <div class="field">
+          <label>رقم الترخيص</label>
+          <input id="license" autocomplete="username" placeholder="EK-1234-5678" required>
+        </div>
+        <div class="field">
+          <label>كلمة المرور</label>
+          <input id="password" type="password" autocomplete="current-password" required>
+        </div>
+        <button class="btn primary auth-submit" type="submit">دخول</button>
+      </form>
+
+      <div id="loginError" class="auth-error"></div>
+      <a class="admin-link" href="/admin-login">دخول الإدارة</a>
+    </section>
+  </main>
+<script src="login.js"></script>
+</body>
+</html>

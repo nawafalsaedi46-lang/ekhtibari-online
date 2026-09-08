@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اختباري - النسخة الاحترافية</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="account-bar">
+  <div>
+    <strong id="accountTeacherName">حساب المعلم</strong>
+    <span id="accountLicense" class="account-license"></span>
+  </div>
+  <button type="button" id="logoutBtn" class="btn danger">تسجيل خروج</button>
+</div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div>
+      <h1>اختباري</h1>
+      <p>منشئ اختبارات A4 احترافي</p>
+    </div>
+  </div>
+</header>
+
+
+<main class="container">
+
+  <section class="card exam-manager-card">
+    <div class="section-title">
+      <h2>اختباراتي</h2>
+      <p>كل اختبار هنا محفوظ داخل حسابك فقط، ولا يستطيع أي معلم آخر الوصول إليه.</p>
+    </div>
+
+    <div class="exam-save-row">
+      <div class="field exam-name-field">
+        <label>اسم الاختبار للحفظ</label>
+        <input type="text" id="examSaveName" placeholder="مثال: اختبار رياضيات الفترة الأولى">
+      </div>
+      <button type="button" id="saveToAccountBtn" class="btn primary">☁️ حفظ في حسابي</button>
+      <button type="button" id="newExamBtn" class="btn light">+ اختبار جديد</button>
+    </div>
+
+    <div id="accountSaveStatus" class="account-save-status"></div>
+    <div id="savedExamsList" class="saved-exams-list">
+      <div class="empty-questions">جاري تحميل اختباراتك...</div>
+    </div>
+  </section>
+
+
+  <section class="card">
+    <div class="section-title">
+      <h2>بيانات الاختبار</h2>
+      <p>تظهر هذه البيانات تلقائيًا في ورقة الاختبار والطباعة.</p>
+    </div>
+
+    <div class="form-grid">
+      <div class="field"><label>التاريخ</label><input type="date" id="examDate"></div>
+      <div class="field"><label>المنطقة التعليمية</label><input type="text" id="region" placeholder="منطقة المدينة المنورة"></div>
+      <div class="field"><label>اسم المدرسة</label><input type="text" id="school" placeholder="اسم المدرسة"></div>
+
+      <div class="field">
+        <label>معلم / معلمة</label>
+        <select id="teacherGender">
+          <option value="معلم">معلم</option>
+          <option value="معلمة">معلمة</option>
+        </select>
+      </div>
+
+      <div class="field"><label>اسم المعلم / المعلمة</label><input type="text" id="teacher" placeholder="الاسم"></div>
+      <div class="field"><label>المادة</label><input type="text" id="subject" placeholder="الرياضيات"></div>
+      <div class="field"><label>الصف</label><input type="text" id="grade" placeholder="الثالث المتوسط"></div>
+      <div class="field"><label>الفصل الدراسي</label><input type="text" id="semester" placeholder="الفصل الأول"></div>
+      <div class="field"><label>نوع الاختبار</label><input type="text" id="examType" placeholder="اختبار الفترة الأولى"></div>
+      <div class="field"><label>زمن الاختبار</label><input type="text" id="duration" placeholder="45 دقيقة"></div>
+      <div class="field"><label>الدرجة الكلية</label><input type="number" id="totalScore" min="0" step="0.5" placeholder="تلقائي"></div>
+      <div class="field"><label>شعار المدرسة - اختياري</label><input type="file" id="customLogo" accept="image/*"></div>
+
+      <div class="field">
+        <label>حجم خط الأسئلة</label>
+        <select id="questionFontSize">
+          <option value="12">12 - صغير</option>
+          <option value="13">13</option>
+          <option value="14" selected>14 - متوسط</option>
+          <option value="15">15</option>
+          <option value="16">16 - كبير</option>
+          <option value="17">17</option>
+          <option value="18">18 - كبير جدًا</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>إطار ورقة الاختبار</label>
+        <select id="paperFrame">
+          <option value="none">بدون إطار</option>
+          <option value="simple">إطار بسيط</option>
+          <option value="official" selected>إطار رسمي</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>رسالة ختام الاختبار</label>
+        <input type="text" id="endMessage" value="( انتهت الأسئلة )" placeholder="مثال: وفقكم الله وسدد خطاكم">
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="questionCard">
+    <div class="section-title">
+      <h2>كتابة الأسئلة</h2>
+      <p>اختر النوع، اكتب عدد الفقرات، ثم أدخل الأسئلة والإجابات.</p>
+    </div>
+
+    <div class="type-label">نوع السؤال</div>
+    <div class="question-types" id="questionTypes">
+      <button type="button" class="type-card active" data-type="mcq"><span class="type-icon">🔘</span><span>اختيار من متعدد</span></button>
+      <button type="button" class="type-card" data-type="truefalse"><span class="type-icon">✅</span><span>صح أو خطأ</span></button>
+      <button type="button" class="type-card" data-type="fill"><span class="type-icon">✍️</span><span>أكمل الفراغ</span></button>
+      <button type="button" class="type-card" data-type="essay"><span class="type-icon">📝</span><span>مقالي</span></button>
+      <button type="button" class="type-card" data-type="order"><span class="type-icon">🔢</span><span>ترتيب</span></button>
+      <button type="button" class="type-card" data-type="table"><span class="type-icon">📋</span><span>جدول</span></button>
+      <button type="button" class="type-card" data-type="image"><span class="type-icon">🖼️</span><span>صورة / رسم</span></button>
+      <button type="button" class="type-card" data-type="math"><span class="type-icon">➗</span><span>رياضيات</span></button>
+      <button type="button" class="type-card" data-type="reading"><span class="type-icon">📖</span><span>قطعة قراءة</span></button>
+    </div>
+
+    <input type="hidden" id="questionType" value="mcq">
+
+    <div class="editor-top-grid">
+      <div class="paragraph-count-box">
+        <label for="itemCount">عدد الفقرات</label>
+        <input type="number" id="itemCount" min="1" value="1" placeholder="20 أو 40 أو 60">
+        <small>بدون حد ثابت.</small>
+      </div>
+
+      <div class="field question-title-field">
+        <label>تعليمات / عنوان السؤال</label>
+        <input type="text" id="questionTitle" placeholder="اختر الإجابة الصحيحة فيما يلي:">
+      </div>
+    </div>
+
+    <div id="specialQuestionFields"></div>
+    <div id="questionEditor" class="question-editor"></div>
+
+    <div class="editor-actions">
+      <button type="button" id="addItemBtn" class="btn secondary">+ إضافة فقرة</button>
+      <button type="button" id="saveQuestionBtn" class="btn primary">💾 حفظ السؤال</button>
+      <button type="button" id="cancelEditBtn" class="btn light" style="display:none;">إلغاء التعديل</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="questions-header">
+      <div>
+        <h2>أسئلة الاختبار</h2>
+        <p>تعديل أو حذف السؤال كاملًا أو فقرة منفردة.</p>
+      </div>
+      <div class="question-count"><span id="questionCount">0</span> سؤال</div>
+    </div>
+
+    <div class="score-summary">مجموع درجات الأسئلة: <strong id="calculatedScore">0</strong></div>
+    <div id="questionsList" class="questions-list">
+      <div class="empty-questions">لم تتم إضافة أسئلة حتى الآن.</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-title">
+      <h2>معاينة الاختبار</h2>
+      <p>المعاينة هنا متصلة، أما الطباعة فتُقسَّم تلقائيًا إلى صفحات A4 حقيقية.</p>
+    </div>
+
+    <div class="preview-actions">
+      <button type="button" id="studentVersionBtn" class="btn primary">👨‍🎓 نسخة الطالب</button>
+      <button type="button" id="answerVersionBtn" class="btn secondary">✅ نموذج الإجابة</button>
+      <button type="button" id="printBtn" class="btn dark">🖨️ طباعة A4</button>
+      <button type="button" id="clearExamBtn" class="btn danger">🗑️ مسح الاختبار</button>
+    </div>
+
+    <div class="paper-wrapper">
+      <div class="paper frame-official" id="examPaper">
+        <div class="paper-inner-border">
+          <div id="versionBadge" class="version-badge">نسخة الطالب</div>
+
+          <div id="previewHeader"></div>
+
+          <div id="studentInfoRow" class="student-info">
+            <div>اسم الطالب: ............................................................</div>
+            <div>الصف: ....................................</div>
+          </div>
+
+          <div id="paperQuestions" class="paper-questions">
+            <div class="paper-empty">بعد إضافة الأسئلة ستظهر هنا تلقائيًا.</div>
+          </div>
+
+          <div class="teacher-footer">
+            <span id="teacherLabel">معلم المادة:</span>
+            <span id="pTeacher">-</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- حاوية مستقلة للطباعة. يبنيها JavaScript صفحة A4 صفحة A4 -->
+<div id="printRoot" class="print-root" aria-hidden="true"></div>
+
+<script src="app.js"></script>
+<script src="account.js"></script>
+</body>
+</html>
