@@ -1,4 +1,4 @@
-﻿services:
+services:
   - type: web
     name: ekhtibari-online-v2
     runtime: node
@@ -21,7 +21,7 @@
         generateValue: true
 
       - key: ADMIN_USERNAME
-        value: admin
+        value: NA1425
 
       - key: ADMIN_PASSWORD
         sync: false

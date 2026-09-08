@@ -3,42 +3,41 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>لوحة إدارة اختباري</title>
+  <title>ظ„ظˆط­ط© ط¥ط¯ط§ط±ط© ط§ط®طھط¨ط§ط±ظٹ</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="auth.css">
 </head>
 <body>
 <header class="topbar">
   <div class="topbar-inner admin-top">
-    <div><h1>لوحة إدارة اختباري</h1><p>إنشاء وإدارة تراخيص المعلمين</p></div>
-    <button id="adminLogoutBtn" class="btn danger">تسجيل خروج</button>
+    <div><h1>ظ„ظˆط­ط© ط¥ط¯ط§ط±ط© ط§ط®طھط¨ط§ط±ظٹ</h1><p>ط¥ظ†ط´ط§ط، ظˆط¥ط¯ط§ط±ط© طھط±ط§ط®ظٹطµ ط§ظ„ظ…ط¹ظ„ظ…ظٹظ†</p></div>
+    <button id="adminLogoutBtn" class="btn danger">طھط³ط¬ظٹظ„ ط®ط±ظˆط¬</button>
   </div>
 </header>
 
 <main class="container">
   <section class="card">
     <div class="section-title">
-      <h2>إضافة معلم جديد</h2>
-      <p>سيُنشئ النظام رقم ترخيص مستقل للمعلم.</p>
+      <h2>ط¥ط¶ط§ظپط© ظ…ط¹ظ„ظ… ط¬ط¯ظٹط¯</h2>
+      <p>ط³ظٹظڈظ†ط´ط¦ ط§ظ„ظ†ط¸ط§ظ… ط±ظ‚ظ… طھط±ط®ظٹطµ ظ…ط³طھظ‚ظ„ ظ„ظ„ظ…ط¹ظ„ظ….</p>
     </div>
 
     <form id="createTeacherForm" class="form-grid">
-      <div class="field"><label>اسم المعلم</label><input id="teacherName" required></div>
-      <div class="field"><label>كلمة المرور الأولية</label><input id="teacherPassword" type="password" minlength="6" required></div>
-      <div class="field"><label>تاريخ انتهاء الترخيص - اختياري</label><input id="expiresAt" type="date"></div>
-      <div class="field admin-create-button"><button class="btn primary" type="submit">+ إنشاء الترخيص</button></div>
+      <div class="field"><label>ط§ط³ظ… ط§ظ„ظ…ط¹ظ„ظ…</label><input id="teacherName" required></div>
+      <div class="field"><label>ظƒظ„ظ…ط© ط§ظ„ظ…ط±ظˆط± ط§ظ„ط£ظˆظ„ظٹط©</label><input id="teacherPassword" type="password" minlength="6" required></div>
+      <div class="field admin-create-button"><button class="btn primary" type="submit">+ ط¥ظ†ط´ط§ط، ط§ظ„طھط±ط®ظٹطµ</button></div>
     </form>
     <div id="adminMessage" class="account-save-status"></div>
   </section>
 
   <section class="card">
     <div class="questions-header">
-      <div><h2>المعلمون</h2><p>كل معلم مستقل ببياناته واختباراته.</p></div>
-      <div class="question-count"><span id="teacherCount">0</span> معلم</div>
+      <div><h2>ط§ظ„ظ…ط¹ظ„ظ…ظˆظ†</h2><p>ظƒظ„ ظ…ط¹ظ„ظ… ظ…ط³طھظ‚ظ„ ط¨ط¨ظٹط§ظ†ط§طھظ‡ ظˆط§ط®طھط¨ط§ط±ط§طھظ‡.</p></div>
+      <div class="question-count"><span id="teacherCount">0</span> ظ…ط¹ظ„ظ…</div>
     </div>
     <div class="admin-table-wrap">
       <table class="admin-table">
-        <thead><tr><th>المعلم</th><th>رقم الترخيص</th><th>الحالة</th><th>الانتهاء</th><th>الاختبارات</th><th>الإجراءات</th></tr></thead>
+        <thead><tr><th>ط§ظ„ظ…ط¹ظ„ظ…</th><th>ط±ظ‚ظ… ط§ظ„طھط±ط®ظٹطµ</th><th>ط§ظ„ط­ط§ظ„ط©</th><th>ط§ظ„ط§ط®طھط¨ط§ط±ط§طھ</th><th>ط§ظ„ط¥ط¬ط±ط§ط،ط§طھ</th></tr></thead>
         <tbody id="teachersTableBody"></tbody>
       </table>
     </div>
