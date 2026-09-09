@@ -1,4 +1,4 @@
-let questions = [];
+﻿let questions = [];
 let editingQuestionIndex = -1;
 let editingItemIndex = -1;
 let currentVersion = "student";
@@ -1001,7 +1001,7 @@ function renderItemHTML(q,item,itemIndex,forPrint=false){
                 ${
                   currentVersion==="answer"
                     ? mixedRight[i].correctNumber
-                    : "(     )"
+                    : ""
                 }
 
               </td>
@@ -1381,3 +1381,4 @@ addEditorItem();
 renderQuestionsList();
 renderPreview();
 if(currentVersion==="answer") versionBadge.textContent="نموذج الإجابة";
+
