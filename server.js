@@ -60,6 +60,7 @@ async function initDb() {
 
   await pool.query("ALTER TABLE teachers ADD COLUMN IF NOT EXISTS gender TEXT NOT NULL DEFAULT 'معلم'");
   await pool.query("ALTER TABLE teachers ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMPTZ");
+  await pool.query("ALTER TABLE teachers ADD COLUMN IF NOT EXISTS admin_note TEXT NOT NULL DEFAULT ''");
   await pool.query(`
     CREATE TABLE IF NOT EXISTS exams (
       id TEXT PRIMARY KEY,
@@ -593,6 +594,139 @@ app.get("/api/admin/teachers/trash", requireAdmin, async (req, res) => {
     res.status(500).json({ error: "تعذر تحميل المحذوفات." });
   }
 });
+
+app.get("/api/admin/teachers/:id/profile", requireAdmin, async (req, res) => {
+  try {
+
+    const teacherResult = await pool.query(
+      `SELECT
+         t.id,
+         t.name,
+         t.license,
+         t.gender,
+         t.active,
+         t.admin_note AS "adminNote",
+         t.created_at AS "createdAt",
+         t.expires_at::text AS "expiresAt",
+         COUNT(e.id)::int AS "examCount",
+         MAX(e.updated_at) AS "lastExamAt"
+       FROM teachers t
+       LEFT JOIN exams e
+         ON e.teacher_id = t.id
+       WHERE t.id = $1
+         AND t.deleted_at IS NULL
+       GROUP BY t.id
+       LIMIT 1`,
+      [req.params.id]
+    );
+
+    const teacher = teacherResult.rows[0];
+
+    if(!teacher){
+      return res.status(404).json({
+        error:"المعلم غير موجود."
+      });
+    }
+
+    const examResult = await pool.query(
+      `SELECT
+         id,
+         name,
+         created_at AS "createdAt",
+         updated_at AS "updatedAt"
+       FROM exams
+       WHERE teacher_id = $1
+       ORDER BY updated_at DESC
+       LIMIT 5`,
+      [req.params.id]
+    );
+
+    res.json({
+      teacher,
+      recentExams:examResult.rows
+    });
+
+  } catch(err){
+
+    console.error(err);
+
+    res.status(500).json({
+      error:"تعذر تحميل ملف المعلم."
+    });
+
+  }
+});
+
+
+app.patch("/api/admin/teachers/:id/profile", requireAdmin, async (req, res) => {
+  try {
+
+    const name =
+      String(req.body.name || "").trim();
+
+    const gender =
+      String(req.body.gender || "معلم").trim();
+
+    const adminNote =
+      String(req.body.adminNote || "").trim();
+
+    if(!name){
+      return res.status(400).json({
+        error:"اسم المعلم مطلوب."
+      });
+    }
+
+    if(!["معلم","معلمة"].includes(gender)){
+      return res.status(400).json({
+        error:"نوع الحساب غير صحيح."
+      });
+    }
+
+    const { rows } = await pool.query(
+      `UPDATE teachers
+       SET name = $2,
+           gender = $3,
+           admin_note = $4
+       WHERE id = $1
+         AND deleted_at IS NULL
+       RETURNING
+         id,
+         name,
+         license,
+         gender,
+         active,
+         admin_note AS "adminNote",
+         expires_at::text AS "expiresAt"`,
+      [
+        req.params.id,
+        name,
+        gender,
+        adminNote
+      ]
+    );
+
+    if(!rows[0]){
+      return res.status(404).json({
+        error:"المعلم غير موجود."
+      });
+    }
+
+    res.json({
+      ok:true,
+      teacher:rows[0]
+    });
+
+  } catch(err){
+
+    console.error(err);
+
+    res.status(500).json({
+      error:"تعذر حفظ ملف المعلم."
+    });
+
+  }
+});
+
 
 app.post("/api/admin/teachers", requireAdmin, async (req, res) => {
   try {

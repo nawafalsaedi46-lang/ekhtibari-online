@@ -150,6 +150,154 @@
       }
     }
 
+
+    .teacher-profile-modal{
+      position:fixed;
+      inset:0;
+      z-index:9999;
+      background:rgba(15,23,42,.56);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
+
+    .teacher-profile-modal.hidden{
+      display:none !important;
+    }
+
+    .teacher-profile-card{
+      width:min(920px,100%);
+      max-height:92vh;
+      overflow:auto;
+      background:#fff;
+      border-radius:18px;
+      box-shadow:0 25px 70px rgba(0,0,0,.25);
+    }
+
+    .teacher-profile-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:15px;
+      padding:20px 22px;
+      border-bottom:1px solid #e5e7eb;
+      position:sticky;
+      top:0;
+      background:#fff;
+      z-index:2;
+    }
+
+    .teacher-profile-header h2{
+      margin:0;
+    }
+
+    .teacher-profile-close{
+      width:38px;
+      height:38px;
+      border:0;
+      border-radius:10px;
+      cursor:pointer;
+      font-size:20px;
+      background:#f3f4f6;
+    }
+
+    .teacher-profile-body{
+      padding:22px;
+    }
+
+    .teacher-profile-summary{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:10px;
+      margin-bottom:20px;
+    }
+
+    .teacher-profile-item{
+      background:#f8fafc;
+      border:1px solid #e5e7eb;
+      border-radius:12px;
+      padding:13px;
+    }
+
+    .teacher-profile-item span{
+      display:block;
+      color:#6b7280;
+      font-size:12px;
+      margin-bottom:5px;
+    }
+
+    .teacher-profile-item strong{
+      display:block;
+      word-break:break-word;
+    }
+
+    .teacher-profile-form{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin-bottom:22px;
+    }
+
+    .teacher-profile-form .field-full{
+      grid-column:1/-1;
+    }
+
+    .teacher-profile-form input,
+    .teacher-profile-form select,
+    .teacher-profile-form textarea{
+      width:100%;
+    }
+
+    .teacher-profile-form textarea{
+      min-height:110px;
+      resize:vertical;
+    }
+
+    .profile-note-hint{
+      color:#6b7280;
+      font-size:12px;
+      margin-top:5px;
+    }
+
+    .recent-exams-box{
+      margin-top:20px;
+      border-top:1px solid #e5e7eb;
+      padding-top:18px;
+    }
+
+    .recent-exam-row{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 0;
+      border-bottom:1px solid #f1f5f9;
+    }
+
+    .recent-exam-row:last-child{
+      border-bottom:0;
+    }
+
+    .recent-exam-date{
+      color:#6b7280;
+      font-size:13px;
+      white-space:nowrap;
+    }
+
+    @media(max-width:750px){
+      .teacher-profile-summary{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+
+      .teacher-profile-form{
+        grid-template-columns:1fr;
+      }
+
+      .teacher-profile-form .field-full{
+        grid-column:auto;
+      }
+    }
+
   </style>
 </head>
 
@@ -415,6 +563,163 @@
   </section>
 
 </main>
+
+
+<div
+  id="teacherProfileModal"
+  class="teacher-profile-modal hidden"
+>
+
+  <div class="teacher-profile-card">
+
+    <div class="teacher-profile-header">
+
+      <div>
+        <h2>👤 ملف المعلم</h2>
+        <div id="profileHeaderLicense"></div>
+      </div>
+
+      <button
+        id="closeTeacherProfileBtn"
+        class="teacher-profile-close"
+        type="button"
+      >
+        ✕
+      </button>
+
+    </div>
+
+
+    <div class="teacher-profile-body">
+
+      <div class="teacher-profile-summary">
+
+        <div class="teacher-profile-item">
+          <span>الحالة</span>
+          <strong id="profileStatus">-</strong>
+        </div>
+
+        <div class="teacher-profile-item">
+          <span>تاريخ إنشاء الحساب</span>
+          <strong id="profileCreatedAt">-</strong>
+        </div>
+
+        <div class="teacher-profile-item">
+          <span>انتهاء الاشتراك</span>
+          <strong id="profileExpiresAt">-</strong>
+        </div>
+
+        <div class="teacher-profile-item">
+          <span>عدد الاختبارات</span>
+          <strong id="profileExamCount">0</strong>
+        </div>
+
+        <div class="teacher-profile-item">
+          <span>آخر تحديث لاختبار</span>
+          <strong id="profileLastExamAt">-</strong>
+        </div>
+
+      </div>
+
+
+      <form id="teacherProfileForm">
+
+        <input
+          id="profileTeacherId"
+          type="hidden"
+        >
+
+        <div class="teacher-profile-form">
+
+          <div class="field">
+
+            <label>اسم المعلم</label>
+
+            <input
+              id="profileTeacherName"
+              required
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>الصفة</label>
+
+            <select id="profileTeacherGender">
+
+              <option value="معلم">
+                معلم
+              </option>
+
+              <option value="معلمة">
+                معلمة
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="field">
+
+            <label>رقم الترخيص</label>
+
+            <input
+              id="profileTeacherLicense"
+              readonly
+              dir="ltr"
+            >
+
+          </div>
+
+
+          <div class="field-full">
+
+            <label>
+              ملاحظات الإدارة الخاصة
+            </label>
+
+            <textarea
+              id="profileAdminNote"
+              placeholder="مثال: تم التواصل معه، طلب تجديد سنوي..."
+            ></textarea>
+
+            <div class="profile-note-hint">
+              هذه الملاحظات تظهر لك في الإدارة فقط ولا يراها المعلم.
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <button
+          class="btn primary"
+          type="submit"
+        >
+          💾 حفظ ملف المعلم
+        </button>
+
+      </form>
+
+
+      <div class="recent-exams-box">
+
+        <h3>آخر الاختبارات</h3>
+
+        <div id="profileRecentExams">
+          لا توجد اختبارات.
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
 
 <script src="admin.js"></script>
 

@@ -160,6 +160,15 @@ function renderTeachers(){
           <td>
 
             <button
+              class="mini-btn edit"
+              onclick="openTeacherProfile(
+                '${t.id}'
+              )"
+            >
+              👤 الملف
+            </button>
+
+            <button
               class="mini-btn ${
                 t.active ? "delete" : "edit"
               }"
@@ -527,6 +536,264 @@ document
         event.target.reset();
 
         await refreshAll();
+
+      }catch(error){
+
+        message(
+          error.message,
+          true
+        );
+
+      }
+
+    }
+  );
+
+
+function formatProfileDate(value){
+
+  if(!value){
+    return "-";
+  }
+
+  const date =
+    new Date(value);
+
+  if(Number.isNaN(date.getTime())){
+    return String(value);
+  }
+
+  return date.toLocaleString("ar-SA");
+}
+
+
+async function openTeacherProfile(id){
+
+  try{
+
+    const data =
+      await api(
+        "/api/admin/teachers/" +
+        id +
+        "/profile"
+      );
+
+    const t =
+      data.teacher;
+
+    document.getElementById(
+      "profileTeacherId"
+    ).value =
+      t.id;
+
+    document.getElementById(
+      "profileTeacherName"
+    ).value =
+      t.name || "";
+
+    document.getElementById(
+      "profileTeacherGender"
+    ).value =
+      t.gender || "معلم";
+
+    document.getElementById(
+      "profileTeacherLicense"
+    ).value =
+      t.license || "";
+
+    document.getElementById(
+      "profileHeaderLicense"
+    ).textContent =
+      t.license || "";
+
+    document.getElementById(
+      "profileAdminNote"
+    ).value =
+      t.adminNote || "";
+
+    document.getElementById(
+      "profileStatus"
+    ).textContent =
+      t.active
+        ? "✅ نشط"
+        : "⏸️ موقوف";
+
+    document.getElementById(
+      "profileCreatedAt"
+    ).textContent =
+      formatProfileDate(
+        t.createdAt
+      );
+
+    document.getElementById(
+      "profileExpiresAt"
+    ).textContent =
+      t.expiresAt || "دائم";
+
+    document.getElementById(
+      "profileExamCount"
+    ).textContent =
+      Number(
+        t.examCount || 0
+      );
+
+    document.getElementById(
+      "profileLastExamAt"
+    ).textContent =
+      formatProfileDate(
+        t.lastExamAt
+      );
+
+    const exams =
+      data.recentExams || [];
+
+    const examsBox =
+      document.getElementById(
+        "profileRecentExams"
+      );
+
+    if(!exams.length){
+
+      examsBox.innerHTML =
+        '<div class="trash-empty">لا توجد اختبارات حتى الآن.</div>';
+
+    }else{
+
+      examsBox.innerHTML =
+        exams.map(exam => `
+
+          <div class="recent-exam-row">
+
+            <strong>
+              ${clean(
+                exam.name || "اختبار بدون اسم"
+              )}
+            </strong>
+
+            <span class="recent-exam-date">
+              ${clean(
+                formatProfileDate(
+                  exam.updatedAt
+                )
+              )}
+            </span>
+
+          </div>
+
+        `).join("");
+
+    }
+
+    document
+      .getElementById(
+        "teacherProfileModal"
+      )
+      .classList
+      .remove("hidden");
+
+  }catch(error){
+
+    message(
+      error.message,
+      true
+    );
+
+  }
+}
+
+
+function closeTeacherProfile(){
+
+  document
+    .getElementById(
+      "teacherProfileModal"
+    )
+    .classList
+    .add("hidden");
+
+}
+
+
+document
+  .getElementById(
+    "closeTeacherProfileBtn"
+  )
+  .addEventListener(
+    "click",
+    closeTeacherProfile
+  );
+
+
+document
+  .getElementById(
+    "teacherProfileModal"
+  )
+  .addEventListener(
+    "click",
+    event => {
+
+      if(
+        event.target.id ===
+        "teacherProfileModal"
+      ){
+        closeTeacherProfile();
+      }
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "teacherProfileForm"
+  )
+  .addEventListener(
+    "submit",
+    async event => {
+
+      event.preventDefault();
+
+      const id =
+        document.getElementById(
+          "profileTeacherId"
+        ).value;
+
+      try{
+
+        await api(
+          "/api/admin/teachers/" +
+          id +
+          "/profile",
+          {
+            method:"PATCH",
+            body:JSON.stringify({
+
+              name:
+                document.getElementById(
+                  "profileTeacherName"
+                ).value.trim(),
+
+              gender:
+                document.getElementById(
+                  "profileTeacherGender"
+                ).value,
+
+              adminNote:
+                document.getElementById(
+                  "profileAdminNote"
+                ).value
+
+            })
+          }
+        );
+
+        message(
+          "تم حفظ ملف المعلم ✅"
+        );
+
+        await refreshAll();
+
+        await openTeacherProfile(id);
 
       }catch(error){
 
@@ -995,6 +1262,9 @@ document
     }
   );
 
+
+window.openTeacherProfile =
+  openTeacherProfile;
 
 window.toggleTeacher =
   toggleTeacher;
