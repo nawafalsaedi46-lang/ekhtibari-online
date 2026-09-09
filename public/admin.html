@@ -67,6 +67,89 @@
       text-align:center;
       font-weight:800;
     }
+
+    .admin-overview{
+      margin-bottom:20px;
+    }
+
+    .admin-overview-title{
+      margin-bottom:14px;
+    }
+
+    .admin-overview-title h2{
+      margin:0 0 4px;
+    }
+
+    .admin-overview-title p{
+      margin:0;
+      color:#6b7280;
+    }
+
+    .admin-stats-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:12px;
+    }
+
+    .admin-stat-card{
+      background:#fff;
+      border:1px solid #e5e7eb;
+      border-radius:14px;
+      padding:17px;
+      min-height:112px;
+      box-shadow:0 4px 14px rgba(0,0,0,.04);
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+
+    .admin-stat-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+
+    .admin-stat-label{
+      color:#4b5563;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .admin-stat-icon{
+      font-size:22px;
+    }
+
+    .admin-stat-number{
+      font-size:30px;
+      line-height:1;
+      font-weight:900;
+      color:#111827;
+      margin-top:14px;
+    }
+
+    .admin-stat-warning{
+      border-color:#fed7aa;
+      background:#fffaf5;
+    }
+
+    .admin-stat-danger{
+      border-color:#fecaca;
+      background:#fffafa;
+    }
+
+    @media(max-width:900px){
+      .admin-stats-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+    }
+
+    @media(max-width:520px){
+      .admin-stats-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
   </style>
 </head>
 
@@ -86,6 +169,84 @@
 </header>
 
 <main class="container">
+
+  <section class="admin-overview">
+
+    <div class="admin-overview-title">
+      <h2>نظرة عامة</h2>
+      <p>ملخص مباشر لحالة منصة اختباري.</p>
+    </div>
+
+    <div class="admin-stats-grid">
+
+      <div class="admin-stat-card">
+        <div class="admin-stat-top">
+          <span class="admin-stat-label">إجمالي المعلمين</span>
+          <span class="admin-stat-icon">👥</span>
+        </div>
+        <div id="statTotalTeachers" class="admin-stat-number">0</div>
+      </div>
+
+      <div class="admin-stat-card">
+        <div class="admin-stat-top">
+          <span class="admin-stat-label">الحسابات الفعّالة</span>
+          <span class="admin-stat-icon">✅</span>
+        </div>
+        <div id="statActiveTeachers" class="admin-stat-number">0</div>
+      </div>
+
+      <div class="admin-stat-card">
+        <div class="admin-stat-top">
+          <span class="admin-stat-label">الحسابات الموقوفة</span>
+          <span class="admin-stat-icon">⏸️</span>
+        </div>
+        <div id="statStoppedTeachers" class="admin-stat-number">0</div>
+      </div>
+
+      <div class="admin-stat-card admin-stat-danger">
+        <div class="admin-stat-top">
+          <span class="admin-stat-label">اشتراكات منتهية</span>
+          <span class="admin-stat-icon">⛔</span>
+        </div>
+        <div id="statExpiredTeachers" class="admin-stat-number">0</div>
+      </div>
+
+      <div class="admin-stat-card admin-stat-warning">
+        <div class="admin-stat-top">
+          <span class="admin-stat-label">تنتهي خلال 7 أيام</span>
+          <span class="admin-stat-icon">⚠️</span>
+        </div>
+        <div id="statExpiringSoon" class="admin-stat-number">0</div>
+      </div>
+
+      <div class="admin-stat-card">
+        <div class="admin-stat-top">
+          <span class="admin-stat-label">المحذوفات</span>
+          <span class="admin-stat-icon">🗑️</span>
+        </div>
+        <div id="statTrashTeachers" class="admin-stat-number">0</div>
+      </div>
+
+      <div class="admin-stat-card">
+        <div class="admin-stat-top">
+          <span class="admin-stat-label">إجمالي الاختبارات</span>
+          <span class="admin-stat-icon">📝</span>
+        </div>
+        <div id="statTotalExams" class="admin-stat-number">0</div>
+      </div>
+
+      <div class="admin-stat-card">
+        <div class="admin-stat-top">
+          <span class="admin-stat-label">اختبارات هذا الشهر</span>
+          <span class="admin-stat-icon">📅</span>
+        </div>
+        <div id="statMonthExams" class="admin-stat-number">0</div>
+      </div>
+
+    </div>
+
+  </section>
+
 
   <section class="card">
     <div class="section-title">

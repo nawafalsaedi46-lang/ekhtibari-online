@@ -464,6 +464,87 @@ app.delete("/api/exams/:id", requireTeacher, async (req, res) => {
    لوحة الإدارة
 ========================= */
 
+app.get("/api/admin/stats", requireAdmin, async (req, res) => {
+  try {
+
+    const teacherResult = await pool.query(`
+      SELECT
+
+        COUNT(*) FILTER (
+          WHERE deleted_at IS NULL
+        )::int AS "totalTeachers",
+
+        COUNT(*) FILTER (
+          WHERE deleted_at IS NULL
+            AND active = TRUE
+            AND (
+              expires_at IS NULL
+              OR expires_at >= CURRENT_DATE
+            )
+        )::int AS "activeTeachers",
+
+        COUNT(*) FILTER (
+          WHERE deleted_at IS NULL
+            AND active = FALSE
+        )::int AS "stoppedTeachers",
+
+        COUNT(*) FILTER (
+          WHERE deleted_at IS NULL
+            AND expires_at IS NOT NULL
+            AND expires_at < CURRENT_DATE
+        )::int AS "expiredTeachers",
+
+        COUNT(*) FILTER (
+          WHERE deleted_at IS NULL
+            AND active = TRUE
+            AND expires_at IS NOT NULL
+            AND expires_at >= CURRENT_DATE
+            AND expires_at <= CURRENT_DATE + 7
+        )::int AS "expiringSoon",
+
+        COUNT(*) FILTER (
+          WHERE deleted_at IS NOT NULL
+        )::int AS "trashTeachers"
+
+      FROM teachers
+    `);
+
+    const examResult = await pool.query(`
+      SELECT
+
+        COUNT(*) FILTER (
+          WHERE t.deleted_at IS NULL
+        )::int AS "totalExams",
+
+        COUNT(*) FILTER (
+          WHERE t.deleted_at IS NULL
+            AND e.created_at >= date_trunc('month', CURRENT_DATE)
+        )::int AS "monthExams"
+
+      FROM exams e
+      JOIN teachers t
+        ON t.id = e.teacher_id
+    `);
+
+    res.json({
+      stats:{
+        ...teacherResult.rows[0],
+        ...examResult.rows[0]
+      }
+    });
+
+  } catch(err){
+
+    console.error(err);
+
+    res.status(500).json({
+      error:"تعذر تحميل إحصائيات الإدارة."
+    });
+
+  }
+});
+
+
 app.get("/api/admin/teachers", requireAdmin, async (req, res) => {
   try {
     const { rows } = await pool.query(`

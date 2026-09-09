@@ -301,6 +301,56 @@ function renderTrash(){
 }
 
 
+async function loadStats(){
+
+  const data =
+    await api("/api/admin/stats");
+
+  const stats =
+    data.stats || {};
+
+  document.getElementById(
+    "statTotalTeachers"
+  ).textContent =
+    Number(stats.totalTeachers || 0);
+
+  document.getElementById(
+    "statActiveTeachers"
+  ).textContent =
+    Number(stats.activeTeachers || 0);
+
+  document.getElementById(
+    "statStoppedTeachers"
+  ).textContent =
+    Number(stats.stoppedTeachers || 0);
+
+  document.getElementById(
+    "statExpiredTeachers"
+  ).textContent =
+    Number(stats.expiredTeachers || 0);
+
+  document.getElementById(
+    "statExpiringSoon"
+  ).textContent =
+    Number(stats.expiringSoon || 0);
+
+  document.getElementById(
+    "statTrashTeachers"
+  ).textContent =
+    Number(stats.trashTeachers || 0);
+
+  document.getElementById(
+    "statTotalExams"
+  ).textContent =
+    Number(stats.totalExams || 0);
+
+  document.getElementById(
+    "statMonthExams"
+  ).textContent =
+    Number(stats.monthExams || 0);
+}
+
+
 async function loadTeachers(){
 
   const data =
@@ -330,6 +380,7 @@ async function loadTrash(){
 async function refreshAll(){
 
   await Promise.all([
+    loadStats(),
     loadTeachers(),
     loadTrash()
   ]);
@@ -513,7 +564,7 @@ async function toggleTeacher(
         : "تم إيقاف الحساب ✅"
     );
 
-    await loadTeachers();
+    await refreshAll();
 
   }catch(error){
 
@@ -691,7 +742,7 @@ async function renewTeacher(
       " ✅"
     );
 
-    await loadTeachers();
+    await refreshAll();
 
   }catch(error){
 
