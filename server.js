@@ -59,6 +59,7 @@ async function initDb() {
   `);
 
   await pool.query("ALTER TABLE teachers ADD COLUMN IF NOT EXISTS gender TEXT NOT NULL DEFAULT 'معلم'");
+  await pool.query("ALTER TABLE teachers ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMPTZ");
   await pool.query(`
     CREATE TABLE IF NOT EXISTS exams (
       id TEXT PRIMARY KEY,
@@ -111,6 +112,7 @@ async function requireTeacher(req, res, next) {
               expires_at::text AS expires_at
        FROM teachers
        WHERE id = $1
+         AND deleted_at IS NULL
        LIMIT 1`,
       [req.session.teacherId]
     );
@@ -182,6 +184,7 @@ app.post("/api/auth/teacher-login", async (req, res) => {
               expires_at::text AS expires_at
        FROM teachers
        WHERE UPPER(license) = $1
+         AND deleted_at IS NULL
        LIMIT 1`,
       [license]
     );
@@ -474,6 +477,7 @@ app.get("/api/admin/teachers", requireAdmin, async (req, res) => {
         COUNT(e.id)::int AS "examCount"
       FROM teachers t
       LEFT JOIN exams e ON e.teacher_id = t.id
+      WHERE t.deleted_at IS NULL
       GROUP BY t.id
       ORDER BY t.created_at DESC
     `);
@@ -482,6 +486,30 @@ app.get("/api/admin/teachers", requireAdmin, async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "تعذر تحميل المعلمين." });
+  }
+});
+
+app.get("/api/admin/teachers/trash", requireAdmin, async (req, res) => {
+  try {
+    const { rows } = await pool.query(`
+      SELECT
+        t.id,
+        t.name,
+        t.license,
+        t.expires_at::text AS "expiresAt",
+        t.deleted_at AS "deletedAt",
+        COUNT(e.id)::int AS "examCount"
+      FROM teachers t
+      LEFT JOIN exams e ON e.teacher_id = t.id
+      WHERE t.deleted_at IS NOT NULL
+      GROUP BY t.id
+      ORDER BY t.deleted_at DESC
+    `);
+
+    res.json({ teachers: rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "تعذر تحميل المحذوفات." });
   }
 });
 
@@ -527,6 +555,7 @@ app.patch("/api/admin/teachers/:id", requireAdmin, async (req, res) => {
       `SELECT id, active, expires_at::text AS expires_at
        FROM teachers
        WHERE id = $1
+         AND deleted_at IS NULL
        LIMIT 1`,
       [req.params.id]
     );
@@ -582,38 +611,107 @@ app.patch("/api/admin/teachers/:id", requireAdmin, async (req, res) => {
 app.delete("/api/admin/teachers/:id", requireAdmin, async (req, res) => {
   try {
     const { rows } = await pool.query(
-      "SELECT id, active FROM teachers WHERE id = $1 LIMIT 1",
+      `UPDATE teachers
+       SET deleted_at = NOW(),
+           active = FALSE
+       WHERE id = $1
+         AND deleted_at IS NULL
+       RETURNING id, name, license`,
+      [req.params.id]
+    );
+
+    if(!rows[0]){
+      return res.status(404).json({
+        error: "المعلم غير موجود أو موجود مسبقًا في المحذوفات."
+      });
+    }
+
+    res.json({ ok:true, teacher:rows[0] });
+
+  } catch(err){
+    console.error(err);
+    res.status(500).json({
+      error: "تعذر نقل المعلم إلى المحذوفات."
+    });
+  }
+});
+
+
+app.patch("/api/admin/teachers/:id/restore", requireAdmin, async (req, res) => {
+  try {
+    const { rows } = await pool.query(
+      `UPDATE teachers
+       SET deleted_at = NULL,
+           active = TRUE
+       WHERE id = $1
+         AND deleted_at IS NOT NULL
+       RETURNING id, name, license, active,
+                 expires_at::text AS "expiresAt"`,
+      [req.params.id]
+    );
+
+    if(!rows[0]){
+      return res.status(404).json({
+        error: "الحساب غير موجود في المحذوفات."
+      });
+    }
+
+    res.json({ ok:true, teacher:rows[0] });
+
+  } catch(err){
+    console.error(err);
+    res.status(500).json({
+      error: "تعذر استعادة الحساب."
+    });
+  }
+});
+
+
+app.delete("/api/admin/teachers/:id/permanent", requireAdmin, async (req, res) => {
+  try {
+    const confirmLicense =
+      String(req.body.confirmLicense || "")
+        .trim()
+        .toUpperCase();
+
+    const { rows } = await pool.query(
+      `SELECT id, name, license
+       FROM teachers
+       WHERE id = $1
+         AND deleted_at IS NOT NULL
+       LIMIT 1`,
       [req.params.id]
     );
 
     const teacher = rows[0];
 
-    if (!teacher) {
+    if(!teacher){
       return res.status(404).json({
-        error: "\u0627\u0644\u0645\u0639\u0644\u0645 \u063a\u064a\u0631 \u0645\u0648\u062c\u0648\u062f."
+        error: "الحساب غير موجود في المحذوفات."
       });
     }
 
-    if (teacher.active) {
-      return res.status(409).json({
-        error: "\u0623\u0648\u0642\u0641 \u0627\u0644\u0645\u0639\u0644\u0645 \u0623\u0648\u0644\u0627\u064b \u0642\u0628\u0644 \u0627\u0644\u062d\u0630\u0641."
+    if(confirmLicense !== String(teacher.license).toUpperCase()){
+      return res.status(400).json({
+        error: "رقم الترخيص غير مطابق."
       });
     }
 
     await pool.query(
-      "DELETE FROM teachers WHERE id = $1",
-      [req.params.id]
+      "DELETE FROM teachers WHERE id = $1 AND deleted_at IS NOT NULL",
+      [teacher.id]
     );
 
-    res.json({ ok: true });
+    res.json({ ok:true });
 
-  } catch (err) {
+  } catch(err){
     console.error(err);
     res.status(500).json({
-      error: "\u062a\u0639\u0630\u0631 \u062d\u0630\u0641 \u0627\u0644\u0645\u0639\u0644\u0645."
+      error: "تعذر الحذف النهائي."
     });
   }
 });
+
 
 app.get("/exams", teacherPage, (req, res) => {
   res.sendFile(path.join(PUBLIC_DIR, "exams.html"));

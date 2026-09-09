@@ -6,16 +6,87 @@
   <title>لوحة إدارة اختباري</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="auth.css">
+
+  <style>
+    .admin-tabs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+
+    .admin-tab{
+      border:1px solid #d1d5db;
+      background:#fff;
+      padding:11px 18px;
+      border-radius:10px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .admin-tab.active{
+      background:#0f766e;
+      color:#fff;
+      border-color:#0f766e;
+    }
+
+    .admin-search{
+      margin-bottom:16px;
+    }
+
+    .admin-search input{
+      width:100%;
+      max-width:500px;
+      padding:12px 14px;
+      border:1px solid #d1d5db;
+      border-radius:10px;
+      font-size:15px;
+    }
+
+    .hidden{
+      display:none !important;
+    }
+
+    .trash-info{
+      background:#fff7ed;
+      border:1px solid #fed7aa;
+      border-radius:10px;
+      padding:12px;
+      margin-bottom:15px;
+      line-height:1.8;
+    }
+
+    .trash-empty{
+      text-align:center;
+      padding:30px 10px !important;
+      color:#6b7280;
+    }
+
+    .license-cell{
+      direction:ltr;
+      text-align:center;
+      font-weight:800;
+    }
+  </style>
 </head>
+
 <body>
+
 <header class="topbar">
   <div class="topbar-inner admin-top">
-    <div><h1>لوحة إدارة اختباري</h1><p>إنشاء وإدارة تراخيص المعلمين</p></div>
-    <button id="adminLogoutBtn" class="btn danger">تسجيل خروج</button>
+    <div>
+      <h1>لوحة إدارة اختباري</h1>
+      <p>إدارة حسابات وتراخيص المعلمين</p>
+    </div>
+
+    <button id="adminLogoutBtn" class="btn danger">
+      تسجيل خروج
+    </button>
   </div>
 </header>
 
 <main class="container">
+
   <section class="card">
     <div class="section-title">
       <h2>إضافة معلم جديد</h2>
@@ -23,27 +94,168 @@
     </div>
 
     <form id="createTeacherForm" class="form-grid">
-      <div class="field"><label>اسم المعلم</label><input id="teacherName" required></div>
-      <div class="field"><label>كلمة المرور الأولية</label><input id="teacherPassword" type="text" minlength="6" required></div>
-      <div class="field"><label>تاريخ انتهاء الترخيص - اختياري</label><input id="expiresAt" type="date"></div>
-      <div class="field admin-create-button"><button class="btn primary" type="submit">+ إنشاء الترخيص</button></div>
+
+      <div class="field">
+        <label>اسم المعلم</label>
+        <input id="teacherName" required>
+      </div>
+
+      <div class="field">
+        <label>كلمة المرور الأولية</label>
+        <input
+          id="teacherPassword"
+          type="text"
+          minlength="6"
+          required
+        >
+      </div>
+
+      <div class="field">
+        <label>تاريخ انتهاء الترخيص - اختياري</label>
+        <input id="expiresAt" type="date">
+      </div>
+
+      <div class="field admin-create-button">
+        <button class="btn primary" type="submit">
+          + إنشاء الترخيص
+        </button>
+      </div>
+
     </form>
-    <div id="adminMessage" class="account-save-status"></div>
+
+    <div
+      id="adminMessage"
+      class="account-save-status"
+    ></div>
   </section>
 
+
   <section class="card">
-    <div class="questions-header">
-      <div><h2>المعلمون</h2><p>كل معلم مستقل ببياناته واختباراته.</p></div>
-      <div class="question-count"><span id="teacherCount">0</span> معلم</div>
+
+    <div class="admin-tabs">
+
+      <button
+        id="teachersTabBtn"
+        class="admin-tab active"
+        type="button"
+      >
+        👥 المعلمون
+      </button>
+
+      <button
+        id="trashTabBtn"
+        class="admin-tab"
+        type="button"
+      >
+        🗑️ المحذوفات
+        (<span id="trashTabCount">0</span>)
+      </button>
+
     </div>
-    <div class="admin-table-wrap">
-      <table class="admin-table">
-        <thead><tr><th>المعلم</th><th>رقم الترخيص</th><th>الحالة</th><th>الانتهاء</th><th>الاختبارات</th><th>الإجراءات</th></tr></thead>
-        <tbody id="teachersTableBody"></tbody>
-      </table>
+
+
+    <div class="admin-search">
+
+      <input
+        id="adminSearch"
+        type="search"
+        placeholder="🔎 ابحث باسم المعلم أو رقم الترخيص"
+        autocomplete="off"
+      >
+
     </div>
+
+
+    <div id="teachersSection">
+
+      <div class="questions-header">
+
+        <div>
+          <h2>المعلمون</h2>
+          <p>كل معلم مستقل ببياناته واختباراته.</p>
+        </div>
+
+        <div class="question-count">
+          <span id="teacherCount">0</span>
+          معلم
+        </div>
+
+      </div>
+
+      <div class="admin-table-wrap">
+
+        <table class="admin-table">
+
+          <thead>
+            <tr>
+              <th>المعلم</th>
+              <th>رقم الترخيص</th>
+              <th>الحالة</th>
+              <th>الانتهاء</th>
+              <th>الاختبارات</th>
+              <th>الإجراءات</th>
+            </tr>
+          </thead>
+
+          <tbody id="teachersTableBody"></tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+
+    <div id="trashSection" class="hidden">
+
+      <div class="questions-header">
+
+        <div>
+          <h2>🗑️ المحذوفات</h2>
+          <p>يمكن استعادة الحساب قبل حذفه نهائيًا.</p>
+        </div>
+
+        <div class="question-count">
+          <span id="trashCount">0</span>
+          حساب
+        </div>
+
+      </div>
+
+      <div class="trash-info">
+        عند نقل المعلم إلى المحذوفات لا تُحذف اختباراته.
+        ويمكنك البحث عنه برقم الترخيص ثم استعادته.
+        الحذف النهائي فقط هو الذي يحذف الحساب واختباراته نهائيًا.
+      </div>
+
+      <div class="admin-table-wrap">
+
+        <table class="admin-table">
+
+          <thead>
+            <tr>
+              <th>المعلم</th>
+              <th>رقم الترخيص</th>
+              <th>تاريخ الحذف</th>
+              <th>انتهاء الاشتراك</th>
+              <th>الاختبارات</th>
+              <th>الإجراءات</th>
+            </tr>
+          </thead>
+
+          <tbody id="trashTableBody"></tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
   </section>
+
 </main>
+
 <script src="admin.js"></script>
+
 </body>
 </html>
