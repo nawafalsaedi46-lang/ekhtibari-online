@@ -1,0 +1,370 @@
+﻿<!doctype html>
+
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
+
+<title>رسائل المعلمين - إدارة اختباري</title>
+
+<link rel="stylesheet" href="/admin-support.css">
+
+</head>
+
+<body>
+
+
+<header class="support-admin-header">
+
+  <div>
+
+    <a
+      class="back-link"
+      href="/admin"
+    >
+      ← الرجوع إلى الإدارة
+    </a>
+
+    <h1>
+      📨 رسائل المعلمين
+    </h1>
+
+    <p>
+      متابعة المشاكل والاقتراحات والاستفسارات.
+    </p>
+
+  </div>
+
+
+  <button
+    id="logoutBtn"
+    class="logout-btn"
+    type="button"
+  >
+    تسجيل خروج
+  </button>
+
+</header>
+
+
+<main class="support-admin-container">
+
+
+  <section class="stats-grid">
+
+    <div class="stat-card">
+
+      <span>
+        جميع الطلبات
+      </span>
+
+      <strong id="allCount">
+        0
+      </strong>
+
+    </div>
+
+
+    <div class="stat-card unread">
+
+      <span>
+        غير المقروءة
+      </span>
+
+      <strong id="unreadCount">
+        0
+      </strong>
+
+    </div>
+
+
+    <div class="stat-card">
+
+      <span>
+        جديدة
+      </span>
+
+      <strong id="newCount">
+        0
+      </strong>
+
+    </div>
+
+
+    <div class="stat-card progress">
+
+      <span>
+        قيد المعالجة
+      </span>
+
+      <strong id="progressCount">
+        0
+      </strong>
+
+    </div>
+
+
+    <div class="stat-card resolved">
+
+      <span>
+        تم الحل
+      </span>
+
+      <strong id="resolvedCount">
+        0
+      </strong>
+
+    </div>
+
+  </section>
+
+
+  <section class="filter-card">
+
+    <div class="search-box">
+
+      <input
+        id="ticketSearch"
+        type="search"
+        placeholder="🔎 ابحث باسم المعلم أو الترخيص أو رقم الطلب أو العنوان"
+      >
+
+    </div>
+
+
+    <select id="statusFilter">
+
+      <option value="">
+        كل الحالات
+      </option>
+
+      <option value="new">
+        🔵 جديد
+      </option>
+
+      <option value="in_progress">
+        🟡 قيد المعالجة
+      </option>
+
+      <option value="resolved">
+        🟢 تم الحل
+      </option>
+
+    </select>
+
+
+    <select id="categoryFilter">
+
+      <option value="">
+        كل الأنواع
+      </option>
+
+      <option value="technical">
+        🛠️ مشكلة تقنية
+      </option>
+
+      <option value="suggestion">
+        💡 اقتراح
+      </option>
+
+      <option value="question">
+        ❓ استفسار
+      </option>
+
+      <option value="subscription">
+        💳 اشتراك أو تجديد
+      </option>
+
+      <option value="other">
+        📌 أخرى
+      </option>
+
+    </select>
+
+
+    <label class="unread-only">
+
+      <input
+        id="unreadOnly"
+        type="checkbox"
+      >
+
+      غير المقروء فقط
+
+    </label>
+
+  </section>
+
+
+  <section class="tickets-card">
+
+    <div class="tickets-head">
+
+      <div>
+
+        <h2>
+          صندوق الرسائل
+        </h2>
+
+        <p>
+          اضغط على أي رسالة لفتح المحادثة.
+        </p>
+
+      </div>
+
+      <button
+        id="refreshBtn"
+        class="refresh-btn"
+        type="button"
+      >
+        🔄 تحديث
+      </button>
+
+    </div>
+
+
+    <div
+      id="ticketsList"
+      class="tickets-list"
+    >
+
+      <div class="empty">
+        جاري تحميل الرسائل...
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<div
+  id="ticketModal"
+  class="ticket-modal"
+  aria-hidden="true"
+>
+
+  <div class="ticket-dialog">
+
+
+    <div class="dialog-header">
+
+      <div>
+
+        <div
+          id="conversationTicketId"
+          class="ticket-id"
+        ></div>
+
+        <h2 id="conversationSubject">
+          المحادثة
+        </h2>
+
+        <div
+          id="conversationTeacher"
+          class="teacher-info"
+        ></div>
+
+        <div
+          id="conversationMeta"
+          class="conversation-meta"
+        ></div>
+
+      </div>
+
+
+      <button
+        id="closeModalBtn"
+        class="close-btn"
+        type="button"
+      >
+        ✕
+      </button>
+
+    </div>
+
+
+    <div class="status-control">
+
+      <label>
+        حالة الطلب
+      </label>
+
+      <select id="ticketStatus">
+
+        <option value="new">
+          🔵 جديد
+        </option>
+
+        <option value="in_progress">
+          🟡 قيد المعالجة
+        </option>
+
+        <option value="resolved">
+          🟢 تم الحل
+        </option>
+
+      </select>
+
+      <button
+        id="saveStatusBtn"
+        class="secondary-btn"
+        type="button"
+      >
+        حفظ الحالة
+      </button>
+
+      <span
+        id="statusMessage"
+        class="status-message"
+      ></span>
+
+    </div>
+
+
+    <div
+      id="conversationMessages"
+      class="conversation-messages"
+    ></div>
+
+
+    <form
+      id="replyForm"
+      class="reply-form"
+    >
+
+      <textarea
+        id="replyBody"
+        maxlength="5000"
+        placeholder="اكتب رد الإدارة للمعلم..."
+        required
+      ></textarea>
+
+      <button
+        id="sendReplyBtn"
+        class="primary-btn"
+        type="submit"
+      >
+        إرسال الرد
+      </button>
+
+    </form>
+
+
+  </div>
+
+</div>
+
+
+<script src="/admin-support.js"></script>
+
+</body>
+
+</html>

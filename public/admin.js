@@ -557,6 +557,41 @@ document
   );
 
 
+async function loadSupportUnreadCount(){
+
+  try{
+
+    const data =
+      await api(
+        "/api/admin/support/tickets"
+      );
+
+    const count =
+      Number(
+        data.unreadCount || 0
+      );
+
+    const el =
+      document.getElementById(
+        "supportUnreadCount"
+      );
+
+    if(el){
+      el.textContent = count;
+    }
+
+  }catch(error){
+
+    console.error(
+      "تعذر تحميل عدد رسائل المعلمين",
+      error
+    );
+
+  }
+
+}
+
+
 async function loadStats(){
 
   const data =
@@ -1540,3 +1575,5 @@ refreshAll()
       true
     );
   });
+
+loadSupportUnreadCount().catch(()=>{});

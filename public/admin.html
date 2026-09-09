@@ -362,6 +362,19 @@
       }
     }
 
+
+    .admin-tab-link{
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:4px;
+    }
+
+    #supportUnreadCount:not(:empty){
+      font-weight:900;
+    }
+
   </style>
 </head>
 
@@ -609,6 +622,16 @@
         🗑️ المحذوفات
         (<span id="trashTabCount">0</span>)
       </button>
+
+      <a
+        id="supportTabLink"
+        class="admin-tab admin-tab-link"
+        href="/admin/support"
+      >
+        📨 رسائل المعلمين
+        (<span id="supportUnreadCount">0</span>)
+      </a>
+
 
     </div>
 

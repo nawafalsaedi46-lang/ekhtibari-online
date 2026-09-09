@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>تواصل مع الإدارة - اختباري</title>
+
+<link rel="stylesheet" href="/dashboard.css">
+<link rel="stylesheet" href="/support.css">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+  <aside class="sidebar">
+
+    <div class="brand">
+
+      <div class="brand-icon">
+        📄
+      </div>
+
+      <div>
+        <h2>اختباري</h2>
+        <span>منصة المعلم</span>
+      </div>
+
+    </div>
+
+
+    <nav>
+
+      <a class="nav-item" href="/dashboard">
+        <span>🏠</span>
+        الرئيسية
+      </a>
+
+      <a class="nav-item" href="/teacher">
+        <span>📝</span>
+        إنشاء اختبار جديد
+      </a>
+
+      <a class="nav-item" href="/exams">
+        <span>📁</span>
+        اختباراتي
+      </a>
+
+      <a class="nav-item active" href="/support">
+        <span>💬</span>
+        تواصل مع الإدارة
+      </a>
+
+      <a class="nav-item" href="/settings">
+        <span>⚙️</span>
+        الإعدادات
+      </a>
+
+    </nav>
+
+  </aside>
+
+
+  <main class="main">
+
+    <header class="top">
+
+      <div>
+        <p class="welcome">
+          مركز الدعم
+        </p>
+
+        <h1>
+          تواصل مع الإدارة
+        </h1>
+      </div>
+
+      <div class="account-box">
+        <span id="supportTeacherName">
+          المعلم
+        </span>
+        <strong id="supportTeacherLicense">
+          ...
+        </strong>
+      </div>
+
+    </header>
+
+
+    <section class="support-intro">
+
+      <div class="support-intro-icon">
+        💬
+      </div>
+
+      <div>
+        <h2>كيف نقدر نخدمك؟</h2>
+
+        <p>
+          أرسل مشكلتك أو اقتراحك أو استفسارك،
+          وسيظهر رد الإدارة هنا داخل حسابك.
+        </p>
+      </div>
+
+    </section>
+
+
+    <div class="support-grid">
+
+      <section class="support-card">
+
+        <div class="support-card-head">
+
+          <div>
+            <h2>✉️ رسالة جديدة</h2>
+            <p>
+              اكتب تفاصيل طلبك بشكل واضح.
+            </p>
+          </div>
+
+        </div>
+
+
+        <form id="newTicketForm">
+
+          <label class="support-field">
+
+            <span>نوع الرسالة</span>
+
+            <select
+              id="ticketCategory"
+              required
+            >
+
+              <option value="technical">
+                🛠️ مشكلة تقنية
+              </option>
+
+              <option value="suggestion">
+                💡 اقتراح
+              </option>
+
+              <option value="question">
+                ❓ استفسار
+              </option>
+
+              <option value="subscription">
+                💳 اشتراك أو تجديد
+              </option>
+
+              <option value="other">
+                📌 أخرى
+              </option>
+
+            </select>
+
+          </label>
+
+
+          <label class="support-field">
+
+            <span>عنوان الرسالة</span>
+
+            <input
+              id="ticketSubject"
+              maxlength="150"
+              placeholder="مثال: مشكلة في حفظ الاختبار"
+              required
+            >
+
+          </label>
+
+
+          <label class="support-field">
+
+            <span>التفاصيل</span>
+
+            <textarea
+              id="ticketBody"
+              maxlength="5000"
+              placeholder="اشرح المشكلة أو الاقتراح بالتفصيل..."
+              required
+            ></textarea>
+
+          </label>
+
+
+          <button
+            id="sendTicketBtn"
+            class="support-primary-btn"
+            type="submit"
+          >
+            إرسال للإدارة
+          </button>
+
+
+          <div
+            id="ticketFormMessage"
+            class="support-form-message"
+          ></div>
+
+        </form>
+
+      </section>
+
+
+      <section class="support-card">
+
+        <div class="support-card-head">
+
+          <div>
+            <h2>📨 رسائلي</h2>
+
+            <p>
+              تابع طلباتك وردود الإدارة.
+            </p>
+          </div>
+
+          <span
+            id="ticketCount"
+            class="support-count"
+          >
+            0
+          </span>
+
+        </div>
+
+
+        <div
+          id="ticketsList"
+          class="tickets-list"
+        >
+
+          <div class="support-empty">
+            جاري تحميل الرسائل...
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+</div>
+
+
+<div
+  id="ticketModal"
+  class="ticket-modal"
+  aria-hidden="true"
+>
+
+  <div class="ticket-dialog">
+
+    <div class="ticket-dialog-head">
+
+      <div>
+
+        <div
+          id="conversationTicketId"
+          class="conversation-id"
+        ></div>
+
+        <h2 id="conversationSubject">
+          المحادثة
+        </h2>
+
+        <div
+          id="conversationMeta"
+          class="conversation-meta"
+        ></div>
+
+      </div>
+
+
+      <button
+        id="closeTicketModal"
+        class="ticket-close"
+        type="button"
+      >
+        ✕
+      </button>
+
+    </div>
+
+
+    <div
+      id="conversationMessages"
+      class="conversation-messages"
+    ></div>
+
+
+    <form
+      id="ticketReplyForm"
+      class="reply-form"
+    >
+
+      <textarea
+        id="ticketReplyBody"
+        maxlength="5000"
+        placeholder="اكتب ردك هنا..."
+        required
+      ></textarea>
+
+      <button
+        id="sendReplyBtn"
+        class="support-primary-btn"
+        type="submit"
+      >
+        إرسال الرد
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<script src="/support.js"></script>
+
+</body>
+</html>

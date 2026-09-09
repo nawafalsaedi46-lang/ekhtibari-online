@@ -91,6 +91,57 @@ async function initDb() {
     );
   `);
   await pool.query(`
+    CREATE TABLE IF NOT EXISTS support_tickets (
+      id TEXT PRIMARY KEY,
+
+      teacher_id TEXT NOT NULL
+        REFERENCES teachers(id)
+        ON DELETE CASCADE,
+
+      category TEXT NOT NULL,
+      subject TEXT NOT NULL,
+
+      status TEXT NOT NULL DEFAULT 'new',
+
+      admin_unread BOOLEAN NOT NULL DEFAULT TRUE,
+      teacher_unread BOOLEAN NOT NULL DEFAULT FALSE,
+
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS support_messages (
+      id TEXT PRIMARY KEY,
+
+      ticket_id TEXT NOT NULL
+        REFERENCES support_tickets(id)
+        ON DELETE CASCADE,
+
+      sender_role TEXT NOT NULL,
+      body TEXT NOT NULL,
+
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+  `);
+
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS idx_support_tickets_teacher
+    ON support_tickets(teacher_id);
+  `);
+
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS idx_support_tickets_status
+    ON support_tickets(status);
+  `);
+
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS idx_support_messages_ticket
+    ON support_messages(ticket_id);
+  `);
+
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS exams (
       id TEXT PRIMARY KEY,
       teacher_id TEXT NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
@@ -457,6 +508,386 @@ app.post("/api/announcement/:id/read", requireTeacher, async (req, res) => {
 
 
 /* =========================
+   مركز دعم المعلم
+========================= */
+
+app.get("/api/support/tickets", requireTeacher, async (req, res) => {
+  try {
+
+    const { rows } = await pool.query(
+      `SELECT
+         st.id,
+         st.category,
+         st.subject,
+         st.status,
+         st.teacher_unread AS "teacherUnread",
+         st.created_at AS "createdAt",
+         st.updated_at AS "updatedAt",
+
+         (
+           SELECT COUNT(*)::int
+           FROM support_messages sm
+           WHERE sm.ticket_id = st.id
+         ) AS "messageCount"
+
+       FROM support_tickets st
+
+       WHERE st.teacher_id = $1
+
+       ORDER BY st.updated_at DESC`,
+      [req.teacher.id]
+    );
+
+    res.json({
+      tickets:rows
+    });
+
+  } catch(err){
+
+    console.error(err);
+
+    res.status(500).json({
+      error:"تعذر تحميل رسائل الدعم."
+    });
+
+  }
+});
+
+
+app.post("/api/support/tickets", requireTeacher, async (req, res) => {
+
+  const allowedCategories = [
+    "technical",
+    "suggestion",
+    "question",
+    "subscription",
+    "other"
+  ];
+
+  const category =
+    String(req.body.category || "").trim();
+
+  const subject =
+    String(req.body.subject || "").trim();
+
+  const body =
+    String(req.body.body || "").trim();
+
+  if(!allowedCategories.includes(category)){
+
+    return res.status(400).json({
+      error:"نوع الرسالة غير صحيح."
+    });
+
+  }
+
+  if(subject.length < 3){
+
+    return res.status(400).json({
+      error:"اكتب عنوانًا واضحًا للرسالة."
+    });
+
+  }
+
+  if(subject.length > 150){
+
+    return res.status(400).json({
+      error:"عنوان الرسالة طويل جدًا."
+    });
+
+  }
+
+  if(body.length < 5){
+
+    return res.status(400).json({
+      error:"اكتب تفاصيل الرسالة."
+    });
+
+  }
+
+  if(body.length > 5000){
+
+    return res.status(400).json({
+      error:"نص الرسالة طويل جدًا."
+    });
+
+  }
+
+  const client =
+    await pool.connect();
+
+  try {
+
+    await client.query("BEGIN");
+
+    const ticketId =
+      newId("SUP");
+
+    const messageId =
+      newId("supportmsg");
+
+    const { rows } = await client.query(
+      `INSERT INTO support_tickets (
+         id,
+         teacher_id,
+         category,
+         subject,
+         status,
+         admin_unread,
+         teacher_unread
+       )
+       VALUES (
+         $1,$2,$3,$4,'new',TRUE,FALSE
+       )
+
+       RETURNING
+         id,
+         category,
+         subject,
+         status,
+         created_at AS "createdAt",
+         updated_at AS "updatedAt"`,
+      [
+        ticketId,
+        req.teacher.id,
+        category,
+        subject
+      ]
+    );
+
+    await client.query(
+      `INSERT INTO support_messages (
+         id,
+         ticket_id,
+         sender_role,
+         body
+       )
+       VALUES ($1,$2,'teacher',$3)`,
+      [
+        messageId,
+        ticketId,
+        body
+      ]
+    );
+
+    await client.query("COMMIT");
+
+    res.json({
+      ok:true,
+      ticket:rows[0]
+    });
+
+  } catch(err){
+
+    await client.query("ROLLBACK");
+
+    console.error(err);
+
+    res.status(500).json({
+      error:"تعذر إرسال الرسالة."
+    });
+
+  } finally {
+
+    client.release();
+
+  }
+
+});
+
+
+app.get("/api/support/tickets/:id", requireTeacher, async (req, res) => {
+  try {
+
+    const { rows } = await pool.query(
+      `SELECT
+         id,
+         category,
+         subject,
+         status,
+         created_at AS "createdAt",
+         updated_at AS "updatedAt"
+
+       FROM support_tickets
+
+       WHERE id = $1
+         AND teacher_id = $2
+
+       LIMIT 1`,
+      [
+        req.params.id,
+        req.teacher.id
+      ]
+    );
+
+    const ticket =
+      rows[0];
+
+    if(!ticket){
+
+      return res.status(404).json({
+        error:"رسالة الدعم غير موجودة."
+      });
+
+    }
+
+    const messagesResult =
+      await pool.query(
+        `SELECT
+           id,
+           sender_role AS "senderRole",
+           body,
+           created_at AS "createdAt"
+
+         FROM support_messages
+
+         WHERE ticket_id = $1
+
+         ORDER BY created_at ASC`,
+        [ticket.id]
+      );
+
+    await pool.query(
+      `UPDATE support_tickets
+       SET teacher_unread = FALSE
+       WHERE id = $1
+         AND teacher_id = $2`,
+      [
+        ticket.id,
+        req.teacher.id
+      ]
+    );
+
+    res.json({
+      ticket,
+      messages:messagesResult.rows
+    });
+
+  } catch(err){
+
+    console.error(err);
+
+    res.status(500).json({
+      error:"تعذر فتح رسالة الدعم."
+    });
+
+  }
+});
+
+
+app.post("/api/support/tickets/:id/messages", requireTeacher, async (req, res) => {
+
+  const body =
+    String(req.body.body || "").trim();
+
+  if(body.length < 1){
+
+    return res.status(400).json({
+      error:"اكتب الرد."
+    });
+
+  }
+
+  if(body.length > 5000){
+
+    return res.status(400).json({
+      error:"الرد طويل جدًا."
+    });
+
+  }
+
+  const client =
+    await pool.connect();
+
+  try {
+
+    await client.query("BEGIN");
+
+    const { rows } = await client.query(
+      `SELECT id
+       FROM support_tickets
+       WHERE id = $1
+         AND teacher_id = $2
+       LIMIT 1`,
+      [
+        req.params.id,
+        req.teacher.id
+      ]
+    );
+
+    if(!rows[0]){
+
+      await client.query("ROLLBACK");
+
+      return res.status(404).json({
+        error:"رسالة الدعم غير موجودة."
+      });
+
+    }
+
+    const messageId =
+      newId("supportmsg");
+
+    const messageResult =
+      await client.query(
+        `INSERT INTO support_messages (
+           id,
+           ticket_id,
+           sender_role,
+           body
+         )
+         VALUES ($1,$2,'teacher',$3)
+
+         RETURNING
+           id,
+           sender_role AS "senderRole",
+           body,
+           created_at AS "createdAt"`,
+        [
+          messageId,
+          req.params.id,
+          body
+        ]
+      );
+
+    await client.query(
+      `UPDATE support_tickets
+       SET
+         status = 'new',
+         admin_unread = TRUE,
+         teacher_unread = FALSE,
+         updated_at = NOW()
+       WHERE id = $1`,
+      [req.params.id]
+    );
+
+    await client.query("COMMIT");
+
+    res.json({
+      ok:true,
+      message:messageResult.rows[0]
+    });
+
+  } catch(err){
+
+    await client.query("ROLLBACK");
+
+    console.error(err);
+
+    res.status(500).json({
+      error:"تعذر إرسال الرد."
+    });
+
+  } finally {
+
+    client.release();
+
+  }
+
+});
+
+
+/* =========================
    اختبارات المعلم
    العزل يتم دائمًا بـ teacher_id
    المأخوذ من جلسة الدخول
@@ -766,6 +1197,326 @@ app.patch("/api/admin/announcement/:id/disable", requireAdmin, async (req, res) 
     });
 
   }
+});
+
+
+/* =========================
+   رسائل المعلمين - الإدارة
+========================= */
+
+app.get("/api/admin/support/tickets", requireAdmin, async (req, res) => {
+  try {
+
+    const { rows } = await pool.query(`
+      SELECT
+        st.id,
+        st.category,
+        st.subject,
+        st.status,
+        st.admin_unread AS "adminUnread",
+        st.created_at AS "createdAt",
+        st.updated_at AS "updatedAt",
+
+        t.id AS "teacherId",
+        t.name AS "teacherName",
+        t.license AS "teacherLicense",
+
+        (
+          SELECT COUNT(*)::int
+          FROM support_messages sm
+          WHERE sm.ticket_id = st.id
+        ) AS "messageCount"
+
+      FROM support_tickets st
+
+      JOIN teachers t
+        ON t.id = st.teacher_id
+
+      WHERE t.deleted_at IS NULL
+
+      ORDER BY
+        st.admin_unread DESC,
+        st.updated_at DESC
+    `);
+
+    const unreadCount =
+      rows.filter(
+        row => row.adminUnread
+      ).length;
+
+    res.json({
+      tickets:rows,
+      unreadCount
+    });
+
+  } catch(err){
+
+    console.error(err);
+
+    res.status(500).json({
+      error:"تعذر تحميل رسائل المعلمين."
+    });
+
+  }
+});
+
+
+app.get("/api/admin/support/tickets/:id", requireAdmin, async (req, res) => {
+  try {
+
+    const { rows } = await pool.query(
+      `SELECT
+         st.id,
+         st.category,
+         st.subject,
+         st.status,
+         st.created_at AS "createdAt",
+         st.updated_at AS "updatedAt",
+
+         t.id AS "teacherId",
+         t.name AS "teacherName",
+         t.license AS "teacherLicense"
+
+       FROM support_tickets st
+
+       JOIN teachers t
+         ON t.id = st.teacher_id
+
+       WHERE st.id = $1
+
+       LIMIT 1`,
+      [req.params.id]
+    );
+
+    const ticket =
+      rows[0];
+
+    if(!ticket){
+
+      return res.status(404).json({
+        error:"رسالة الدعم غير موجودة."
+      });
+
+    }
+
+    const messagesResult =
+      await pool.query(
+        `SELECT
+           id,
+           sender_role AS "senderRole",
+           body,
+           created_at AS "createdAt"
+
+         FROM support_messages
+
+         WHERE ticket_id = $1
+
+         ORDER BY created_at ASC`,
+        [ticket.id]
+      );
+
+    await pool.query(
+      `UPDATE support_tickets
+       SET admin_unread = FALSE
+       WHERE id = $1`,
+      [ticket.id]
+    );
+
+    res.json({
+      ticket,
+      messages:messagesResult.rows
+    });
+
+  } catch(err){
+
+    console.error(err);
+
+    res.status(500).json({
+      error:"تعذر فتح رسالة المعلم."
+    });
+
+  }
+});
+
+
+app.post("/api/admin/support/tickets/:id/messages", requireAdmin, async (req, res) => {
+
+  const body =
+    String(req.body.body || "").trim();
+
+  if(body.length < 1){
+
+    return res.status(400).json({
+      error:"اكتب الرد."
+    });
+
+  }
+
+  if(body.length > 5000){
+
+    return res.status(400).json({
+      error:"الرد طويل جدًا."
+    });
+
+  }
+
+  const client =
+    await pool.connect();
+
+  try {
+
+    await client.query("BEGIN");
+
+    const { rows } =
+      await client.query(
+        `SELECT id
+         FROM support_tickets
+         WHERE id = $1
+         LIMIT 1`,
+        [req.params.id]
+      );
+
+    if(!rows[0]){
+
+      await client.query("ROLLBACK");
+
+      return res.status(404).json({
+        error:"رسالة الدعم غير موجودة."
+      });
+
+    }
+
+    const messageId =
+      newId("supportmsg");
+
+    const messageResult =
+      await client.query(
+        `INSERT INTO support_messages (
+           id,
+           ticket_id,
+           sender_role,
+           body
+         )
+         VALUES ($1,$2,'admin',$3)
+
+         RETURNING
+           id,
+           sender_role AS "senderRole",
+           body,
+           created_at AS "createdAt"`,
+        [
+          messageId,
+          req.params.id,
+          body
+        ]
+      );
+
+    await client.query(
+      `UPDATE support_tickets
+       SET
+         status = CASE
+           WHEN status = 'resolved'
+             THEN 'in_progress'
+           ELSE status
+         END,
+
+         admin_unread = FALSE,
+         teacher_unread = TRUE,
+         updated_at = NOW()
+
+       WHERE id = $1`,
+      [req.params.id]
+    );
+
+    await client.query("COMMIT");
+
+    res.json({
+      ok:true,
+      message:messageResult.rows[0]
+    });
+
+  } catch(err){
+
+    await client.query("ROLLBACK");
+
+    console.error(err);
+
+    res.status(500).json({
+      error:"تعذر إرسال الرد."
+    });
+
+  } finally {
+
+    client.release();
+
+  }
+
+});
+
+
+app.patch("/api/admin/support/tickets/:id/status", requireAdmin, async (req, res) => {
+
+  const status =
+    String(req.body.status || "").trim();
+
+  const allowed =
+    [
+      "new",
+      "in_progress",
+      "resolved"
+    ];
+
+  if(!allowed.includes(status)){
+
+    return res.status(400).json({
+      error:"حالة الطلب غير صحيحة."
+    });
+
+  }
+
+  try {
+
+    const { rows } = await pool.query(
+      `UPDATE support_tickets
+       SET
+         status = $2,
+         teacher_unread = TRUE,
+         updated_at = NOW()
+       WHERE id = $1
+
+       RETURNING
+         id,
+         status,
+         updated_at AS "updatedAt"`,
+      [
+        req.params.id,
+        status
+      ]
+    );
+
+    if(!rows[0]){
+
+      return res.status(404).json({
+        error:"رسالة الدعم غير موجودة."
+      });
+
+    }
+
+    res.json({
+      ok:true,
+      ticket:rows[0]
+    });
+
+  } catch(err){
+
+    console.error(err);
+
+    res.status(500).json({
+      error:"تعذر تحديث حالة الطلب."
+    });
+
+  }
+
 });
 
 
@@ -1236,6 +1987,10 @@ app.get("/exams", teacherPage, (req, res) => {
   res.sendFile(path.join(PUBLIC_DIR, "exams.html"));
 });
 
+app.get("/support", teacherPage, (req, res) => {
+  res.sendFile(path.join(PUBLIC_DIR, "support.html"));
+});
+
 app.get("/settings", teacherPage, (req, res) => {
   res.sendFile(path.join(PUBLIC_DIR, "settings.html"));
 });
@@ -1246,6 +2001,10 @@ app.get("/dashboard", teacherPage, (req, res) => {
 
 app.get("/teacher", teacherPage, (req, res) => {
   res.sendFile(path.join(PUBLIC_DIR, "teacher.html"));
+});
+
+app.get("/admin/support", adminPage, (req, res) => {
+  res.sendFile(path.join(PUBLIC_DIR, "admin-support.html"));
 });
 
 app.get("/admin", adminPage, (req, res) => {

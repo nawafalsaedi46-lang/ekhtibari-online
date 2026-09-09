@@ -1,0 +1,517 @@
+﻿*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Tahoma,Arial,sans-serif;
+  background:#f4f7fb;
+  color:#172033;
+}
+
+.support-admin-header{
+  min-height:110px;
+  background:white;
+  border-bottom:1px solid #e4e9f0;
+  padding:22px clamp(18px,4vw,50px);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.support-admin-header h1{
+  margin:7px 0 5px;
+  font-size:27px;
+}
+
+.support-admin-header p{
+  margin:0;
+  color:#728096;
+}
+
+.back-link{
+  color:#1769e8;
+  text-decoration:none;
+  font-weight:700;
+  font-size:13px;
+}
+
+.logout-btn{
+  border:0;
+  border-radius:11px;
+  padding:11px 16px;
+  background:#fee2e2;
+  color:#b91c1c;
+  font-family:inherit;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.support-admin-container{
+  width:min(1250px,calc(100% - 32px));
+  margin:25px auto 60px;
+}
+
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.stat-card{
+  background:white;
+  border:1px solid #e5e9f0;
+  border-radius:15px;
+  padding:16px;
+}
+
+.stat-card span{
+  display:block;
+  color:#64748b;
+  font-size:13px;
+  margin-bottom:9px;
+}
+
+.stat-card strong{
+  font-size:27px;
+}
+
+.stat-card.unread{
+  border-color:#bfd4ff;
+  background:#f6f9ff;
+}
+
+.stat-card.progress{
+  border-color:#fed7aa;
+  background:#fffaf5;
+}
+
+.stat-card.resolved{
+  border-color:#bbf7d0;
+  background:#f4fff8;
+}
+
+.filter-card{
+  background:white;
+  border:1px solid #e5e9f0;
+  border-radius:16px;
+  padding:15px;
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr auto;
+  gap:10px;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.filter-card input,
+.filter-card select{
+  width:100%;
+  border:1px solid #d8dee8;
+  border-radius:10px;
+  padding:11px 12px;
+  font-family:inherit;
+  background:white;
+}
+
+.unread-only{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  white-space:nowrap;
+  font-size:13px;
+  font-weight:700;
+}
+
+.unread-only input{
+  width:auto;
+}
+
+.tickets-card{
+  background:white;
+  border:1px solid #e5e9f0;
+  border-radius:18px;
+  padding:20px;
+}
+
+.tickets-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:18px;
+}
+
+.tickets-head h2{
+  margin:0 0 4px;
+}
+
+.tickets-head p{
+  margin:0;
+  color:#7b8799;
+  font-size:13px;
+}
+
+.refresh-btn{
+  border:1px solid #d7dfeb;
+  background:white;
+  border-radius:10px;
+  padding:10px 14px;
+  font-family:inherit;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.tickets-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.ticket-row{
+  border:1px solid #e2e7ee;
+  border-radius:14px;
+  padding:15px;
+  display:grid;
+  grid-template-columns:minmax(200px,1.3fr) minmax(160px,1fr) auto auto;
+  gap:15px;
+  align-items:center;
+  cursor:pointer;
+  background:white;
+  transition:.15s ease;
+}
+
+.ticket-row:hover{
+  border-color:#abc7f7;
+  box-shadow:0 6px 20px rgba(15,23,42,.06);
+  transform:translateY(-1px);
+}
+
+.ticket-row.unread{
+  background:#f5f9ff;
+  border-color:#b9d0fa;
+}
+
+.ticket-title{
+  font-weight:900;
+  margin-bottom:6px;
+}
+
+.ticket-id-small{
+  direction:ltr;
+  display:inline-block;
+  color:#1769e8;
+  font-size:11px;
+  font-weight:800;
+}
+
+.teacher-name{
+  font-weight:800;
+}
+
+.teacher-license{
+  direction:ltr;
+  display:block;
+  font-size:11px;
+  color:#64748b;
+  margin-top:5px;
+}
+
+.ticket-category{
+  color:#64748b;
+  font-size:12px;
+  margin-top:5px;
+}
+
+.ticket-time{
+  color:#7b8799;
+  font-size:11px;
+  white-space:nowrap;
+}
+
+.status-badge{
+  border-radius:999px;
+  padding:6px 10px;
+  font-size:11px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.status-new{
+  background:#eff6ff;
+  color:#1d4ed8;
+}
+
+.status-progress{
+  background:#fff7ed;
+  color:#c2410c;
+}
+
+.status-resolved{
+  background:#ecfdf5;
+  color:#047857;
+}
+
+.unread-mark{
+  display:inline-block;
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#1769e8;
+  margin-left:5px;
+}
+
+.empty{
+  padding:45px 10px;
+  text-align:center;
+  color:#94a3b8;
+}
+
+.ticket-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,.62);
+  z-index:10000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  backdrop-filter:blur(4px);
+}
+
+.ticket-modal.show{
+  display:flex;
+}
+
+.ticket-dialog{
+  width:min(760px,100%);
+  max-height:94vh;
+  background:white;
+  border-radius:20px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  box-shadow:0 30px 90px rgba(0,0,0,.3);
+}
+
+.dialog-header{
+  padding:20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:15px;
+  border-bottom:1px solid #e8edf3;
+}
+
+.ticket-id{
+  direction:ltr;
+  text-align:right;
+  color:#1769e8;
+  font-weight:900;
+  font-size:12px;
+}
+
+.dialog-header h2{
+  margin:5px 0 7px;
+}
+
+.teacher-info{
+  font-weight:800;
+  margin-bottom:4px;
+}
+
+.conversation-meta{
+  color:#64748b;
+  font-size:12px;
+}
+
+.close-btn{
+  width:38px;
+  height:38px;
+  min-width:38px;
+  border:0;
+  border-radius:10px;
+  background:#f1f5f9;
+  cursor:pointer;
+  font-size:18px;
+}
+
+.status-control{
+  padding:12px 20px;
+  background:#fafbfc;
+  border-bottom:1px solid #e8edf3;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  flex-wrap:wrap;
+}
+
+.status-control label{
+  font-weight:800;
+  font-size:13px;
+}
+
+.status-control select{
+  border:1px solid #d8dee8;
+  border-radius:9px;
+  padding:8px 10px;
+  font-family:inherit;
+}
+
+.secondary-btn{
+  border:1px solid #bfd0eb;
+  background:white;
+  color:#1769e8;
+  border-radius:9px;
+  padding:8px 12px;
+  font-family:inherit;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.status-message{
+  font-size:12px;
+  font-weight:800;
+}
+
+.conversation-messages{
+  flex:1;
+  min-height:260px;
+  overflow:auto;
+  padding:20px;
+  background:#f8fafc;
+}
+
+.message-row{
+  display:flex;
+  margin-bottom:12px;
+}
+
+.message-row.teacher{
+  justify-content:flex-start;
+}
+
+.message-row.admin{
+  justify-content:flex-end;
+}
+
+.message-bubble{
+  max-width:82%;
+  border-radius:15px;
+  padding:12px 14px;
+  line-height:1.7;
+}
+
+.message-row.teacher .message-bubble{
+  background:white;
+  border:1px solid #e2e8f0;
+}
+
+.message-row.admin .message-bubble{
+  background:#1769e8;
+  color:white;
+}
+
+.message-sender{
+  font-size:11px;
+  font-weight:900;
+  margin-bottom:4px;
+}
+
+.message-text{
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+
+.message-date{
+  margin-top:5px;
+  font-size:10px;
+  opacity:.7;
+}
+
+.reply-form{
+  padding:15px;
+  border-top:1px solid #e8edf3;
+  display:flex;
+  gap:10px;
+  background:white;
+}
+
+.reply-form textarea{
+  flex:1;
+  min-height:58px;
+  max-height:130px;
+  resize:vertical;
+  border:1px solid #d8dee8;
+  border-radius:11px;
+  padding:11px;
+  font-family:inherit;
+}
+
+.primary-btn{
+  border:0;
+  border-radius:11px;
+  padding:11px 18px;
+  background:#1769e8;
+  color:white;
+  font-family:inherit;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.primary-btn:disabled{
+  opacity:.6;
+}
+
+@media(max-width:900px){
+
+  .stats-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .filter-card{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .search-box{
+    grid-column:1/-1;
+  }
+
+  .ticket-row{
+    grid-template-columns:1fr 1fr;
+  }
+
+}
+
+@media(max-width:560px){
+
+  .support-admin-header{
+    align-items:flex-start;
+  }
+
+  .stats-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .filter-card{
+    grid-template-columns:1fr;
+  }
+
+  .search-box{
+    grid-column:auto;
+  }
+
+  .ticket-row{
+    grid-template-columns:1fr;
+  }
+
+  .reply-form{
+    flex-direction:column;
+  }
+
+  .message-bubble{
+    max-width:92%;
+  }
+
+}
