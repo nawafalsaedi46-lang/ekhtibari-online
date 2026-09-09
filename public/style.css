@@ -429,3 +429,34 @@ button{touch-action:manipulation}
   flex-wrap:wrap;
   margin-top:9px;
 }
+
+
+/* تنسيق جدول رتّب المتوازن */
+
+.order-columns-paper{
+  width:100%;
+  table-layout:fixed;
+}
+
+.order-columns-paper th:nth-child(1),
+.order-columns-paper td:nth-child(1){
+  width:45%;
+}
+
+.order-columns-paper th:nth-child(2),
+.order-columns-paper td:nth-child(2){
+  width:10%;
+  text-align:center;
+  vertical-align:middle;
+}
+
+.order-columns-paper th:nth-child(3),
+.order-columns-paper td:nth-child(3){
+  width:45%;
+}
+
+.order-columns-paper .order-number-col{
+  width:10% !important;
+  text-align:center !important;
+}
+
