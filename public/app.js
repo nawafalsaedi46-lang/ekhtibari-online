@@ -233,20 +233,126 @@ function addEditorItem(itemData=null){
         </select>
       </div>`;
   } else if(type==="order"){
-    const arr = item.orderItems?.length ? item.orderItems : ["","","",""];
+
+    const pairs =
+      item.orderPairs?.length
+        ? item.orderPairs
+        : [
+            {left:"",right:""},
+            {left:"",right:""},
+            {left:"",right:""},
+            {left:"",right:""}
+          ];
+
     extra = `
-      <div class="field"><label>العناصر بالترتيب الصحيح</label>
-        <div class="order-list-editor">
-          ${arr.map((v,i)=>`<input type="text" class="order-item" value="${escapeHTML(v)}" placeholder="العنصر ${i+1}">`).join("")}
+      <div class="order-columns-editor">
+
+        <div class="order-columns-head">
+          <strong>العمود (أ)</strong>
+          <strong>العمود (ب)</strong>
+          <span></span>
         </div>
+
+        <div class="order-pairs-list">
+
+          ${pairs.map((pair,i)=>`
+            <div class="order-pair-row">
+
+              <input
+                type="text"
+                class="order-left"
+                value="${escapeHTML(pair.left||"")}"
+                placeholder="عبارة العمود (أ)"
+              >
+
+              <input
+                type="text"
+                class="order-right"
+                value="${escapeHTML(pair.right||"")}"
+                placeholder="ما يناسبها في العمود (ب)"
+              >
+
+              <button
+                type="button"
+                class="mini-btn delete remove-order-pair"
+              >
+                حذف
+              </button>
+
+            </div>
+          `).join("")}
+
+        </div>
+
+        <button
+          type="button"
+          class="mini-btn edit add-order-pair"
+        >
+          + إضافة صف
+        </button>
+
       </div>`;
   } else if(type==="table"){
     const rows = item.rows?.length ? item.rows : [{label:"",answer:""},{label:"",answer:""},{label:"",answer:""}];
+    const answerBank = item.answerBank || "";
+
+    const bankAnswers = [
+      ...answerBank.matchAll(/\(([^()]*)\)/g)
+    ]
+      .map(match=>match[1].trim())
+      .filter(Boolean);
+
     extra = `
+      <div class="field">
+        <label>الإجابات المتاحة فوق الجدول</label>
+        <input
+          type="text"
+          class="table-answer-bank"
+          value="${escapeHTML(answerBank)}"
+          placeholder="مثال: (الصلاة) (الزكاة) (الصيام)"
+        >
+      </div>
+
       <div class="table-editor-grid"><strong>البيان</strong><strong>الإجابة</strong>
         ${rows.map(r=>`
           <input type="text" class="table-label" value="${escapeHTML(r.label||"")}">
-          <input type="text" class="table-answer" value="${escapeHTML(r.answer||"")}">`).join("")}
+
+          <select class="table-answer">
+            <option value="">اختر الإجابة</option>
+
+            ${[
+              ...new Set([
+                ...bankAnswers,
+                r.answer || ""
+              ].filter(Boolean))
+            ].map(answer=>`
+              <option
+                value="${escapeHTML(answer)}"
+                ${answer===(r.answer||"") ? "selected" : ""}
+              >
+                ${escapeHTML(answer)}
+              </option>
+            `).join("")}
+
+          </select>`).join("")}
+      </div>
+
+      <div class="table-row-actions">
+
+        <button
+          type="button"
+          class="mini-btn edit add-table-row"
+        >
+          + إضافة صف
+        </button>
+
+        <button
+          type="button"
+          class="mini-btn delete remove-table-row"
+        >
+          حذف آخر صف
+        </button>
+
       </div>`;
   } else if(type==="image"){
     extra = `
@@ -320,6 +426,310 @@ function addEditorItem(itemData=null){
     });
   }
 
+  if(type==="table"){
+
+    const bankInput =
+      wrap.querySelector(".table-answer-bank");
+
+    if(bankInput){
+
+      bankInput.addEventListener("input",()=>{
+
+        const answers = [
+          ...bankInput.value.matchAll(/\(([^()]*)\)/g)
+        ]
+          .map(match=>match[1].trim())
+          .filter(Boolean);
+
+        wrap
+          .querySelectorAll(".table-answer")
+          .forEach(select=>{
+
+            const current =
+              select.value;
+
+            const options = [
+              ...new Set([
+                ...answers,
+                current
+              ].filter(Boolean))
+            ];
+
+            select.innerHTML =
+              '<option value="">اختر الإجابة</option>' +
+              options.map(answer=>
+                '<option value="' +
+                escapeHTML(answer) +
+                '">' +
+                escapeHTML(answer) +
+                '</option>'
+              ).join("");
+
+            select.value = current;
+
+          });
+
+      });
+
+    }
+
+  }
+
+
+  if(type==="order"){
+
+    const list =
+      wrap.querySelector(
+        ".order-pairs-list"
+      );
+
+    function bindOrderPairDelete(){
+
+      wrap
+        .querySelectorAll(
+          ".remove-order-pair"
+        )
+        .forEach(button=>{
+
+          if(button.dataset.bound==="1"){
+            return;
+          }
+
+          button.dataset.bound="1";
+
+          button.addEventListener(
+            "click",
+            ()=>{
+
+              const rows =
+                list.querySelectorAll(
+                  ".order-pair-row"
+                );
+
+              if(rows.length <= 2){
+
+                alert(
+                  "يجب أن يبقى صفان على الأقل."
+                );
+
+                return;
+              }
+
+              button
+                .closest(
+                  ".order-pair-row"
+                )
+                ?.remove();
+
+            }
+          );
+
+        });
+
+    }
+
+    bindOrderPairDelete();
+
+
+    const addButton =
+      wrap.querySelector(
+        ".add-order-pair"
+      );
+
+    if(addButton){
+
+      addButton.addEventListener(
+        "click",
+        ()=>{
+
+          const row =
+            document.createElement(
+              "div"
+            );
+
+          row.className =
+            "order-pair-row";
+
+          row.innerHTML = `
+            <input
+              type="text"
+              class="order-left"
+              placeholder="عبارة العمود (أ)"
+            >
+
+            <input
+              type="text"
+              class="order-right"
+              placeholder="ما يناسبها في العمود (ب)"
+            >
+
+            <button
+              type="button"
+              class="mini-btn delete remove-order-pair"
+            >
+              حذف
+            </button>
+          `;
+
+          list.appendChild(row);
+
+          bindOrderPairDelete();
+
+        }
+      );
+
+    }
+
+  }
+
+
+  if(type==="table"){
+
+    const tableGrid =
+      wrap.querySelector(
+        ".table-editor-grid"
+      );
+
+    const addTableRowButton =
+      wrap.querySelector(
+        ".add-table-row"
+      );
+
+    const removeTableRowButton =
+      wrap.querySelector(
+        ".remove-table-row"
+      );
+
+
+    if(addTableRowButton){
+
+      addTableRowButton.addEventListener(
+        "click",
+        ()=>{
+
+          const bankInput =
+            wrap.querySelector(
+              ".table-answer-bank"
+            );
+
+          const bankAnswers = [
+            ...(bankInput?.value || "")
+              .matchAll(/\(([^()]*)\)/g)
+          ]
+            .map(match=>match[1].trim())
+            .filter(Boolean);
+
+
+          const label =
+            document.createElement(
+              "input"
+            );
+
+          label.type = "text";
+          label.className =
+            "table-label";
+
+          label.placeholder =
+            "اكتب البيان";
+
+
+          const select =
+            document.createElement(
+              "select"
+            );
+
+          select.className =
+            "table-answer";
+
+
+          const emptyOption =
+            document.createElement(
+              "option"
+            );
+
+          emptyOption.value = "";
+          emptyOption.textContent =
+            "اختر الإجابة";
+
+          select.appendChild(
+            emptyOption
+          );
+
+
+          [
+            ...new Set(bankAnswers)
+          ].forEach(answer=>{
+
+            const option =
+              document.createElement(
+                "option"
+              );
+
+            option.value =
+              answer;
+
+            option.textContent =
+              answer;
+
+            select.appendChild(
+              option
+            );
+
+          });
+
+
+          tableGrid.append(
+            label,
+            select
+          );
+
+        }
+      );
+
+    }
+
+
+    if(removeTableRowButton){
+
+      removeTableRowButton.addEventListener(
+        "click",
+        ()=>{
+
+          const labels =
+            tableGrid.querySelectorAll(
+              ".table-label"
+            );
+
+          const answers =
+            tableGrid.querySelectorAll(
+              ".table-answer"
+            );
+
+          if(labels.length <= 1){
+
+            alert(
+              "يجب أن يبقى صف واحد على الأقل."
+            );
+
+            return;
+          }
+
+          labels[
+            labels.length - 1
+          ].remove();
+
+          answers[
+            answers.length - 1
+          ]?.remove();
+
+        }
+      );
+
+    }
+
+  }
+
+
   const imageInput = wrap.querySelector(".item-image-input");
   if(imageInput){
     imageInput.addEventListener("change", e=>{
@@ -366,11 +776,38 @@ function readEditorItems(){
       };
     }
     if(type==="order"){
-      return {text,orderItems:[...block.querySelectorAll(".order-item")].map(e=>e.value.trim()).filter(Boolean)};
+
+      const lefts=[
+        ...block.querySelectorAll(".order-left")
+      ];
+
+      const rights=[
+        ...block.querySelectorAll(".order-right")
+      ];
+
+      const orderPairs =
+        lefts.map((left,i)=>({
+          left:left.value.trim(),
+          right:rights[i]?.value.trim()||""
+        }))
+        .filter(pair=>pair.left||pair.right);
+
+      return {
+        text,
+        orderPairs
+      };
     }
     if(type==="table"){
       const labels=[...block.querySelectorAll(".table-label")], answers=[...block.querySelectorAll(".table-answer")];
-      return {text,rows:labels.map((e,i)=>({label:e.value.trim(),answer:answers[i]?.value.trim()||""})).filter(r=>r.label||r.answer)};
+
+      return {
+        text,
+        answerBank:block.querySelector(".table-answer-bank")?.value.trim()||"",
+        rows:labels.map((e,i)=>({
+          label:e.value.trim(),
+          answer:answers[i]?.value.trim()||""
+        })).filter(r=>r.label||r.answer)
+      };
     }
     if(type==="image"){
       const p=block.querySelector(".image-preview-editor");
@@ -520,12 +957,77 @@ function renderItemHTML(q,item,itemIndex,forPrint=false){
       ? `<div class="inline-model-answer">${escapeHTML(item.answer).replaceAll("\n","<br>")}</div>`
       : `<div class="student-answer-lines">........................................................................<br>........................................................................</div>`;
   } else if(q.type==="order"){
-    html+=`<div class="order-answer-area">${
-      currentVersion==="answer"
-        ? item.orderItems.map((v,i)=>`<div class="inline-correct-answer">${i+1}) ${escapeHTML(v)}</div>`).join("")
-        : item.orderItems.map((_,i)=>`${i+1}) ........................................`).join("<br>")
-    }</div>`;
+
+    const pairs =
+      Array.isArray(item.orderPairs)
+        ? item.orderPairs
+        : [];
+
+    const mixedRight =
+      pairs
+        .map((pair,index)=>({
+          text:pair.right,
+          correctNumber:index+1
+        }))
+        .reverse();
+
+    html += `
+      <table class="exam-table order-columns-paper">
+
+        <thead>
+          <tr>
+            <th>العمود (أ)</th>
+            <th class="order-number-col">الرقم</th>
+            <th>العمود (ب)</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          ${pairs.map((pair,i)=>`
+
+            <tr>
+
+              <td>
+                ${i+1}- ${escapeHTML(pair.left)}
+              </td>
+
+              <td class="order-number-col ${
+                currentVersion==="answer"
+                  ? "table-correct-answer"
+                  : ""
+              }">
+
+                ${
+                  currentVersion==="answer"
+                    ? mixedRight[i].correctNumber
+                    : "(     )"
+                }
+
+              </td>
+
+              <td>
+                ${escapeHTML(mixedRight[i].text)}
+              </td>
+
+            </tr>
+
+          `).join("")}
+
+        </tbody>
+
+      </table>
+    `;
   } else if(q.type==="table"){
+
+    if(item.answerBank){
+      html += `
+        <div class="table-answer-bank-paper">
+          ${escapeHTML(item.answerBank)}
+        </div>
+      `;
+    }
+
     html+=`<table class="exam-table"><thead><tr><th>البيان</th><th>الإجابة</th></tr></thead><tbody>${
       item.rows.map(r=>`<tr><td>${escapeHTML(r.label)}</td><td class="${currentVersion==="answer"?"table-correct-answer":""}">${currentVersion==="answer"?escapeHTML(r.answer):"........................"}</td></tr>`).join("")
     }</tbody></table>`;
@@ -662,8 +1164,7 @@ function newPrintPage(firstPage=false){
   }else{
     body.insertAdjacentHTML("beforeend",`
       <div class="print-continuation-head">
-        <span>${escapeHTML(getValue("subject")||"المادة")} - ${escapeHTML(getValue("examType")||"اختبار")}</span>
-        <span>${currentVersion==="answer"?"نموذج الإجابة":"تكملة الاختبار"}</span>
+        <span>${currentVersion==="answer"?"تابع نموذج الإجابة":"تكملة الاختبار"}</span>
       </div>`);
   }
   return page;
