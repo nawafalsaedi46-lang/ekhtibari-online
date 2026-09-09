@@ -61,6 +61,35 @@ async function initDb() {
   await pool.query("ALTER TABLE teachers ADD COLUMN IF NOT EXISTS gender TEXT NOT NULL DEFAULT 'معلم'");
   await pool.query("ALTER TABLE teachers ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMPTZ");
   await pool.query("ALTER TABLE teachers ADD COLUMN IF NOT EXISTS admin_note TEXT NOT NULL DEFAULT ''");
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS announcements (
+      id TEXT PRIMARY KEY,
+      title TEXT NOT NULL,
+      body TEXT NOT NULL,
+      active BOOLEAN NOT NULL DEFAULT TRUE,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS announcement_reads (
+      announcement_id TEXT NOT NULL
+        REFERENCES announcements(id)
+        ON DELETE CASCADE,
+
+      teacher_id TEXT NOT NULL
+        REFERENCES teachers(id)
+        ON DELETE CASCADE,
+
+      read_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+      PRIMARY KEY (
+        announcement_id,
+        teacher_id
+      )
+    );
+  `);
   await pool.query(`
     CREATE TABLE IF NOT EXISTS exams (
       id TEXT PRIMARY KEY,
@@ -337,6 +366,97 @@ app.patch("/api/me/password", requireTeacher, async (req, res) => {
 });
 
 /* =========================
+   رسائل الإدارة للمعلمين
+========================= */
+
+app.get("/api/announcement", requireTeacher, async (req, res) => {
+  try {
+
+    const { rows } = await pool.query(
+      `SELECT
+         a.id,
+         a.title,
+         a.body,
+         a.created_at AS "createdAt"
+
+       FROM announcements a
+
+       WHERE a.active = TRUE
+
+         AND NOT EXISTS (
+           SELECT 1
+           FROM announcement_reads ar
+           WHERE ar.announcement_id = a.id
+             AND ar.teacher_id = $1
+         )
+
+       ORDER BY a.created_at DESC
+       LIMIT 1`,
+      [req.teacher.id]
+    );
+
+    res.json({
+      announcement:rows[0] || null
+    });
+
+  } catch(err){
+
+    console.error(err);
+
+    res.status(500).json({
+      error:"تعذر تحميل رسالة الإدارة."
+    });
+
+  }
+});
+
+
+app.post("/api/announcement/:id/read", requireTeacher, async (req, res) => {
+  try {
+
+    const { rowCount } = await pool.query(
+      `INSERT INTO announcement_reads (
+         announcement_id,
+         teacher_id
+       )
+
+       SELECT $1, $2
+
+       WHERE EXISTS (
+         SELECT 1
+         FROM announcements
+         WHERE id = $1
+       )
+
+       ON CONFLICT (
+         announcement_id,
+         teacher_id
+       )
+       DO NOTHING`,
+      [
+        req.params.id,
+        req.teacher.id
+      ]
+    );
+
+    res.json({
+      ok:true,
+      saved:rowCount > 0
+    });
+
+  } catch(err){
+
+    console.error(err);
+
+    res.status(500).json({
+      error:"تعذر تسجيل الاطلاع على الرسالة."
+    });
+
+  }
+});
+
+
+/* =========================
    اختبارات المعلم
    العزل يتم دائمًا بـ teacher_id
    المأخوذ من جلسة الدخول
@@ -464,6 +584,190 @@ app.delete("/api/exams/:id", requireTeacher, async (req, res) => {
 /* =========================
    لوحة الإدارة
 ========================= */
+
+app.get("/api/admin/announcement", requireAdmin, async (req, res) => {
+  try {
+
+    const { rows } = await pool.query(`
+      SELECT
+        a.id,
+        a.title,
+        a.body,
+        a.created_at AS "createdAt",
+
+        (
+          SELECT COUNT(*)::int
+          FROM announcement_reads ar
+          WHERE ar.announcement_id = a.id
+        ) AS "readCount",
+
+        (
+          SELECT COUNT(*)::int
+          FROM teachers t
+          WHERE t.deleted_at IS NULL
+        ) AS "teacherCount"
+
+      FROM announcements a
+
+      WHERE a.active = TRUE
+
+      ORDER BY a.created_at DESC
+      LIMIT 1
+    `);
+
+    res.json({
+      announcement:rows[0] || null
+    });
+
+  } catch(err){
+
+    console.error(err);
+
+    res.status(500).json({
+      error:"تعذر تحميل رسالة الإدارة."
+    });
+
+  }
+});
+
+
+app.post("/api/admin/announcement", requireAdmin, async (req, res) => {
+
+  const title =
+    String(req.body.title || "").trim();
+
+  const body =
+    String(req.body.body || "").trim();
+
+  if(title.length < 2){
+
+    return res.status(400).json({
+      error:"اكتب عنوان الرسالة."
+    });
+
+  }
+
+  if(title.length > 120){
+
+    return res.status(400).json({
+      error:"عنوان الرسالة طويل جدًا."
+    });
+
+  }
+
+  if(body.length < 2){
+
+    return res.status(400).json({
+      error:"اكتب نص الرسالة."
+    });
+
+  }
+
+  if(body.length > 3000){
+
+    return res.status(400).json({
+      error:"نص الرسالة طويل جدًا."
+    });
+
+  }
+
+  const client =
+    await pool.connect();
+
+  try {
+
+    await client.query("BEGIN");
+
+    await client.query(
+      "UPDATE announcements SET active = FALSE WHERE active = TRUE"
+    );
+
+    const id =
+      newId("announcement");
+
+    const { rows } = await client.query(
+      `INSERT INTO announcements (
+         id,
+         title,
+         body,
+         active
+       )
+       VALUES ($1,$2,$3,TRUE)
+
+       RETURNING
+         id,
+         title,
+         body,
+         active,
+         created_at AS "createdAt"`,
+      [
+        id,
+        title,
+        body
+      ]
+    );
+
+    await client.query("COMMIT");
+
+    res.json({
+      ok:true,
+      announcement:rows[0]
+    });
+
+  } catch(err){
+
+    await client.query("ROLLBACK");
+
+    console.error(err);
+
+    res.status(500).json({
+      error:"تعذر نشر الرسالة."
+    });
+
+  } finally {
+
+    client.release();
+
+  }
+
+});
+
+
+app.patch("/api/admin/announcement/:id/disable", requireAdmin, async (req, res) => {
+  try {
+
+    const { rows } = await pool.query(
+      `UPDATE announcements
+       SET active = FALSE
+       WHERE id = $1
+         AND active = TRUE
+       RETURNING id`,
+      [req.params.id]
+    );
+
+    if(!rows[0]){
+
+      return res.status(404).json({
+        error:"الرسالة غير موجودة أو موقوفة."
+      });
+
+    }
+
+    res.json({
+      ok:true
+    });
+
+  } catch(err){
+
+    console.error(err);
+
+    res.status(500).json({
+      error:"تعذر إيقاف الرسالة."
+    });
+
+  }
+});
+
 
 app.get("/api/admin/stats", requireAdmin, async (req, res) => {
   try {

@@ -61,6 +61,148 @@ async function loadDashboard(){
   }
 }
 
+let dashboardAnnouncementId = null;
+
+
+async function loadAnnouncement(){
+
+  try{
+
+    const data =
+      await dashboardApi(
+        "/api/announcement"
+      );
+
+    const announcement =
+      data.announcement;
+
+    if(!announcement){
+      return;
+    }
+
+    dashboardAnnouncementId =
+      announcement.id;
+
+    document.getElementById(
+      "announcementModalTitle"
+    ).textContent =
+      announcement.title || "";
+
+    document.getElementById(
+      "announcementModalBody"
+    ).textContent =
+      announcement.body || "";
+
+    const date =
+      new Date(
+        announcement.createdAt
+      );
+
+    document.getElementById(
+      "announcementModalDate"
+    ).textContent =
+      Number.isNaN(date.getTime())
+        ? ""
+        : "تاريخ النشر: " +
+          date.toLocaleString("ar-SA");
+
+    const modal =
+      document.getElementById(
+        "announcementModal"
+      );
+
+    modal.classList.add(
+      "show"
+    );
+
+    modal.setAttribute(
+      "aria-hidden",
+      "false"
+    );
+
+  }catch(error){
+
+    console.error(
+      "تعذر تحميل رسالة الإدارة",
+      error
+    );
+
+  }
+
+}
+
+
+document
+  .getElementById(
+    "announcementReadBtn"
+  )
+  .addEventListener(
+    "click",
+    async () => {
+
+      if(!dashboardAnnouncementId){
+        return;
+      }
+
+      const button =
+        document.getElementById(
+          "announcementReadBtn"
+        );
+
+      button.disabled =
+        true;
+
+      button.textContent =
+        "جاري الحفظ...";
+
+      try{
+
+        await dashboardApi(
+          "/api/announcement/" +
+          encodeURIComponent(
+            dashboardAnnouncementId
+          ) +
+          "/read",
+          {
+            method:"POST"
+          }
+        );
+
+        document
+          .getElementById(
+            "announcementModal"
+          )
+          .classList
+          .remove("show");
+
+        document
+          .getElementById(
+            "announcementModal"
+          )
+          .setAttribute(
+            "aria-hidden",
+            "true"
+          );
+
+        dashboardAnnouncementId =
+          null;
+
+      }catch(error){
+
+        console.error(error);
+
+        button.disabled =
+          false;
+
+        button.textContent =
+          "✅ تم الاطلاع";
+
+      }
+
+    }
+  );
+
+
 function escapeHtml(value=""){
   return String(value)
     .replaceAll("&","&amp;")
@@ -77,3 +219,4 @@ document.getElementById("logoutBtn").addEventListener("click",async()=>{
 });
 
 loadDashboard();
+loadAnnouncement();

@@ -1,6 +1,7 @@
 let teachers = [];
 let deletedTeachers = [];
 let currentView = "teachers";
+let currentAnnouncementId = null;
 
 
 async function api(url, options = {}) {
@@ -310,6 +311,252 @@ function renderTrash(){
 }
 
 
+function announcementFeedback(text,error=false){
+
+  const el =
+    document.getElementById(
+      "announcementFeedback"
+    );
+
+  el.textContent =
+    text || "";
+
+  el.style.color =
+    error
+      ? "#b91c1c"
+      : "#075e54";
+}
+
+
+function announcementDate(value){
+
+  if(!value){
+    return "-";
+  }
+
+  const date =
+    new Date(value);
+
+  if(Number.isNaN(date.getTime())){
+    return "-";
+  }
+
+  return date.toLocaleString("ar-SA");
+}
+
+
+async function loadAnnouncement(){
+
+  const data =
+    await api(
+      "/api/admin/announcement"
+    );
+
+  const announcement =
+    data.announcement;
+
+  const box =
+    document.getElementById(
+      "currentAnnouncementBox"
+    );
+
+  const disableBtn =
+    document.getElementById(
+      "disableAnnouncementBtn"
+    );
+
+  if(!announcement){
+
+    currentAnnouncementId = null;
+
+    box.textContent =
+      "لا توجد رسالة نشطة حاليًا.";
+
+    disableBtn.disabled =
+      true;
+
+    return;
+  }
+
+  currentAnnouncementId =
+    announcement.id;
+
+  document.getElementById(
+    "announcementTitle"
+  ).value =
+    announcement.title || "";
+
+  document.getElementById(
+    "announcementBody"
+  ).value =
+    announcement.body || "";
+
+  box.innerHTML = "";
+
+  const title =
+    document.createElement("strong");
+
+  title.textContent =
+    announcement.title;
+
+  const body =
+    document.createElement("div");
+
+  body.textContent =
+    announcement.body;
+
+  body.style.whiteSpace =
+    "pre-wrap";
+
+  const meta =
+    document.createElement("div");
+
+  meta.className =
+    "announcement-current-meta";
+
+  meta.textContent =
+    "نُشرت: " +
+    announcementDate(
+      announcement.createdAt
+    ) +
+    " — اطلع عليها " +
+    Number(
+      announcement.readCount || 0
+    ) +
+    " من " +
+    Number(
+      announcement.teacherCount || 0
+    ) +
+    " معلم";
+
+  box.append(
+    title,
+    body,
+    meta
+  );
+
+  disableBtn.disabled =
+    false;
+}
+
+
+document
+  .getElementById(
+    "adminAnnouncementForm"
+  )
+  .addEventListener(
+    "submit",
+    async event => {
+
+      event.preventDefault();
+
+      const title =
+        document.getElementById(
+          "announcementTitle"
+        ).value.trim();
+
+      const body =
+        document.getElementById(
+          "announcementBody"
+        ).value.trim();
+
+      if(
+        !confirm(
+          "نشر هذه الرسالة لجميع المعلمين؟"
+        )
+      ){
+        return;
+      }
+
+      try{
+
+        announcementFeedback(
+          "جاري نشر الرسالة..."
+        );
+
+        await api(
+          "/api/admin/announcement",
+          {
+            method:"POST",
+            body:JSON.stringify({
+              title,
+              body
+            })
+          }
+        );
+
+        announcementFeedback(
+          "تم نشر الرسالة لجميع المعلمين ✅"
+        );
+
+        await loadAnnouncement();
+
+      }catch(error){
+
+        announcementFeedback(
+          error.message,
+          true
+        );
+
+      }
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "disableAnnouncementBtn"
+  )
+  .addEventListener(
+    "click",
+    async () => {
+
+      if(!currentAnnouncementId){
+        return;
+      }
+
+      if(
+        !confirm(
+          "إيقاف الرسالة الحالية؟\n\nلن تظهر للمعلمين بعد الإيقاف."
+        )
+      ){
+        return;
+      }
+
+      try{
+
+        await api(
+          "/api/admin/announcement/" +
+          currentAnnouncementId +
+          "/disable",
+          {
+            method:"PATCH"
+          }
+        );
+
+        announcementFeedback(
+          "تم إيقاف الرسالة ✅"
+        );
+
+        currentAnnouncementId =
+          null;
+
+        await loadAnnouncement();
+
+      }catch(error){
+
+        announcementFeedback(
+          error.message,
+          true
+        );
+
+      }
+
+    }
+  );
+
+
 async function loadStats(){
 
   const data =
@@ -389,6 +636,7 @@ async function loadTrash(){
 async function refreshAll(){
 
   await Promise.all([
+    loadAnnouncement(),
     loadStats(),
     loadTeachers(),
     loadTrash()

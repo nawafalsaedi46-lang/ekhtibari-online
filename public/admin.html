@@ -298,6 +298,70 @@
       }
     }
 
+
+    .announcement-admin-card{
+      border:1px solid #dbe7ff;
+      background:linear-gradient(135deg,#ffffff,#f6f9ff);
+    }
+
+    .announcement-admin-grid{
+      display:grid;
+      grid-template-columns:1fr 1.5fr;
+      gap:14px;
+    }
+
+    .announcement-admin-grid .field-full{
+      grid-column:1/-1;
+    }
+
+    .announcement-admin-grid textarea{
+      width:100%;
+      min-height:120px;
+      resize:vertical;
+    }
+
+    .announcement-admin-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+
+    .announcement-current{
+      margin-top:16px;
+      padding:14px;
+      border-radius:12px;
+      background:#f8fafc;
+      border:1px solid #e5e7eb;
+      line-height:1.8;
+    }
+
+    .announcement-current strong{
+      display:block;
+      margin-bottom:5px;
+    }
+
+    .announcement-current-meta{
+      color:#64748b;
+      font-size:13px;
+      margin-top:7px;
+    }
+
+    .announcement-admin-feedback{
+      margin-top:10px;
+      font-weight:700;
+    }
+
+    @media(max-width:700px){
+      .announcement-admin-grid{
+        grid-template-columns:1fr;
+      }
+
+      .announcement-admin-grid .field-full{
+        grid-column:auto;
+      }
+    }
+
   </style>
 </head>
 
@@ -391,6 +455,92 @@
         <div id="statMonthExams" class="admin-stat-number">0</div>
       </div>
 
+    </div>
+
+  </section>
+
+
+  <section class="card announcement-admin-card">
+
+    <div class="section-title">
+
+      <h2>📢 رسالة الإدارة للمعلمين</h2>
+
+      <p>
+        انشر تنبيهًا أو تحديثًا يظهر لجميع المعلمين عند دخولهم.
+      </p>
+
+    </div>
+
+
+    <form id="adminAnnouncementForm">
+
+      <div class="announcement-admin-grid">
+
+        <div class="field">
+
+          <label>عنوان الرسالة</label>
+
+          <input
+            id="announcementTitle"
+            maxlength="120"
+            placeholder="مثال: تحديث جديد 🎉"
+            required
+          >
+
+        </div>
+
+
+        <div class="field field-full">
+
+          <label>نص الرسالة</label>
+
+          <textarea
+            id="announcementBody"
+            maxlength="3000"
+            placeholder="مثال: تم إضافة خاصية جديدة في منصة اختباري..."
+            required
+          ></textarea>
+
+        </div>
+
+      </div>
+
+
+      <div class="announcement-admin-actions">
+
+        <button
+          class="btn primary"
+          type="submit"
+        >
+          📢 نشر لجميع المعلمين
+        </button>
+
+        <button
+          id="disableAnnouncementBtn"
+          class="btn danger"
+          type="button"
+          disabled
+        >
+          ⛔ إيقاف الرسالة الحالية
+        </button>
+
+      </div>
+
+    </form>
+
+
+    <div
+      id="announcementFeedback"
+      class="announcement-admin-feedback"
+    ></div>
+
+
+    <div
+      id="currentAnnouncementBox"
+      class="announcement-current"
+    >
+      لا توجد رسالة نشطة حاليًا.
     </div>
 
   </section>
