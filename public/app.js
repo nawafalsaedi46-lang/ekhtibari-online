@@ -317,22 +317,29 @@ function addEditorItem(itemData=null){
         ${rows.map(r=>`
           <input type="text" class="table-label" value="${escapeHTML(r.label||"")}">
 
-          <select class="table-answer">
+          <select class="table-answer" multiple size="4">
             <option value="">اختر الإجابة</option>
 
-            ${[
-              ...new Set([
-                ...bankAnswers,
-                r.answer || ""
-              ].filter(Boolean))
-            ].map(answer=>`
-              <option
-                value="${escapeHTML(answer)}"
-                ${answer===(r.answer||"") ? "selected" : ""}
-              >
-                ${escapeHTML(answer)}
-              </option>
-            `).join("")}
+            ${(()=>{
+              const savedAnswers = String(r.answer||"")
+                .split(/\s*\+\s*/)
+                .map(v=>v.trim())
+                .filter(Boolean);
+
+              return [
+                ...new Set([
+                  ...bankAnswers,
+                  ...savedAnswers
+                ])
+              ].map(answer=>`
+                <option
+                  value="${escapeHTML(answer)}"
+                  ${savedAnswers.includes(answer) ? "selected" : ""}
+                >
+                  ${escapeHTML(answer)}
+                </option>
+              `).join("");
+            })()}
 
           </select>`).join("")}
       </div>
@@ -640,6 +647,8 @@ function addEditorItem(itemData=null){
 
           select.className =
             "table-answer";
+          select.multiple = true;
+          select.size = 4;
 
 
           const emptyOption =
@@ -730,6 +739,43 @@ function addEditorItem(itemData=null){
   }
 
 
+  /* TABLE_MULTI_NORMAL_CLICK */
+  if(type==="table"){
+
+    wrap.addEventListener(
+      "mousedown",
+      event=>{
+
+        const option =
+          event.target.closest?.("option");
+
+        if(!option) return;
+
+        const select =
+          option.closest(
+            "select.table-answer[multiple]"
+          );
+
+        if(!select) return;
+
+        event.preventDefault();
+
+        option.selected =
+          !option.selected;
+
+        select.dispatchEvent(
+          new Event(
+            "change",
+            {bubbles:true}
+          )
+        );
+
+      }
+    );
+
+  }
+
+
   const imageInput = wrap.querySelector(".item-image-input");
   if(imageInput){
     imageInput.addEventListener("change", e=>{
@@ -805,7 +851,10 @@ function readEditorItems(){
         answerBank:block.querySelector(".table-answer-bank")?.value.trim()||"",
         rows:labels.map((e,i)=>({
           label:e.value.trim(),
-          answer:answers[i]?.value.trim()||""
+          answer:[...(answers[i]?.selectedOptions||[])]
+          .map(option=>option.value.trim())
+          .filter(Boolean)
+          .join(" + ")
         })).filter(r=>r.label||r.answer)
       };
     }
