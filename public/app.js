@@ -190,6 +190,15 @@ function emptyItem(type){
 
 function addEditorItem(itemData=null){
   const type = questionType.value;
+
+  if(
+    type==="mention" &&
+    !itemData &&
+    questionEditor.querySelectorAll(".question-item-editor").length >= 1
+  ){
+    return;
+  }
+
   const item = itemData || emptyItem(type);
   const index = questionEditor.querySelectorAll(".question-item-editor").length;
   const wrap = document.createElement("div");
@@ -272,6 +281,22 @@ function addEditorItem(itemData=null){
           Number(block.querySelector(".mention-count")?.value || 1)
         ),
         answer:block.querySelector(".item-answer")?.value.trim() || ""
+      };
+    }
+
+    if(type==="mention"){
+      return {
+        text,
+        mentionCount:Math.max(
+          1,
+          Math.floor(
+            Number(
+              block.querySelector(".mention-count")?.value || 1
+            )
+          )
+        ),
+        answer:
+          block.querySelector(".item-answer")?.value.trim() || ""
       };
     }
 
@@ -421,7 +446,13 @@ function addEditorItem(itemData=null){
       <button type="button" class="mini-btn delete remove-editor-item">حذف</button>
     </div>
     <div class="item-fields">
-      <div class="field"><textarea class="item-text" rows="2" placeholder="اكتب الفقرة ${index+1}">${escapeHTML(item.text||"")}</textarea></div>
+      <div class="field">
+        <textarea
+          class="item-text"
+          rows="2"
+          placeholder="${type==="mention" ? "اكتب السؤال، مثال: اذكري أركان الإسلام" : "اكتب الفقرة " + (index+1)}"
+        >${escapeHTML(item.text||"")}</textarea>
+      </div>
       ${extra}
     </div>`;
 
@@ -842,6 +873,11 @@ function renumberEditor(){
 }
 
 function setEditorItemCount(count){
+
+  if(questionType.value==="mention"){
+    count = 1;
+  }
+
   count = Math.max(1, Math.floor(Number(count)||1));
   let current = questionEditor.querySelectorAll(".question-item-editor").length;
   while(current < count){ addEditorItem(); current++; }
@@ -970,7 +1006,15 @@ function editQuestion(i){
   const q=questions[i]; if(!q)return;
   editingQuestionIndex=i; editingItemIndex=-1;
   activateType(q.type); questionTitle.value=q.title||""; renderSpecialFields(q);
-  questionEditor.innerHTML=""; q.items.forEach(addEditorItem); itemCount.value=q.items.length;
+  questionEditor.innerHTML="";
+
+  if(q.type==="mention"){
+    addEditorItem(q.items[0] || emptyItem("mention"));
+    itemCount.value=1;
+  }else{
+    q.items.forEach(addEditorItem);
+    itemCount.value=q.items.length;
+  }
   saveQuestionBtn.textContent="💾 حفظ تعديل السؤال"; cancelEditBtn.style.display="inline-block";
   $("questionCard").scrollIntoView({behavior:"smooth",block:"start"});
 }
