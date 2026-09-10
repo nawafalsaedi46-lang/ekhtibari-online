@@ -267,18 +267,7 @@ function addEditorItem(itemData=null){
       </div>
     `;
 
-  } else if(type==="mention"){
-      return {
-        text,
-        mentionCount:Math.max(
-          1,
-          Number(block.querySelector(".mention-count")?.value || 1)
-        ),
-        answer:block.querySelector(".item-answer")?.value.trim() || ""
-      };
-    }
-
-    if(type==="order"){
+  } else if(type==="order"){
 
     const pairs =
       item.orderPairs?.length
@@ -870,6 +859,19 @@ function readEditorItems(){
         answer:block.querySelector(".item-answer")?.value || "0"
       };
     }
+    if(type==="mention"){
+      return {
+        text,
+        mentionCount:Math.max(
+          1,
+          Math.floor(
+            Number(block.querySelector(".mention-count")?.value || 1)
+          )
+        ),
+        answer:block.querySelector(".item-answer")?.value.trim() || ""
+      };
+    }
+
     if(type==="order"){
 
       const lefts=[
