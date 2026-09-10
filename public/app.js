@@ -1276,8 +1276,32 @@ async function buildPrintPages(){
       continue;
     }
 
-    // لم يتسع كاملًا: نحذفه ونبني السؤال فقرة فقرة.
+    /*
+      السؤال لم يتسع في المساحة المتبقية:
+      إذا كانت الصفحة تحتوي سؤالًا سابقًا، ننقل السؤال كاملًا
+      إلى صفحة A4 جديدة أولًا.
+      ولا نقسم السؤال إلا إذا كان أكبر من صفحة كاملة.
+    */
     full.remove();
+
+    const pageAlreadyHasQuestion =
+      !!pageBody(page).querySelector(".print-question");
+
+    if(pageAlreadyHasQuestion){
+
+      page = newPrintPage(false);
+
+      pageBody(page).appendChild(full);
+
+      await waitForImages(full);
+
+      if(!isOverflowing(page)){
+        continue;
+      }
+
+      // السؤال نفسه أكبر من صفحة كاملة، لذلك نسمح بتقسيم فقراته.
+      full.remove();
+    }
 
     let chunk=makeQuestionChunk(q,qi,false);
     pageBody(page).appendChild(chunk);
