@@ -297,7 +297,7 @@ function addEditorItem(itemData=null){
     const answerBank = item.answerBank || "";
 
     const bankAnswers = [
-      ...answerBank.matchAll(/\(([^()]*)\)/g)
+      ...answerBank.matchAll(/\(?\s*([^-]+?)\s*\)?(?=\s*(?:-|$))/g)
     ]
       .map(match=>match[1].trim())
       .filter(Boolean);
@@ -309,7 +309,7 @@ function addEditorItem(itemData=null){
           type="text"
           class="table-answer-bank"
           value="${escapeHTML(answerBank)}"
-          placeholder="مثال: (الصلاة) (الزكاة) (الصيام)"
+          placeholder="مثال: (الصلاة) - الزكاة - (الصيام)"
         >
       </div>
 
@@ -436,7 +436,7 @@ function addEditorItem(itemData=null){
       bankInput.addEventListener("input",()=>{
 
         const answers = [
-          ...bankInput.value.matchAll(/\(([^()]*)\)/g)
+          ...bankInput.value.matchAll(/\(?\s*([^-]+?)\s*\)?(?=\s*(?:-|$))/g)
         ]
           .map(match=>match[1].trim())
           .filter(Boolean);
@@ -614,7 +614,7 @@ function addEditorItem(itemData=null){
 
           const bankAnswers = [
             ...(bankInput?.value || "")
-              .matchAll(/\(([^()]*)\)/g)
+              .matchAll(/\(?\s*([^-]+?)\s*\)?(?=\s*(?:-|$))/g)
           ]
             .map(match=>match[1].trim())
             .filter(Boolean);
