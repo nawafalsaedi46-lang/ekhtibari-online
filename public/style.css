@@ -460,3 +460,14 @@ button{touch-action:manipulation}
   text-align:center !important;
 }
 
+
+
+/* FOLLOW ARROW MEDIUM FINAL */
+.print-page:not(:last-child)::after{
+  content:"يتبع  ⟵" !important;
+  font-size:12px !important;
+  font-weight:800 !important;
+  min-width:28mm !important;
+  padding:2.3mm 6mm !important;
+}
+
