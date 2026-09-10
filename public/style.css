@@ -471,3 +471,27 @@ button{touch-action:manipulation}
   padding:2.3mm 6mm !important;
 }
 
+
+
+/* FOLLOW ARROW LEFT ABOVE LINE */
+.print-page:not(:last-child)::after{
+  content:"يتبع  ⟵" !important;
+
+  left:8mm !important;
+  right:auto !important;
+  bottom:10mm !important;
+  transform:none !important;
+
+  min-width:auto !important;
+  padding:0 !important;
+
+  border:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+
+  font-size:15px !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+  white-space:nowrap !important;
+}
+
