@@ -300,7 +300,7 @@ function addEditorItem(itemData=null){
     extra = `
       <div class="mention-editor">
         <div class="field">
-          <label>عدد الفقرات تحت السؤال</label>
+          <label>عدد الإجابات المطلوبة لهذه الفقرة</label>
           <input
             type="number"
             class="mention-count"
@@ -309,7 +309,7 @@ function addEditorItem(itemData=null){
             value="${count}"
             placeholder="مثال: 5"
           >
-          <small>مثال: اختر 5 ليظهر تحت السؤال خمس فقرات مرقمة.</small>
+          <small>مثال: إذا كانت الصيغة "اذكري ثلاثة" اختر 3.</small>
         </div>
 
         <div class="field">
@@ -885,14 +885,17 @@ function addEditorItem(itemData=null){
 
 function renumberEditor(){
   questionEditor.querySelectorAll(".question-item-editor").forEach((b,i)=>{
-    const n=b.querySelector(".item-number"); if(n) n.textContent=i+1;
+    const n=b.querySelector(".item-number");
+    if(!n) return;
+
+    n.textContent =
+      questionType.value==="mention"
+        ? `( ${optionLetter(i)} )`
+        : i+1;
   });
 }
 
 function setEditorItemCount(count){
-  if(questionType.value === "mention"){
-    count = 1;
-  }
   count = Math.max(1, Math.floor(Number(count)||1));
   let current = questionEditor.querySelectorAll(".question-item-editor").length;
   while(current < count){ addEditorItem(); current++; }
@@ -1085,7 +1088,7 @@ function renderQuestionsList(){
       </div>
       ${q.items.map((it,ii)=>`
         <div class="saved-item"><div class="saved-item-top">
-          <div><strong>${ii+1}.</strong> ${escapeHTML(it.text)}</div>
+          <div><strong>${q.type==="mention" ? `( ${optionLetter(ii)} )` : `${ii+1}.`}</strong> ${escapeHTML(it.text)}</div>
           <div class="saved-item-actions">
             <button class="mini-btn edit" onclick="editSingleItem(${qi},${ii})">تعديل</button>
             <button class="mini-btn delete" onclick="deleteSingleItem(${qi},${ii})">حذف</button>
@@ -1096,7 +1099,13 @@ function renderQuestionsList(){
 
 function renderItemHTML(q,item,itemIndex,forPrint=false){
   const wrapClass = forPrint ? "print-question-item" : "paper-question-item";
-  let html=`<div class="${wrapClass}"><div class="paper-item-question"><strong>${itemIndex+1}.</strong> ${escapeHTML(item.text)}</div>`;
+
+  const itemLabel =
+    q.type==="mention"
+      ? `( ${optionLetter(itemIndex)} )`
+      : `${itemIndex+1}.`;
+
+  let html=`<div class="${wrapClass}"><div class="paper-item-question"><strong>${itemLabel}</strong> ${escapeHTML(item.text)}</div>`;
 
   if(q.type==="mcq"){
     html+=`<div class="paper-options options-count-${Math.min(item.options.length,6)}">${item.options.map((op,i)=>{
