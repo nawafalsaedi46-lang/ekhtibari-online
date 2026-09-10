@@ -597,3 +597,34 @@ button{touch-action:manipulation}
   z-index:10 !important;
 }
 
+
+
+/* FOLLOW LEFT ABOVE FOOTER FINAL */
+.print-page:not(:last-child)::after{
+  content:"يتبع  ⟵" !important;
+
+  position:absolute !important;
+  left:10mm !important;
+  right:auto !important;
+  bottom:9mm !important;
+
+  width:auto !important;
+  height:auto !important;
+  min-width:0 !important;
+
+  padding:0 !important;
+  margin:0 !important;
+
+  border:0 !important;
+  background:transparent !important;
+  clip-path:none !important;
+
+  font-size:15px !important;
+  font-weight:900 !important;
+  color:#111 !important;
+
+  transform:none !important;
+  white-space:nowrap !important;
+  z-index:20 !important;
+}
+
