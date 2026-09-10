@@ -73,20 +73,6 @@
       <div class="field"><label>الصف</label><input type="text" id="grade" placeholder="الثالث المتوسط"></div>
       <div class="field"><label>الفصل الدراسي</label><input type="text" id="semester" placeholder="الفصل الأول"></div>
       <div class="field"><label>نوع الاختبار</label><input type="text" id="examType" placeholder="اختبار الفترة الأولى"></div>
-      <div class="field final-cover-data">
-        <label>العام الدراسي - للنهائي</label>
-        <input type="text" id="academicYear" placeholder="مثال: 1448 هـ">
-      </div>
-
-      <div class="field final-cover-data">
-        <label>اليوم - للنهائي</label>
-        <input type="text" id="examDay" placeholder="مثال: الأحد">
-      </div>
-
-      <div class="field final-cover-data">
-        <label>الدور - للنهائي</label>
-        <input type="text" id="examRound" placeholder="الدور الأول">
-      </div>
       <div class="field"><label>زمن الاختبار</label><input type="text" id="duration" placeholder="45 دقيقة"></div>
       <div class="field"><label>الدرجة الكلية</label><input type="number" id="totalScore" min="0" step="0.5" placeholder="تلقائي"></div>
       <div class="field"><label>شعار المدرسة - اختياري</label><input type="file" id="customLogo" accept="image/*"></div>
@@ -189,8 +175,6 @@
     <div class="preview-actions">
       <button type="button" id="studentVersionBtn" class="btn primary">👨‍🎓 نسخة الطالب</button>
       <button type="button" id="answerVersionBtn" class="btn secondary">✅ نموذج الإجابة</button>
-      <button type="button" id="finalCoverBtn" class="btn final-cover-btn" style="display:none;">📄 غلاف النهائي: مفعّل</button>
-      <input type="hidden" id="finalCoverMode" value="on">
       <button type="button" id="printBtn" class="btn dark">🖨️ طباعة A4</button>
       <button type="button" id="clearExamBtn" class="btn danger">🗑️ مسح الاختبار</button>
     </div>

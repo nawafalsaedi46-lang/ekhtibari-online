@@ -1,4 +1,4 @@
-let questions = [];
+﻿let questions = [];
 let editingQuestionIndex = -1;
 let editingItemIndex = -1;
 let currentVersion = "student";
@@ -30,8 +30,7 @@ let schoolLogoData = "";
 
 const formIds = [
   "examDate","region","school","teacherGender","teacher","subject","grade",
-  "semester","examType","academicYear","examDay","examRound","finalCoverMode",
-  "duration","totalScore","questionFontSize","paperFrame","endMessage"
+  "semester","examType","duration","totalScore","questionFontSize","paperFrame","endMessage"
 ];
 
 function escapeHTML(value=""){
@@ -130,225 +129,6 @@ function calculateTotalScore(){
   return questions.reduce((s,q)=>s+Number(q.score||0),0);
 }
 
-function isFinalExam(){
-  return /نهائ|نهاية/.test(getValue("examType"));
-}
-
-function shouldUseFinalCover(){
-  return isFinalExam() && getValue("finalCoverMode") !== "off";
-}
-
-function syncFinalCoverUI(){
-  const finalExam = isFinalExam();
-
-  document.querySelectorAll(".final-cover-data").forEach(el=>{
-    el.style.display = finalExam ? "flex" : "none";
-  });
-
-  const btn = $("finalCoverBtn");
-  const mode = $("finalCoverMode");
-
-  if(!btn || !mode) return;
-
-  btn.style.display = finalExam ? "inline-flex" : "none";
-
-  const enabled = mode.value !== "off";
-
-  btn.classList.toggle("active",enabled);
-
-  btn.textContent = enabled
-    ? "📄 غلاف النهائي: مفعّل"
-    : "📄 غلاف النهائي: متوقف";
-}
-
-function finalCoverQuestionName(index){
-  const names = [
-    "الأول","الثاني","الثالث","الرابع","الخامس",
-    "السادس","السابع","الثامن","التاسع","العاشر",
-    "الحادي عشر","الثاني عشر"
-  ];
-
-  return names[index] || String(index + 1);
-}
-
-function createFinalCoverPage(){
-
-  const page = document.createElement("section");
-  page.className = "print-page final-cover-page frame-official";
-
-  const subject = getValue("subject") || "المادة";
-  const grade = getValue("grade") || "الصف";
-  const semester = getValue("semester") || "الفصل الدراسي";
-  const academicYear = getValue("academicYear") || "........................";
-  const round = getValue("examRound") || "الدور الأول";
-  const school = getValue("school") || "اسم المدرسة";
-  const region = getValue("region") || "المنطقة التعليمية";
-  const duration = getValue("duration") || "................";
-  const day = getValue("examDay") || "................";
-  const date = getValue("examDate")
-    ? formatDate(getValue("examDate"))
-    : "................";
-
-  const total = calculateTotalScore();
-
-  const logoHTML = schoolLogoData
-    ? `<img src="${schoolLogoData}" alt="شعار المدرسة">`
-    : `<img src="moe-logo.svg" alt="وزارة التعليم">`;
-
-  const scoreRows = questions.length
-    ? questions.map((q,i)=>`
-        <tr>
-          <td>${finalCoverQuestionName(i)}</td>
-          <td>${Number(q.score||0)}</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-      `).join("")
-    : `
-        <tr>
-          <td>الأول</td>
-          <td>—</td>
-          <td></td><td></td>
-          <td></td><td></td>
-          <td></td><td></td>
-          <td></td><td></td>
-        </tr>
-      `;
-
-  page.innerHTML = `
-    <div class="final-cover-inner">
-
-      ${
-        currentVersion==="answer"
-          ? `<div class="final-cover-answer-badge">نموذج الإجابة</div>`
-          : ""
-      }
-
-      <div class="final-cover-top">
-
-        <div class="final-cover-meta">
-          <div><strong>المادة:</strong> ${escapeHTML(subject)}</div>
-          <div><strong>الصف:</strong> ${escapeHTML(grade)}</div>
-          <div><strong>الزمن:</strong> ${escapeHTML(duration)}</div>
-          <div><strong>التاريخ:</strong> ${escapeHTML(date)}</div>
-          <div><strong>اليوم:</strong> ${escapeHTML(day)}</div>
-        </div>
-
-        <div class="final-cover-logo">
-          ${logoHTML}
-        </div>
-
-        <div class="final-cover-ministry">
-          <strong>المملكة العربية السعودية</strong>
-          <span>وزارة التعليم</span>
-          <span>${escapeHTML(region)}</span>
-          <span>${escapeHTML(school)}</span>
-        </div>
-
-      </div>
-
-      <div class="final-cover-title">
-        <div class="basmala">بسم الله الرحمن الرحيم</div>
-
-        <h1>
-          ${escapeHTML(getValue("examType") || "الاختبار النهائي")}
-          لمادة ${escapeHTML(subject)}
-          للصف ${escapeHTML(grade)}
-        </h1>
-
-        <div class="final-cover-year">
-          العام الدراسي ${escapeHTML(academicYear)}
-        </div>
-
-        <div class="final-cover-semester">
-          ${escapeHTML(semester)}
-          ${round ? ` ( ${escapeHTML(round)} )` : ""}
-        </div>
-      </div>
-
-      <div class="final-cover-student-box">
-
-        <div class="final-student-line">
-          <strong>اسم الطالب/ـة:</strong>
-          <span></span>
-        </div>
-
-        <div class="final-student-line">
-          <strong>رقم الجلوس:</strong>
-          <span></span>
-        </div>
-
-      </div>
-
-      <table class="final-cover-grading">
-
-        <thead>
-          <tr>
-            <th rowspan="2">رقم<br>السؤال</th>
-            <th rowspan="2">درجة<br>السؤال</th>
-            <th colspan="2">الدرجة</th>
-            <th colspan="2">المصحح</th>
-            <th colspan="2">المراجع</th>
-            <th colspan="2">المدقق</th>
-          </tr>
-
-          <tr>
-            <th>رقمًا</th>
-            <th>كتابة</th>
-
-            <th>الاسم</th>
-            <th>التوقيع</th>
-
-            <th>الاسم</th>
-            <th>التوقيع</th>
-
-            <th>الاسم</th>
-            <th>التوقيع</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          ${scoreRows}
-
-          <tr class="final-cover-total">
-            <td>المجموع</td>
-            <td>${total}</td>
-            <td></td><td></td>
-            <td></td><td></td>
-            <td></td><td></td>
-            <td></td><td></td>
-          </tr>
-        </tbody>
-
-      </table>
-
-      <div class="final-cover-instructions">
-        <div class="instructions-title">تعليمات عامة:</div>
-
-        <div>◆ اقرأ/ي السؤال جيدًا قبل الإجابة.</div>
-        <div>◆ اكتب/ي بخط واضح مع المحافظة على نظافة الورقة.</div>
-        <div>◆ لا تترك/ي سؤالًا دون إجابة.</div>
-        <div>◆ راجع/ي إجابتك قبل تسليم ورقة الاختبار.</div>
-      </div>
-
-      <div class="final-cover-footer">
-        <span>
-          ${getValue("teacherGender")==="معلمة" ? "معلمة المادة" : "معلم المادة"}:
-        </span>
-        <strong>${escapeHTML(getValue("teacher") || "........................")}</strong>
-      </div>
-
-    </div>
-  `;
-
-  return page;
-}
 function headerHTML(includeStudent=true, compact=false){
   const gender = getValue("teacherGender") || "معلم";
   const logoHTML = `
@@ -1454,7 +1234,6 @@ function renderItemHTML(q,item,itemIndex,forPrint=false){
 }
 
 function renderPreview(){
-  syncFinalCoverUI();
   previewHeader.innerHTML=headerHTML(false,false);
   studentInfoRow.style.display=currentVersion==="student"?"grid":"none";
   versionBadge.textContent=currentVersion==="answer"?"نموذج الإجابة":"نسخة الطالب";
@@ -1637,12 +1416,6 @@ async function buildPrintPages(){
   printRoot.innerHTML="";
   printRoot.classList.add("measure");
 
-  if(shouldUseFinalCover()){
-    const coverPage = createFinalCoverPage();
-    printRoot.appendChild(coverPage);
-    await waitForImages(coverPage);
-  }
-
   let page=newPrintPage(true);
   await waitForImages(page);
 
@@ -1754,14 +1527,9 @@ async function buildPrintPages(){
     pageBody(page).appendChild(endBlock);
   }
 
-  const pages=[...printRoot.querySelectorAll(".print-page:not(.final-cover-page)")];
-
+  const pages=[...printRoot.querySelectorAll(".print-page")];
   pages.forEach((p,i)=>{
-    const numberBox=p.querySelector(".print-page-number");
-
-    if(numberBox){
-      numberBox.textContent=`صفحة ${i+1} من ${pages.length}`;
-    }
+    p.querySelector(".print-page-number").textContent=`صفحة ${i+1} من ${pages.length}`;
   });
 
   printRoot.classList.remove("measure");
@@ -1799,25 +1567,6 @@ saveQuestionBtn.addEventListener("click",saveQuestion);
 cancelEditBtn.addEventListener("click",resetEditor);
 $("studentVersionBtn").addEventListener("click",()=>{currentVersion="student";refreshAll()});
 $("answerVersionBtn").addEventListener("click",()=>{currentVersion="answer";refreshAll()});
-
-const finalCoverBtn = $("finalCoverBtn");
-
-if(finalCoverBtn){
-  finalCoverBtn.addEventListener("click",()=>{
-
-    const mode = $("finalCoverMode");
-
-    if(!mode) return;
-
-    mode.value =
-      mode.value === "off"
-        ? "on"
-        : "off";
-
-    syncFinalCoverUI();
-    save();
-  });
-}
 $("printBtn").addEventListener("click",printExam);
 
 $("clearExamBtn").addEventListener("click",()=>{
