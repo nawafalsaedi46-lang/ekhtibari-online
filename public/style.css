@@ -518,3 +518,50 @@ button{touch-action:manipulation}
   white-space:nowrap !important;
 }
 
+
+
+/* FOLLOW ARROW SHAPE FINAL */
+.print-page:not(:last-child)::after{
+  content:"يتبع" !important;
+
+  position:absolute !important;
+  right:8mm !important;
+  left:auto !important;
+  bottom:9mm !important;
+
+  width:31mm !important;
+  height:11mm !important;
+
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  padding:0 2mm 0 8mm !important;
+  box-sizing:border-box !important;
+
+  background:#fff !important;
+  border:1.5px solid #222 !important;
+  border-radius:0 !important;
+
+  clip-path:polygon(
+    0 50%,
+    28% 0,
+    28% 22%,
+    100% 22%,
+    100% 78%,
+    28% 78%,
+    28% 100%
+  ) !important;
+
+  font-size:15px !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+  color:#111 !important;
+
+  transform:none !important;
+  white-space:nowrap !important;
+
+  -webkit-print-color-adjust:exact !important;
+  print-color-adjust:exact !important;
+}
+
