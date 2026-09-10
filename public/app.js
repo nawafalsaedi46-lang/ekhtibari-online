@@ -234,6 +234,29 @@ function addEditorItem(itemData=null){
           <option value="false" ${String(item.answer)==="false"?"selected":""}>خطأ</option>
         </select>
       </div>`;
+  } else if(type==="fill"){
+    extra = `
+      <div class="field">
+        <label>الإجابة الصحيحة</label>
+        <input
+          type="text"
+          class="item-answer"
+          value="${escapeHTML(item.answer||"")}"
+          placeholder="اكتب الإجابة الصحيحة"
+        >
+      </div>
+
+      <div class="field">
+        <label>الكلمات المساعدة (اختياري)</label>
+        <input
+          type="text"
+          class="fill-word-bank"
+          value="${escapeHTML(item.wordBank||"")}"
+          placeholder="مثال: الرياض - مكة - جدة"
+        >
+        <small>تظهر هذه الكلمات فوق الفراغ للطالب. اتركها فارغة إذا لم ترد إظهار خيارات.</small>
+      </div>
+    `;
   } else if(type==="mention"){
 
     const count = Math.max(
@@ -859,6 +882,14 @@ function readEditorItems(){
         answer:block.querySelector(".item-answer")?.value || "0"
       };
     }
+    if(type==="fill"){
+      return {
+        text,
+        answer:block.querySelector(".item-answer")?.value.trim() || "",
+        wordBank:block.querySelector(".fill-word-bank")?.value.trim() || ""
+      };
+    }
+
     if(type==="mention"){
       return {
         text,
@@ -1049,6 +1080,21 @@ function renderItemHTML(q,item,itemIndex,forPrint=false){
     const f=currentVersion==="answer"&&String(item.answer)==="false";
     html+=`<div class="truefalse-options"><span class="${t?"correct-choice":""}">صح ${t?"✓":""}</span><span class="${f?"correct-choice":""}">خطأ ${f?"✓":""}</span></div>`;
   } else if(q.type==="fill"){
+    if(item.wordBank){
+      html += `
+        <div style="
+          margin:5px 0 7px;
+          padding:6px 10px;
+          border:1px solid #777;
+          border-radius:6px;
+          text-align:center;
+          font-weight:700;
+        ">
+          ${escapeHTML(item.wordBank)}
+        </div>
+      `;
+    }
+
     html+= currentVersion==="answer" && item.answer
       ? `<span class="inline-correct-answer">${escapeHTML(item.answer)}</span>`
       : `<span>....................................................</span>`;
