@@ -709,3 +709,239 @@ button{touch-action:manipulation}
     font-size:12px;
   }
 }
+
+/* =========================================================
+   FINAL EXAM PROFESSIONAL COVER
+========================================================= */
+
+.final-cover-data{
+  display:none;
+}
+
+.final-cover-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  border:1px solid #94a3b8;
+  background:#fff;
+  color:#334155;
+}
+
+.final-cover-btn.active{
+  background:#eefbf7;
+  border-color:#0f766e;
+  color:#0f5f58;
+}
+
+.final-cover-page{
+  position:relative;
+  width:210mm;
+  height:297mm;
+  padding:6mm !important;
+  background:#fff;
+  box-sizing:border-box;
+  direction:rtl;
+}
+
+.final-cover-page::after{
+  content:none !important;
+  display:none !important;
+}
+
+.final-cover-inner{
+  position:relative;
+  height:285mm;
+  border:1.5px solid #222;
+  padding:7mm;
+  box-sizing:border-box;
+  display:flex;
+  flex-direction:column;
+  background:#fff;
+  color:#111;
+  overflow:hidden;
+}
+
+.final-cover-answer-badge{
+  position:absolute;
+  top:4mm;
+  left:50%;
+  transform:translateX(-50%);
+  border:1px solid #555;
+  padding:1.5mm 5mm;
+  border-radius:20px;
+  font-size:10px;
+  font-weight:800;
+  background:#fff;
+  z-index:2;
+}
+
+.final-cover-top{
+  display:grid;
+  grid-template-columns:1fr 42mm 1fr;
+  gap:6mm;
+  align-items:start;
+  direction:ltr;
+  min-height:37mm;
+}
+
+.final-cover-meta,
+.final-cover-ministry{
+  direction:rtl;
+  font-size:11px;
+  line-height:1.75;
+}
+
+.final-cover-meta div{
+  white-space:nowrap;
+}
+
+.final-cover-ministry{
+  text-align:right;
+  display:flex;
+  flex-direction:column;
+}
+
+.final-cover-ministry strong{
+  font-size:12px;
+}
+
+.final-cover-logo{
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  min-height:32mm;
+}
+
+.final-cover-logo img{
+  display:block;
+  width:38mm;
+  max-height:30mm;
+  object-fit:contain;
+}
+
+.final-cover-title{
+  text-align:center;
+  margin:7mm 0 6mm;
+  line-height:1.65;
+}
+
+.final-cover-title .basmala{
+  font-size:15px;
+  font-weight:800;
+  margin-bottom:2mm;
+}
+
+.final-cover-title h1{
+  margin:0 auto 2mm;
+  max-width:160mm;
+  font-size:16px;
+  line-height:1.7;
+  font-weight:900;
+}
+
+.final-cover-year,
+.final-cover-semester{
+  font-size:14px;
+  font-weight:800;
+}
+
+.final-cover-student-box{
+  border:2px solid #333;
+  padding:5mm 7mm;
+  margin:0 11mm 8mm;
+  display:grid;
+  gap:5mm;
+}
+
+.final-student-line{
+  display:flex;
+  align-items:flex-end;
+  gap:4mm;
+  font-size:14px;
+}
+
+.final-student-line strong{
+  white-space:nowrap;
+}
+
+.final-student-line span{
+  flex:1;
+  display:block;
+  height:6mm;
+  border-bottom:1px dotted #222;
+}
+
+.final-cover-grading{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+  margin:0;
+  font-size:9.5px;
+  text-align:center;
+}
+
+.final-cover-grading th,
+.final-cover-grading td{
+  border:1px solid #222;
+  padding:2mm 1mm;
+  height:9mm;
+  vertical-align:middle;
+}
+
+.final-cover-grading th{
+  font-weight:900;
+  background:#fff;
+}
+
+.final-cover-grading th:nth-child(1){
+  width:11%;
+}
+
+.final-cover-grading th:nth-child(2){
+  width:10%;
+}
+
+.final-cover-total td{
+  font-weight:900;
+}
+
+.final-cover-instructions{
+  width:122mm;
+  margin:auto auto 3mm;
+  border:1.5px solid #333;
+  padding:4mm 6mm;
+  font-size:11.5px;
+  line-height:1.8;
+}
+
+.instructions-title{
+  font-size:13px;
+  font-weight:900;
+  margin-bottom:1mm;
+}
+
+.final-cover-footer{
+  display:flex;
+  justify-content:flex-end;
+  gap:3mm;
+  padding-top:2mm;
+  border-top:1px solid #999;
+  font-size:10px;
+}
+
+@media print{
+
+  .final-cover-page{
+    break-after:page !important;
+    page-break-after:always !important;
+  }
+
+  .final-cover-inner,
+  .final-cover-grading,
+  .final-cover-student-box,
+  .final-cover-instructions{
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+  }
+}
