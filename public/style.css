@@ -628,3 +628,49 @@ button{touch-action:manipulation}
   z-index:20 !important;
 }
 
+
+
+/* MENTION QUESTION */
+.mention-editor{
+  margin-top:8px;
+  padding:12px;
+  border:1px solid #d9e1e8;
+  border-radius:10px;
+  background:#f8fafc;
+}
+
+.mention-count{
+  max-width:180px;
+}
+
+.mention-paper{
+  margin-top:6px;
+  display:grid;
+  gap:5px;
+}
+
+.mention-paper-row{
+  display:flex;
+  align-items:flex-end;
+  gap:7px;
+  min-height:24px;
+  break-inside:avoid;
+  page-break-inside:avoid;
+}
+
+.mention-number{
+  min-width:24px;
+  font-weight:800;
+}
+
+.mention-answer-line{
+  flex:1;
+  height:21px;
+  border-bottom:1px dotted #555;
+}
+
+.mention-answer-text{
+  flex:1;
+  min-height:21px;
+  padding:2px 5px;
+}

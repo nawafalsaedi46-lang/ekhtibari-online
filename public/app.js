@@ -56,7 +56,7 @@ function formatDate(value){
 function qTypeName(type){
   return ({
     mcq:"اختيار من متعدد", truefalse:"صح أو خطأ", fill:"أكمل الفراغ",
-    essay:"مقالي", order:"ترتيب", table:"جدول", image:"صورة / رسم",
+    essay:"مقالي", mention:"اذكري", order:"ترتيب", table:"جدول", image:"صورة / رسم",
     math:"رياضيات", reading:"قطعة قراءة"
   })[type] || type;
 }
@@ -96,6 +96,7 @@ function defaultTitle(type){
     truefalse:"حدد هل العبارة صحيحة أم خاطئة:",
     fill:"أكمل الفراغ فيما يلي:",
     essay:"أجب عن الأسئلة التالية:",
+    mention:"اذكري ما يلي:",
     order:"رتب العناصر التالية بالترتيب الصحيح:",
     table:"أكمل الجدول التالي:",
     image:"تأمل الصورة أو الرسم ثم أجب:",
@@ -180,6 +181,7 @@ function renderSpecialFields(data={}){
 function emptyItem(type){
   if(type==="mcq") return {text:"",options:["","","",""],answer:"0"};
   if(type==="truefalse") return {text:"",answer:"true"};
+  if(type==="mention") return {text:"",mentionCount:3,answer:""};
   if(type==="order") return {text:"",orderItems:["","","",""]};
   if(type==="table") return {text:"",rows:[{label:"",answer:""},{label:"",answer:""},{label:"",answer:""}]};
   if(type==="image") return {text:"",image:"",answer:""};
@@ -232,7 +234,48 @@ function addEditorItem(itemData=null){
           <option value="false" ${String(item.answer)==="false"?"selected":""}>خطأ</option>
         </select>
       </div>`;
-  } else if(type==="order"){
+  } else if(type==="mention"){
+
+    const count = Math.max(1, Number(item.mentionCount || 3));
+
+    extra = `
+      <div class="mention-editor">
+        <div class="field">
+          <label>عدد المطلوب ذكره</label>
+          <input
+            type="number"
+            class="mention-count"
+            min="1"
+            step="1"
+            value="${count}"
+            placeholder="مثال: 5"
+          >
+          <small>العدد مفتوح، اكتب أي عدد تحتاجه.</small>
+        </div>
+
+        <div class="field">
+          <label>نموذج الإجابة</label>
+          <textarea
+            class="item-answer mention-model-answer"
+            rows="5"
+            placeholder="اكتب كل إجابة في سطر مستقل"
+          >${escapeHTML(item.answer||"")}</textarea>
+        </div>
+      </div>
+    `;
+
+  } else if(type==="mention"){
+      return {
+        text,
+        mentionCount:Math.max(
+          1,
+          Number(block.querySelector(".mention-count")?.value || 1)
+        ),
+        answer:block.querySelector(".item-answer")?.value.trim() || ""
+      };
+    }
+
+    if(type==="order"){
 
     const pairs =
       item.orderPairs?.length
@@ -1005,6 +1048,31 @@ function renderItemHTML(q,item,itemIndex,forPrint=false){
     html+= currentVersion==="answer" && item.answer
       ? `<div class="inline-model-answer">${escapeHTML(item.answer).replaceAll("\n","<br>")}</div>`
       : `<div class="student-answer-lines">........................................................................<br>........................................................................</div>`;
+  } else if(q.type==="mention"){
+
+    const mentionCount = Math.max(
+      1,
+      Number(item.mentionCount || 1)
+    );
+
+    const answers = String(item.answer || "")
+      .split(/\r?\n/)
+      .map(v=>v.trim())
+      .filter(Boolean);
+
+    html += `
+      <div class="mention-paper">
+        ${Array.from({length:mentionCount},(_,i)=>`
+          <div class="mention-paper-row">
+            <span class="mention-number">${i+1}-</span>
+            <span class="${currentVersion==="answer" ? "mention-answer-text inline-correct-answer" : "mention-answer-line"}">
+              ${currentVersion==="answer" ? escapeHTML(answers[i] || "") : ""}
+            </span>
+          </div>
+        `).join("")}
+      </div>
+    `;
+
   } else if(q.type==="order"){
 
     const pairs =
