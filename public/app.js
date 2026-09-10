@@ -1210,11 +1210,6 @@ function newPrintPage(firstPage=false){
 
   if(firstPage){
     body.insertAdjacentHTML("beforeend",headerHTML(true,true));
-  }else{
-    body.insertAdjacentHTML("beforeend",`
-      <div class="print-continuation-head">
-        <span>${currentVersion==="answer"?"تابع نموذج الإجابة":"تكملة الاختبار"}</span>
-      </div>`);
   }
   return page;
 }
