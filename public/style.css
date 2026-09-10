@@ -674,3 +674,38 @@ button{touch-action:manipulation}
   min-height:21px;
   padding:2px 5px;
 }
+
+
+/* FILL QUESTION LEVEL BANK */
+
+.fill-question-bank-editor{
+  border-color:#b8cbd7;
+}
+
+.fill-question-bank-editor input{
+  width:100%;
+}
+
+.fill-question-bank-paper{
+  margin:7px 0 9px;
+  padding:7px 12px;
+  border:1px solid #777;
+  border-radius:7px;
+  text-align:center;
+  font-size:13px;
+  line-height:1.6;
+  break-inside:avoid;
+  page-break-inside:avoid;
+}
+
+.fill-question-bank-paper strong{
+  margin-left:6px;
+}
+
+@media print{
+  .fill-question-bank-paper{
+    margin:5px 0 7px;
+    padding:5px 9px;
+    font-size:12px;
+  }
+}

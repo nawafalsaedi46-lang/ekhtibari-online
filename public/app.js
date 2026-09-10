@@ -47,6 +47,21 @@ function getValue(id){
   return el ? String(el.value || "").trim() : "";
 }
 
+function getFillQuestionBank(q){
+  if(!q) return "";
+
+  if(String(q.wordBank || "").trim()){
+    return String(q.wordBank).trim();
+  }
+
+  const oldItem =
+    Array.isArray(q.items)
+      ? q.items.find(item=>String(item?.wordBank || "").trim())
+      : null;
+
+  return String(oldItem?.wordBank || "").trim();
+}
+
 function formatDate(value){
   if(!value) return "-";
   const p = value.split("-");
@@ -170,6 +185,34 @@ function renderSpecialFields(data={}){
       <div class="field"><textarea id="readingPassage" rows="7" placeholder="اكتب قطعة القراءة هنا...">${escapeHTML(data.passage||"")}</textarea></div>`;
     specialQuestionFields.appendChild(box);
   }
+  if(questionType.value === "fill"){
+
+    const fillBank = document.createElement("div");
+    fillBank.className = "special-box fill-question-bank-editor";
+
+    fillBank.innerHTML = `
+      <div class="special-box-title">
+        الكلمات المساعدة للسؤال
+        <small>(اختياري)</small>
+      </div>
+
+      <div class="field">
+        <input
+          type="text"
+          id="fillWordBank"
+          value="${escapeHTML(getFillQuestionBank(data))}"
+          placeholder="مثال: الصلاة - الزكاة - الصيام - الحج"
+        >
+
+        <small>
+          تظهر مرة واحدة فوق جميع فقرات أكمل الفراغ.
+        </small>
+      </div>
+    `;
+
+    specialQuestionFields.appendChild(fillBank);
+  }
+
   const score = document.createElement("div");
   score.className = "special-box";
   score.innerHTML = `
@@ -245,18 +288,8 @@ function addEditorItem(itemData=null){
           placeholder="اكتب الإجابة الصحيحة"
         >
       </div>
-
-      <div class="field">
-        <label>الكلمات المساعدة (اختياري)</label>
-        <input
-          type="text"
-          class="fill-word-bank"
-          value="${escapeHTML(item.wordBank||"")}"
-          placeholder="مثال: الرياض - مكة - جدة"
-        >
-        <small>تظهر هذه الكلمات فوق الفراغ للطالب. اتركها فارغة إذا لم ترد إظهار خيارات.</small>
-      </div>
     `;
+
   } else if(type==="mention"){
 
     const count = Math.max(
@@ -882,14 +915,6 @@ function readEditorItems(){
         answer:block.querySelector(".item-answer")?.value || "0"
       };
     }
-    if(type==="fill"){
-      return {
-        text,
-        answer:block.querySelector(".item-answer")?.value.trim() || "",
-        wordBank:block.querySelector(".fill-word-bank")?.value.trim() || ""
-      };
-    }
-
     if(type==="mention"){
       return {
         text,
@@ -979,6 +1004,9 @@ function saveQuestion(){
     title:questionTitle.value.trim()||defaultTitle(questionType.value),
     score:Number($("questionScore")?.value||0),
     passage:questionType.value==="reading" ? ($("readingPassage")?.value.trim()||"") : "",
+    wordBank:questionType.value==="fill"
+      ? ($("fillWordBank")?.value.trim() || "")
+      : "",
     items
   };
 
@@ -1080,21 +1108,6 @@ function renderItemHTML(q,item,itemIndex,forPrint=false){
     const f=currentVersion==="answer"&&String(item.answer)==="false";
     html+=`<div class="truefalse-options"><span class="${t?"correct-choice":""}">صح ${t?"✓":""}</span><span class="${f?"correct-choice":""}">خطأ ${f?"✓":""}</span></div>`;
   } else if(q.type==="fill"){
-    if(item.wordBank){
-      html += `
-        <div style="
-          margin:5px 0 7px;
-          padding:6px 10px;
-          border:1px solid #777;
-          border-radius:6px;
-          text-align:center;
-          font-weight:700;
-        ">
-          ${escapeHTML(item.wordBank)}
-        </div>
-      `;
-    }
-
     html+= currentVersion==="answer" && item.answer
       ? `<span class="inline-correct-answer">${escapeHTML(item.answer)}</span>`
       : `<span>....................................................</span>`;
@@ -1235,6 +1248,14 @@ function renderPreview(){
         <span class="question-score-box">${Number(q.score||0)}</span>
       </div>
       ${q.type==="reading" ? `<div class="reading-passage">${escapeHTML(q.passage||"").replaceAll("\n","<br>")}</div>` : ""}
+
+      ${q.type==="fill" && getFillQuestionBank(q)
+        ? `<div class="fill-question-bank-paper">
+             <strong>الكلمات المساعدة:</strong>
+             <span>( ${escapeHTML(getFillQuestionBank(q))} )</span>
+           </div>`
+        : ""}
+
       ${q.items.map((it,ii)=>renderItemHTML(q,it,ii,false)).join("")}
     </div>`).join("") +
     (end?`<div class="exam-end-message">${escapeHTML(end)}</div>`:"");
@@ -1356,7 +1377,20 @@ function makeQuestionChunk(q,qi,continued=false){
     <div class="print-question-title ${continued?"continued":""}">
       <span>${continued?"تابع ": ""}السؤال ${qi+1}: ${escapeHTML(q.title)}</span>
       <span class="print-score-box">${continued?"":Number(q.score||0)}</span>
-    </div>`;
+    </div>
+
+    ${
+      !continued &&
+      q.type==="fill" &&
+      getFillQuestionBank(q)
+        ? `
+          <div class="fill-question-bank-paper">
+            <strong>الكلمات المساعدة:</strong>
+            <span>( ${escapeHTML(getFillQuestionBank(q))} )</span>
+          </div>
+        `
+        : ""
+    }`;
   return div;
 }
 
