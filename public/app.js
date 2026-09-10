@@ -1251,7 +1251,7 @@ function renderPreview(){
 
       ${q.type==="fill" && getFillQuestionBank(q)
         ? `<div class="fill-question-bank-paper">
-             <strong>اختر من الكلمات التالية:</strong>
+             
              <span>( ${escapeHTML(getFillQuestionBank(q))} )</span>
            </div>`
         : ""}
@@ -1385,7 +1385,7 @@ function makeQuestionChunk(q,qi,continued=false){
       getFillQuestionBank(q)
         ? `
           <div class="fill-question-bank-paper">
-            <strong>اختر من الكلمات التالية:</strong>
+            
             <span>( ${escapeHTML(getFillQuestionBank(q))} )</span>
           </div>
         `
