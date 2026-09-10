@@ -565,3 +565,35 @@ button{touch-action:manipulation}
   print-color-adjust:exact !important;
 }
 
+
+
+/* FOLLOW INSIDE FOOTER FINAL */
+.print-page:not(:last-child)::after{
+  content:"يتبع  ◀" !important;
+
+  position:absolute !important;
+  right:12mm !important;
+  left:auto !important;
+  bottom:4.5mm !important;
+
+  width:auto !important;
+  height:auto !important;
+  min-width:0 !important;
+
+  padding:0 !important;
+  margin:0 !important;
+
+  background:transparent !important;
+  border:0 !important;
+  clip-path:none !important;
+
+  color:#111 !important;
+  font-size:13px !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+
+  transform:none !important;
+  white-space:nowrap !important;
+  z-index:10 !important;
+}
+
