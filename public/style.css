@@ -495,3 +495,26 @@ button{touch-action:manipulation}
   white-space:nowrap !important;
 }
 
+
+
+/* FOLLOW ARROW RIGHT ABOVE LINE FINAL */
+.print-page:not(:last-child)::after{
+  content:"يتبع  ⟶" !important;
+
+  right:8mm !important;
+  left:auto !important;
+  bottom:10mm !important;
+  transform:none !important;
+
+  min-width:auto !important;
+  padding:0 !important;
+
+  border:0 !important;
+  background:transparent !important;
+
+  font-size:16px !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+  white-space:nowrap !important;
+}
+
