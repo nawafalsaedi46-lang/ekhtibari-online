@@ -236,12 +236,15 @@ function addEditorItem(itemData=null){
       </div>`;
   } else if(type==="mention"){
 
-    const count = Math.max(1, Number(item.mentionCount || 3));
+    const count = Math.max(
+      1,
+      Math.floor(Number(item.mentionCount || 3))
+    );
 
     extra = `
       <div class="mention-editor">
         <div class="field">
-          <label>عدد المطلوب ذكره</label>
+          <label>عدد الفقرات تحت السؤال</label>
           <input
             type="number"
             class="mention-count"
@@ -250,7 +253,7 @@ function addEditorItem(itemData=null){
             value="${count}"
             placeholder="مثال: 5"
           >
-          <small>العدد مفتوح، اكتب أي عدد تحتاجه.</small>
+          <small>مثال: اختر 5 ليظهر تحت السؤال خمس فقرات مرقمة.</small>
         </div>
 
         <div class="field">
@@ -842,6 +845,9 @@ function renumberEditor(){
 }
 
 function setEditorItemCount(count){
+  if(questionType.value === "mention"){
+    count = 1;
+  }
   count = Math.max(1, Math.floor(Number(count)||1));
   let current = questionEditor.querySelectorAll(".question-item-editor").length;
   while(current < count){ addEditorItem(); current++; }
