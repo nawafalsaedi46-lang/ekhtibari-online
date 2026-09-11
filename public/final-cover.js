@@ -580,16 +580,39 @@
 
 
   function syncButton(){
-    btn.style.display =
-      isFinal()
-        ? "inline-flex"
-        : "none";
+
+    btn.style.display = "inline-flex";
+
+    if(isFinal()){
+      btn.classList.remove("final-cover-locked");
+      btn.title = "فتح غلاف الاختبار النهائي";
+      btn.setAttribute("aria-label","فتح غلاف الاختبار النهائي");
+    }else{
+      btn.classList.add("final-cover-locked");
+      btn.title = "يتطلب اختيار اختبار نهائي أولًا";
+      btn.setAttribute("aria-label","يتطلب اختيار اختبار نهائي أولًا");
+    }
   }
 
 
   btn.addEventListener("click",()=>{
 
     if(!isFinal()){
+
+      alert(
+        'غلاف الاختبار مخصص للاختبار النهائي.\n\n' +
+        'من خانة "نوع الاختبار" بالأعلى اختر أو اكتب "اختبار نهائي"، ' +
+        'ثم اضغط على زر غلاف الاختبار مرة أخرى.'
+      );
+
+      try{
+        examType.focus();
+        examType.scrollIntoView({
+          behavior:"smooth",
+          block:"center"
+        });
+      }catch{}
+
       return;
     }
 

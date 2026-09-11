@@ -351,3 +351,16 @@
     margin:0 !important;
   }
 }
+
+
+/* FINAL COVER LOCKED */
+.final-cover-trigger.final-cover-locked{
+  opacity:.68;
+  filter:saturate(.65);
+  cursor:help !important;
+}
+
+.final-cover-trigger:not(.final-cover-locked){
+  opacity:1;
+  filter:none;
+}
