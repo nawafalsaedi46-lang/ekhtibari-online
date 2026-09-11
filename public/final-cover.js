@@ -63,14 +63,22 @@
     }
   }
 
-  function totalScore(){
-    const qs = getQuestionsSafe();
+  let coverRows = [];
+  let approvalColumns = [
+    "المصحح/ة",
+    "المراجع/ة",
+    "المدقق/ة"
+  ];
 
-    return qs.reduce(
-      (sum,q)=>sum + Number(q?.score || 0),
+  let coverTableInitialized = false;
+
+  function totalScore(){
+    return coverRows.reduce(
+      (sum,row)=>sum + Number(row.score || 0),
       0
     );
   }
+
 
   function questionLabel(i){
     const n = [
@@ -176,6 +184,49 @@
 
         </div>
 
+        <div class="fc-table-settings">
+
+          <div class="fc-table-settings-title">
+            جدول الدرجات
+          </div>
+
+          <div class="fc-table-settings-note">
+            اكتب درجة كل سؤال، والمجموع يحسب تلقائيًا.
+          </div>
+
+          <div class="fc-table-actions">
+            <button
+              type="button"
+              id="fcAddScoreRow"
+              class="btn light"
+            >
+              + إضافة صف
+            </button>
+
+            <button
+              type="button"
+              id="fcAddApprovalColumn"
+              class="btn light"
+            >
+              + إضافة عمود
+            </button>
+          </div>
+
+          <div id="fcScoreRowsEditor"></div>
+
+          <div class="fc-cover-total">
+            المجموع:
+            <strong id="fcAutoTotal">0</strong>
+          </div>
+
+          <div class="fc-table-settings-title">
+            أعمدة الاعتماد
+          </div>
+
+          <div id="fcApprovalColumnsEditor"></div>
+
+        </div>
+
         <label class="fc-check">
           <input
             type="checkbox"
@@ -234,7 +285,107 @@
   ];
 
 
-  function loadFromExam(){
+  function resetCoverRowsFromExam(){
+
+    const qs = getQuestionsSafe();
+
+    coverRows = qs.length
+      ? qs.map((q,i)=>({
+          label:questionLabel(i),
+          score:Number(q?.score || 0)
+        }))
+      : [{
+          label:"الأول",
+          score:0
+        }];
+
+    coverTableInitialized = true;
+
+    renderTableEditor();
+  }
+
+
+  function renderTableEditor(){
+
+    const rowsBox =
+      $c("fcScoreRowsEditor");
+
+    const colsBox =
+      $c("fcApprovalColumnsEditor");
+
+    if(rowsBox){
+
+      rowsBox.innerHTML =
+        coverRows.map((row,index)=>`
+          <div class="fc-edit-score-row">
+
+            <span class="fc-edit-num">
+              ${index + 1}
+            </span>
+
+            <input
+              type="text"
+              data-cover-label="${index}"
+              value="${esc(row.label)}"
+              placeholder="السؤال"
+            >
+
+            <input
+              type="number"
+              min="0"
+              step="0.5"
+              data-cover-score="${index}"
+              value="${Number(row.score || 0)}"
+              placeholder="الدرجة"
+            >
+
+            <button
+              type="button"
+              class="fc-delete-small"
+              data-delete-cover-row="${index}"
+            >
+              ×
+            </button>
+
+          </div>
+        `).join("");
+    }
+
+
+    if(colsBox){
+
+      colsBox.innerHTML =
+        approvalColumns.map((title,index)=>`
+          <div class="fc-edit-column-row">
+
+            <input
+              type="text"
+              data-cover-column="${index}"
+              value="${esc(title)}"
+              placeholder="اسم العمود"
+            >
+
+            <button
+              type="button"
+              class="fc-delete-small"
+              data-delete-cover-column="${index}"
+            >
+              ×
+            </button>
+
+          </div>
+        `).join("");
+    }
+
+
+    if($c("fcAutoTotal")){
+      $c("fcAutoTotal").textContent =
+        totalScore();
+    }
+  }
+
+
+  function loadFromExam(forceRows=false){
 
     $c("fcRegion").value =
       val("region");
@@ -264,15 +415,23 @@
       val("examType") || "اختبار نهائي";
 
     if(!$c("fcRound").value){
-      $c("fcRound").value = "الدور الأول";
+      $c("fcRound").value =
+        "الدور الأول";
     }
 
     if(!$c("fcInstructions").value){
+
       $c("fcInstructions").value =
 `اقرأ/ي السؤال جيدًا قبل البدء بالإجابة.
 اكتب/ي الإجابة بخط واضح.
 تأكد/ي من الإجابة عن جميع الأسئلة.
 راجع/ي إجاباتك قبل تسليم الورقة.`;
+    }
+
+    if(forceRows || !coverTableInitialized){
+      resetCoverRowsFromExam();
+    }else{
+      renderTableEditor();
     }
 
     renderPreview();
@@ -281,42 +440,30 @@
 
   function scoreTable(){
 
-    const qs = getQuestionsSafe();
+    const rows =
+      coverRows.map((row,index)=>`
 
-    const rows = qs.length
-      ? qs.map((q,i)=>`
-          <tr>
-            <td class="fc-q">
-              ${esc(questionLabel(i))}
-            </td>
-
-            <td>
-              ${esc(Number(q?.score || 0))}
-            </td>
-
-            <td></td>
-            <td></td>
-
-            <td></td>
-            <td></td>
-
-            <td></td>
-            <td></td>
-
-            <td></td>
-            <td></td>
-          </tr>
-        `).join("")
-      : `
         <tr>
-          <td>-</td>
-          <td>0</td>
-          <td></td><td></td>
-          <td></td><td></td>
-          <td></td><td></td>
-          <td></td><td></td>
+
+          <td class="fc-q">
+            ${esc(row.label || questionLabel(index))}
+          </td>
+
+          <td class="fc-question-score">
+            ${esc(Number(row.score || 0))}
+          </td>
+
+          <td></td>
+          <td></td>
+
+          ${approvalColumns.map(()=>`
+            <td class="fc-signature-box"></td>
+          `).join("")}
+
         </tr>
-      `;
+
+      `).join("");
+
 
     return `
       <table class="fc-score-table">
@@ -324,38 +471,40 @@
         <thead>
 
           <tr>
-            <th rowspan="2">السؤال</th>
-            <th rowspan="2">درجته</th>
+
+            <th rowspan="2">
+              السؤال
+            </th>
+
+            <th rowspan="2">
+              درجته
+            </th>
 
             <th colspan="2">
               الدرجة المستحقة
             </th>
 
-            <th colspan="2">
-              المصحح/ة
-            </th>
+            ${approvalColumns.map(title=>`
+              <th
+                rowspan="2"
+                class="fc-approval-title"
+              >
+                ${esc(title)}
+              </th>
+            `).join("")}
 
-            <th colspan="2">
-              المراجع/ة
-            </th>
-
-            <th colspan="2">
-              المدقق/ة
-            </th>
           </tr>
 
           <tr>
-            <th>رقمًا</th>
-            <th>كتابة</th>
 
-            <th>الاسم</th>
-            <th>التوقيع</th>
+            <th>
+              رقمًا
+            </th>
 
-            <th>الاسم</th>
-            <th>التوقيع</th>
+            <th>
+              كتابة
+            </th>
 
-            <th>الاسم</th>
-            <th>التوقيع</th>
           </tr>
 
         </thead>
@@ -365,12 +514,22 @@
           ${rows}
 
           <tr class="fc-total">
-            <td>المجموع</td>
-            <td>${esc(totalScore())}</td>
-            <td></td><td></td>
-            <td></td><td></td>
-            <td></td><td></td>
-            <td></td><td></td>
+
+            <td>
+              المجموع
+            </td>
+
+            <td>
+              ${esc(totalScore())}
+            </td>
+
+            <td></td>
+            <td></td>
+
+            ${approvalColumns.map(()=>`
+              <td></td>
+            `).join("")}
+
           </tr>
 
         </tbody>
@@ -394,7 +553,8 @@
         .filter(Boolean);
 
     const dense =
-      getQuestionsSafe().length > 8
+      coverRows.length > 8 ||
+      approvalColumns.length > 3
         ? "dense"
         : "";
 
@@ -630,7 +790,7 @@
 
   $c("fcReload").addEventListener(
     "click",
-    loadFromExam
+    ()=>loadFromExam(true)
   );
 
 
@@ -657,6 +817,149 @@
     );
 
   });
+
+
+  $c("fcAddScoreRow").addEventListener(
+    "click",
+    ()=>{
+
+      coverRows.push({
+        label:questionLabel(coverRows.length),
+        score:0
+      });
+
+      renderTableEditor();
+      renderPreview();
+    }
+  );
+
+
+  $c("fcAddApprovalColumn").addEventListener(
+    "click",
+    ()=>{
+
+      approvalColumns.push(
+        "اعتماد جديد"
+      );
+
+      renderTableEditor();
+      renderPreview();
+    }
+  );
+
+
+  $c("fcScoreRowsEditor").addEventListener(
+    "input",
+    event=>{
+
+      if(event.target.matches("[data-cover-label]")){
+
+        const i =
+          Number(event.target.dataset.coverLabel);
+
+        coverRows[i].label =
+          event.target.value;
+
+        renderPreview();
+      }
+
+
+      if(event.target.matches("[data-cover-score]")){
+
+        const i =
+          Number(event.target.dataset.coverScore);
+
+        coverRows[i].score =
+          Math.max(
+            0,
+            Number(event.target.value || 0)
+          );
+
+        $c("fcAutoTotal").textContent =
+          totalScore();
+
+        renderPreview();
+      }
+
+    }
+  );
+
+
+  $c("fcScoreRowsEditor").addEventListener(
+    "click",
+    event=>{
+
+      const btn =
+        event.target.closest(
+          "[data-delete-cover-row]"
+        );
+
+      if(!btn) return;
+
+      if(coverRows.length <= 1){
+        alert("يجب أن يبقى صف واحد على الأقل.");
+        return;
+      }
+
+      coverRows.splice(
+        Number(btn.dataset.deleteCoverRow),
+        1
+      );
+
+      renderTableEditor();
+      renderPreview();
+    }
+  );
+
+
+  $c("fcApprovalColumnsEditor").addEventListener(
+    "input",
+    event=>{
+
+      if(
+        !event.target.matches(
+          "[data-cover-column]"
+        )
+      ){
+        return;
+      }
+
+      const i =
+        Number(event.target.dataset.coverColumn);
+
+      approvalColumns[i] =
+        event.target.value;
+
+      renderPreview();
+    }
+  );
+
+
+  $c("fcApprovalColumnsEditor").addEventListener(
+    "click",
+    event=>{
+
+      const btn =
+        event.target.closest(
+          "[data-delete-cover-column]"
+        );
+
+      if(!btn) return;
+
+      if(approvalColumns.length <= 1){
+        alert("يجب أن يبقى عمود واحد على الأقل.");
+        return;
+      }
+
+      approvalColumns.splice(
+        Number(btn.dataset.deleteCoverColumn),
+        1
+      );
+
+      renderTableEditor();
+      renderPreview();
+    }
+  );
 
 
   examType.addEventListener(
