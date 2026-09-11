@@ -527,3 +527,10 @@ table tbody tr:last-child td:nth-child(9),
 table tbody tr:last-child td:nth-child(10){
   border-bottom-color: #444 !important;
 }
+
+
+/* MOVE FINAL COVER META LEFT */
+.fc-head-info.left{
+  position:relative;
+  left:-18px;
+}
