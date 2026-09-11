@@ -457,6 +457,7 @@
           <td></td>
 
           ${approvalColumns.map(()=>`
+            <td class="fc-name-box"></td>
             <td class="fc-signature-box"></td>
           `).join("")}
 
@@ -473,22 +474,19 @@
           <tr>
 
             <th rowspan="2">
-              السؤال
+              رقم السؤال
             </th>
 
             <th rowspan="2">
-              درجته
+              درجة السؤال
             </th>
 
             <th colspan="2">
-              الدرجة المستحقة
+              الدرجة
             </th>
 
             ${approvalColumns.map(title=>`
-              <th
-                rowspan="2"
-                class="fc-approval-title"
-              >
+              <th colspan="2">
                 ${esc(title)}
               </th>
             `).join("")}
@@ -497,13 +495,13 @@
 
           <tr>
 
-            <th>
-              رقمًا
-            </th>
+            <th>رقمًا</th>
+            <th>كتابة</th>
 
-            <th>
-              كتابة
-            </th>
+            ${approvalColumns.map(()=>`
+              <th>الاسم</th>
+              <th>التوقيع</th>
+            `).join("")}
 
           </tr>
 
@@ -527,6 +525,7 @@
             <td></td>
 
             ${approvalColumns.map(()=>`
+              <td></td>
               <td></td>
             `).join("")}
 
