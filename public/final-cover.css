@@ -497,3 +497,33 @@
 
 }
 
+
+
+/* FINAL COVER MERGE SIGNATURE COLUMNS */
+table tbody tr td:nth-child(5),
+table tbody tr td:nth-child(6),
+table tbody tr td:nth-child(7),
+table tbody tr td:nth-child(8),
+table tbody tr td:nth-child(9),
+table tbody tr td:nth-child(10){
+  border-top-color: transparent !important;
+  border-bottom-color: transparent !important;
+}
+
+table tbody tr:first-child td:nth-child(5),
+table tbody tr:first-child td:nth-child(6),
+table tbody tr:first-child td:nth-child(7),
+table tbody tr:first-child td:nth-child(8),
+table tbody tr:first-child td:nth-child(9),
+table tbody tr:first-child td:nth-child(10){
+  border-top-color: #444 !important;
+}
+
+table tbody tr:last-child td:nth-child(5),
+table tbody tr:last-child td:nth-child(6),
+table tbody tr:last-child td:nth-child(7),
+table tbody tr:last-child td:nth-child(8),
+table tbody tr:last-child td:nth-child(9),
+table tbody tr:last-child td:nth-child(10){
+  border-bottom-color: #444 !important;
+}
