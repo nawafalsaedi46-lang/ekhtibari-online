@@ -1,0 +1,353 @@
+﻿/* =========================================================
+   FINAL EXAM COVER - مستقل عن طباعة الاختبار
+========================================================= */
+
+.final-cover-trigger{
+  background:#7c5c12 !important;
+  color:#fff !important;
+}
+
+.final-cover-modal{
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  background:rgba(15,23,42,.68);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+}
+
+.final-cover-modal[hidden]{
+  display:none !important;
+}
+
+.final-cover-box{
+  width:min(1180px,98vw);
+  height:min(92vh,900px);
+  background:#f8fafc;
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 30px 90px #0006;
+  display:grid;
+  grid-template-columns:390px 1fr;
+  direction:rtl;
+}
+
+.final-cover-controls{
+  padding:20px;
+  background:#fff;
+  overflow:auto;
+  border-left:1px solid #e2e8f0;
+}
+
+.final-cover-controls h3{
+  margin:0 0 5px;
+  font-size:21px;
+  color:#0f5c55;
+}
+
+.final-cover-note{
+  margin:0 0 16px;
+  color:#64748b;
+  line-height:1.7;
+  font-size:13px;
+}
+
+.fc-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.fc-field{
+  margin-bottom:11px;
+}
+
+.fc-field.full{
+  grid-column:1/-1;
+}
+
+.fc-field label{
+  display:block;
+  font-size:12px;
+  font-weight:800;
+  margin-bottom:5px;
+  color:#334155;
+}
+
+.fc-field input,
+.fc-field textarea{
+  width:100%;
+  padding:9px 10px;
+  border:1px solid #cbd5e1;
+  border-radius:8px;
+  font:inherit;
+  outline:none;
+}
+
+.fc-field textarea{
+  resize:vertical;
+}
+
+.fc-field input:focus,
+.fc-field textarea:focus{
+  border-color:#0f766e;
+  box-shadow:0 0 0 3px #0f766e18;
+}
+
+.fc-check{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:13px;
+  font-weight:700;
+  margin:8px 0 14px;
+}
+
+.fc-check input{
+  width:auto;
+}
+
+.fc-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:14px;
+}
+
+.final-cover-preview{
+  padding:18px;
+  overflow:auto;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  background:#cbd5e1;
+}
+
+/* الورقة */
+.fc-sheet{
+  width:210mm;
+  min-height:297mm;
+  box-sizing:border-box;
+  background:#fff;
+  color:#111;
+  padding:8mm;
+  direction:rtl;
+  box-shadow:0 8px 30px #0003;
+  font-family:Tahoma,Arial,sans-serif;
+}
+
+.fc-frame{
+  min-height:281mm;
+  border:1.6px solid #222;
+  padding:6mm;
+  box-sizing:border-box;
+  display:flex;
+  flex-direction:column;
+}
+
+.fc-head{
+  display:grid;
+  grid-template-columns:1fr 38mm 1fr;
+  gap:5mm;
+  align-items:start;
+}
+
+.fc-head-info{
+  font-size:10.5px;
+  line-height:1.8;
+  font-weight:700;
+}
+
+.fc-head-info.left{
+  text-align:right;
+}
+
+.fc-logo{
+  text-align:center;
+  min-height:28mm;
+}
+
+.fc-logo img.moe{
+  max-width:33mm;
+  max-height:23mm;
+}
+
+.fc-logo img.school{
+  display:block;
+  max-width:19mm;
+  max-height:15mm;
+  margin:2mm auto 0;
+}
+
+.fc-main-title{
+  text-align:center;
+  margin:5mm 0 4mm;
+  line-height:1.7;
+}
+
+.fc-main-title .basmala{
+  font-weight:900;
+  font-size:14px;
+}
+
+.fc-main-title h1{
+  margin:1mm 0;
+  font-size:16px;
+}
+
+.fc-main-title .sub{
+  font-size:12.5px;
+  font-weight:800;
+}
+
+.fc-student-box{
+  width:86%;
+  margin:2mm auto 6mm;
+  border:1.6px solid #222;
+}
+
+.fc-student-row{
+  min-height:11mm;
+  display:flex;
+  align-items:center;
+  padding:0 4mm;
+  font-size:12px;
+  font-weight:800;
+}
+
+.fc-student-row + .fc-student-row{
+  border-top:1px solid #555;
+}
+
+.fc-student-line{
+  flex:1;
+  margin-right:3mm;
+  border-bottom:1px dotted #333;
+  height:6mm;
+}
+
+.fc-score-table{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+  margin-top:1mm;
+}
+
+.fc-score-table th,
+.fc-score-table td{
+  border:1px solid #222;
+  text-align:center;
+  vertical-align:middle;
+  padding:1.5mm .7mm;
+  font-size:8.5px;
+}
+
+.fc-score-table th{
+  font-weight:900;
+  background:#f8fafc;
+}
+
+.fc-score-table tbody td{
+  height:8mm;
+}
+
+.fc-score-table .fc-q{
+  font-weight:900;
+}
+
+.fc-score-table .fc-total td{
+  font-weight:900;
+  background:#fafafa;
+}
+
+.fc-instructions{
+  width:78%;
+  margin:auto auto 2mm;
+  border:1.3px solid #222;
+  padding:3mm 5mm;
+  font-size:10.5px;
+  line-height:1.8;
+}
+
+.fc-instructions-title{
+  font-size:12px;
+  font-weight:900;
+  margin-bottom:1mm;
+}
+
+.fc-inst{
+  position:relative;
+  padding-right:5mm;
+}
+
+.fc-inst::before{
+  content:"◆";
+  position:absolute;
+  right:0;
+  top:1px;
+  font-size:6px;
+}
+
+.fc-footer{
+  text-align:center;
+  font-size:8px;
+  padding-top:2mm;
+  margin-top:2mm;
+  border-top:1px solid #aaa;
+}
+
+.fc-sheet.dense .fc-score-table th,
+.fc-sheet.dense .fc-score-table td{
+  font-size:7.5px;
+  padding:1mm .5mm;
+}
+
+.fc-sheet.dense .fc-score-table tbody td{
+  height:6mm;
+}
+
+@media(max-width:900px){
+  .final-cover-box{
+    display:block;
+    height:94vh;
+  }
+
+  .final-cover-controls{
+    max-height:48%;
+    border-left:0;
+    border-bottom:1px solid #ddd;
+  }
+
+  .final-cover-preview{
+    height:52%;
+  }
+
+  .fc-sheet{
+    transform:scale(.62);
+    transform-origin:top center;
+    margin-bottom:-105mm;
+  }
+}
+
+@media print{
+  @page{
+    size:A4 portrait;
+    margin:0;
+  }
+
+  html,body{
+    margin:0 !important;
+    padding:0 !important;
+    background:#fff !important;
+  }
+
+  .fc-sheet{
+    width:210mm !important;
+    height:297mm !important;
+    min-height:297mm !important;
+    box-shadow:none !important;
+    margin:0 !important;
+  }
+}
