@@ -534,3 +534,53 @@ table tbody tr:last-child td:nth-child(10){
   position:relative;
   left:-18px;
 }
+
+
+/* FINAL COVER A4 PRINT FIX */
+@media print {
+
+  @page{
+    size:A4 portrait !important;
+    margin:0 !important;
+  }
+
+  html,
+  body{
+    width:210mm !important;
+    height:297mm !important;
+    margin:0 !important;
+    padding:0 !important;
+    background:#fff !important;
+  }
+
+  .fc-sheet{
+    width:210mm !important;
+    height:297mm !important;
+    min-height:297mm !important;
+
+    margin:0 !important;
+    margin-bottom:0 !important;
+    padding:8mm !important;
+
+    transform:none !important;
+    transform-origin:center !important;
+
+    box-shadow:none !important;
+    box-sizing:border-box !important;
+
+    page-break-before:avoid !important;
+    page-break-after:avoid !important;
+    break-before:avoid-page !important;
+    break-after:avoid-page !important;
+  }
+
+  .fc-frame{
+    width:100% !important;
+    height:281mm !important;
+    min-height:281mm !important;
+
+    margin:0 !important;
+    box-sizing:border-box !important;
+  }
+}
+/* FINAL COVER A4 PRINT FIX END */
