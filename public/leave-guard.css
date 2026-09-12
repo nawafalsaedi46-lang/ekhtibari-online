@@ -1,0 +1,84 @@
+﻿.unsaved-exam-modal{
+  position:fixed;
+  inset:0;
+  z-index:999999;
+  background:rgba(15,23,42,.62);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  direction:rtl;
+}
+
+.unsaved-exam-modal[hidden]{
+  display:none !important;
+}
+
+.unsaved-exam-box{
+  width:min(440px,94vw);
+  background:#fff;
+  border-radius:18px;
+  padding:24px;
+  box-shadow:0 25px 80px rgba(0,0,0,.3);
+  text-align:center;
+}
+
+.unsaved-exam-icon{
+  font-size:42px;
+  margin-bottom:7px;
+}
+
+.unsaved-exam-box h3{
+  margin:0 0 8px;
+  font-size:20px;
+  color:#0f172a;
+}
+
+.unsaved-exam-box p{
+  margin:0;
+  color:#64748b;
+  line-height:1.8;
+}
+
+.unsaved-exam-error{
+  display:none;
+  margin-top:12px;
+  padding:9px;
+  border-radius:8px;
+  background:#fef2f2;
+  color:#b91c1c;
+  font-size:12px;
+  font-weight:700;
+}
+
+.unsaved-exam-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:20px;
+}
+
+.unsaved-save-btn,
+.unsaved-leave-btn{
+  border:0;
+  border-radius:10px;
+  padding:12px;
+  font:inherit;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.unsaved-save-btn{
+  background:#2563eb;
+  color:#fff;
+}
+
+.unsaved-leave-btn{
+  background:#dc2626;
+  color:#fff;
+}
+
+.unsaved-save-btn:disabled{
+  opacity:.65;
+  cursor:wait;
+}
