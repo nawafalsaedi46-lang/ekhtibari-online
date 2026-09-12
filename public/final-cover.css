@@ -584,3 +584,20 @@ table tbody tr:last-child td:nth-child(10){
   }
 }
 /* FINAL COVER A4 PRINT FIX END */
+
+
+/* FINAL COVER META PROFESSIONAL POSITION */
+.fc-head-info.left{
+  width:max-content !important;
+  justify-self:end !important;
+  align-self:start !important;
+  text-align:right !important;
+
+  position:static !important;
+  left:auto !important;
+  right:auto !important;
+  transform:none !important;
+
+  margin-left:0 !important;
+  margin-right:auto !important;
+}
