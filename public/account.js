@@ -114,6 +114,9 @@ async function openAccountExam(id){
     currentAccountExamId=d.exam.id;
     document.getElementById("examSaveName").value=d.exam.name;
     applyAccountSnapshot(d.exam.data);
+
+    setSavedExamsVisible(false);
+
     setAccountStatus(`تم فتح: ${d.exam.name}`);
     window.scrollTo({top:0,behavior:"smooth"});
   }catch(e){setAccountStatus(e.message,true)}
@@ -145,9 +148,52 @@ function newAccountExam(){
     else if(id==="endMessage")el.value="( انتهت الأسئلة )";
     else el.value="";
   });
-  resetEditor(); refreshAll();
-  setAccountStatus("اختبار جديد.");
+  resetEditor();
+  refreshAll();
+
+  setSavedExamsVisible(false);
+
+  setAccountStatus(
+    "اختبار جديد — الاختبارات السابقة محفوظة في حسابك."
+  );
 }
+
+function setSavedExamsVisible(show){
+
+  const list =
+    document.getElementById("savedExamsList");
+
+  const btn =
+    document.getElementById("toggleSavedExamsBtn");
+
+  if(list){
+    list.style.display =
+      show ? "block" : "none";
+  }
+
+  if(btn){
+    btn.textContent =
+      show
+        ? "📁 إخفاء الاختبارات المحفوظة"
+        : "📂 عرض الاختبارات المحفوظة";
+  }
+}
+
+
+document
+  .getElementById("toggleSavedExamsBtn")
+  .addEventListener("click",()=>{
+
+    const list =
+      document.getElementById("savedExamsList");
+
+    const visible =
+      list &&
+      list.style.display !== "none";
+
+    setSavedExamsVisible(!visible);
+  });
+
 
 document.getElementById("saveToAccountBtn").addEventListener("click",saveAccountExam);
 document.getElementById("newExamBtn").addEventListener("click",newAccountExam);
