@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="final-cover.css">
   <link rel="stylesheet" href="leave-guard.css">
+  <link rel="stylesheet" href="question-bank.css">
 </head>
 <body>
 <div class="account-bar">
@@ -160,7 +161,19 @@
         <h2>أسئلة الاختبار</h2>
         <p>تعديل أو حذف السؤال كاملًا أو فقرة منفردة.</p>
       </div>
-      <div class="question-count"><span id="questionCount">0</span> سؤال</div>
+      <div class="questions-header-actions">
+        <button
+          type="button"
+          id="qBankOpenBtn"
+          class="btn qbank-main-btn"
+        >
+          📚 بنك الأسئلة
+        </button>
+
+        <div class="question-count">
+          <span id="questionCount">0</span> سؤال
+        </div>
+      </div>
     </div>
 
     <div class="score-summary">مجموع درجات الأسئلة: <strong id="calculatedScore">0</strong></div>
@@ -216,6 +229,7 @@
 <script src="app.js"></script>
 <script src="final-cover.js"></script>
 <script src="account.js"></script>
+<script src="question-bank.js"></script>
 <script src="leave-guard.js"></script>
 </body>
 </html>

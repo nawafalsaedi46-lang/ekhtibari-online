@@ -142,6 +142,32 @@ async function initDb() {
   `);
 
   await pool.query(`
+﻿CREATE TABLE IF NOT EXISTS question_bank (
+  id TEXT PRIMARY KEY,
+  teacher_id TEXT NOT NULL
+    REFERENCES teachers(id)
+    ON DELETE CASCADE,
+
+  type TEXT NOT NULL,
+  title TEXT NOT NULL,
+  subject TEXT NOT NULL DEFAULT '',
+  grade TEXT NOT NULL DEFAULT '',
+
+  data JSONB NOT NULL DEFAULT '{}'::jsonb,
+
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_question_bank_teacher
+ON question_bank(teacher_id);
+
+CREATE INDEX IF NOT EXISTS idx_question_bank_teacher_updated
+ON question_bank(teacher_id, updated_at DESC);
+
+`);
+
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS exams (
       id TEXT PRIMARY KEY,
       teacher_id TEXT NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
@@ -884,6 +910,297 @@ app.post("/api/support/tickets/:id/messages", requireTeacher, async (req, res) =
 
   }
 
+});
+
+
+﻿/* =========================
+   بنك أسئلة المعلم
+   كل معلم يرى بنكه فقط
+========================= */
+
+app.get("/api/question-bank", requireTeacher, async (req, res) => {
+  try {
+    const search = String(req.query.q || "").trim().slice(0, 150);
+    const type = String(req.query.type || "").trim().slice(0, 50);
+    const subject = String(req.query.subject || "").trim().slice(0, 120);
+    const grade = String(req.query.grade || "").trim().slice(0, 120);
+
+    const params = [req.teacher.id];
+    const where = ["teacher_id = $1"];
+
+    if (search) {
+      params.push(`%${search}%`);
+      const n = params.length;
+
+      where.push(`(
+        title ILIKE ${n}
+        OR subject ILIKE ${n}
+        OR grade ILIKE ${n}
+        OR data::text ILIKE ${n}
+      )`);
+    }
+
+    if (type) {
+      params.push(type);
+      where.push(`type = ${params.length}`);
+    }
+
+    if (subject) {
+      params.push(`%${subject}%`);
+      where.push(`subject ILIKE ${params.length}`);
+    }
+
+    if (grade) {
+      params.push(`%${grade}%`);
+      where.push(`grade ILIKE ${params.length}`);
+    }
+
+    const { rows } = await pool.query(
+      `SELECT
+         id,
+         type,
+         title,
+         subject,
+         grade,
+         data,
+         created_at AS "createdAt",
+         updated_at AS "updatedAt"
+       FROM question_bank
+       WHERE ${where.join(" AND ")}
+       ORDER BY updated_at DESC
+       LIMIT 300`,
+      params
+    );
+
+    res.json({ questions: rows });
+
+  } catch (err) {
+    console.error("QUESTION BANK LIST:", err);
+
+    res.status(500).json({
+      error: "تعذر تحميل بنك الأسئلة."
+    });
+  }
+});
+
+
+app.post("/api/question-bank", requireTeacher, async (req, res) => {
+  try {
+    const question = req.body.question;
+
+    if (
+      !question ||
+      typeof question !== "object" ||
+      !Array.isArray(question.items) ||
+      !question.items.length
+    ) {
+      return res.status(400).json({
+        error: "بيانات السؤال غير مكتملة."
+      });
+    }
+
+    const raw = JSON.stringify(question);
+
+    if (raw.length > 8 * 1024 * 1024) {
+      return res.status(400).json({
+        error: "حجم السؤال كبير جدًا للحفظ في البنك."
+      });
+    }
+
+    const id = newId("qb");
+
+    const type =
+      String(question.type || "essay")
+        .trim()
+        .slice(0, 50);
+
+    const title =
+      String(question.title || "سؤال")
+        .trim()
+        .slice(0, 500) || "سؤال";
+
+    const subject =
+      String(req.body.subject || "")
+        .trim()
+        .slice(0, 120);
+
+    const grade =
+      String(req.body.grade || "")
+        .trim()
+        .slice(0, 120);
+
+    const { rows } = await pool.query(
+      `INSERT INTO question_bank (
+         id,
+         teacher_id,
+         type,
+         title,
+         subject,
+         grade,
+         data
+       )
+       VALUES ($1,$2,$3,$4,$5,$6,$7::jsonb)
+
+       RETURNING
+         id,
+         type,
+         title,
+         subject,
+         grade,
+         data,
+         created_at AS "createdAt",
+         updated_at AS "updatedAt"`,
+      [
+        id,
+        req.teacher.id,
+        type,
+        title,
+        subject,
+        grade,
+        raw
+      ]
+    );
+
+    res.json({
+      ok: true,
+      question: rows[0]
+    });
+
+  } catch (err) {
+    console.error("QUESTION BANK CREATE:", err);
+
+    res.status(500).json({
+      error: "تعذر حفظ السؤال في البنك."
+    });
+  }
+});
+
+
+app.patch("/api/question-bank/:id", requireTeacher, async (req, res) => {
+  try {
+    const question = req.body.question;
+
+    if (
+      !question ||
+      typeof question !== "object" ||
+      !Array.isArray(question.items) ||
+      !question.items.length
+    ) {
+      return res.status(400).json({
+        error: "بيانات السؤال غير مكتملة."
+      });
+    }
+
+    const raw = JSON.stringify(question);
+
+    if (raw.length > 8 * 1024 * 1024) {
+      return res.status(400).json({
+        error: "حجم السؤال كبير جدًا."
+      });
+    }
+
+    const type =
+      String(question.type || "essay")
+        .trim()
+        .slice(0, 50);
+
+    const title =
+      String(question.title || "سؤال")
+        .trim()
+        .slice(0, 500) || "سؤال";
+
+    const subject =
+      String(req.body.subject || "")
+        .trim()
+        .slice(0, 120);
+
+    const grade =
+      String(req.body.grade || "")
+        .trim()
+        .slice(0, 120);
+
+    const { rows } = await pool.query(
+      `UPDATE question_bank
+
+       SET
+         type = $1,
+         title = $2,
+         subject = $3,
+         grade = $4,
+         data = $5::jsonb,
+         updated_at = NOW()
+
+       WHERE id = $6
+         AND teacher_id = $7
+
+       RETURNING
+         id,
+         type,
+         title,
+         subject,
+         grade,
+         data,
+         created_at AS "createdAt",
+         updated_at AS "updatedAt"`,
+      [
+        type,
+        title,
+        subject,
+        grade,
+        raw,
+        req.params.id,
+        req.teacher.id
+      ]
+    );
+
+    if (!rows[0]) {
+      return res.status(404).json({
+        error: "السؤال غير موجود في بنكك."
+      });
+    }
+
+    res.json({
+      ok: true,
+      question: rows[0]
+    });
+
+  } catch (err) {
+    console.error("QUESTION BANK UPDATE:", err);
+
+    res.status(500).json({
+      error: "تعذر تعديل السؤال."
+    });
+  }
+});
+
+
+app.delete("/api/question-bank/:id", requireTeacher, async (req, res) => {
+  try {
+    const result = await pool.query(
+      `DELETE FROM question_bank
+       WHERE id = $1
+         AND teacher_id = $2`,
+      [
+        req.params.id,
+        req.teacher.id
+      ]
+    );
+
+    if (!result.rowCount) {
+      return res.status(404).json({
+        error: "السؤال غير موجود."
+      });
+    }
+
+    res.json({ ok: true });
+
+  } catch (err) {
+    console.error("QUESTION BANK DELETE:", err);
+
+    res.status(500).json({
+      error: "تعذر حذف السؤال من البنك."
+    });
+  }
 });
 
 
