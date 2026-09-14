@@ -1011,3 +1011,10 @@ html[data-exam-layout] .layout-meta-strip{
 }
 /* === HIDE EXTRA PRINT TITLES END === */
 
+
+/* === HIDE DUPLICATE META STRIP START === */
+.layout-meta-strip{
+  display:none !important;
+}
+/* === HIDE DUPLICATE META STRIP END === */
+
