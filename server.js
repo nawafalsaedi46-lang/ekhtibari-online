@@ -1210,6 +1210,277 @@ app.delete("/api/question-bank/:id", requireTeacher, async (req, res) => {
    المأخوذ من جلسة الدخول
 ========================= */
 
+
+
+/* =========================================================
+   سجل المتابعة للمعلم
+   العزل دائمًا حسب teacher_id من جلسة المعلم
+========================================================= */
+
+async function ensureFollowupTable(){
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS followup_classes (
+      id TEXT PRIMARY KEY,
+
+      teacher_id TEXT NOT NULL
+        REFERENCES teachers(id)
+        ON DELETE CASCADE,
+
+      name TEXT NOT NULL,
+
+      data JSONB NOT NULL
+        DEFAULT '{"students":[],"days":{}}'::jsonb,
+
+      created_at TIMESTAMPTZ NOT NULL
+        DEFAULT NOW(),
+
+      updated_at TIMESTAMPTZ NOT NULL
+        DEFAULT NOW()
+    );
+  `);
+
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS idx_followup_classes_teacher
+    ON followup_classes(teacher_id, updated_at DESC);
+  `);
+}
+
+
+app.get("/api/followup-classes", requireTeacher, async (req, res) => {
+
+  try{
+
+    await ensureFollowupTable();
+
+    const { rows } = await pool.query(
+      `SELECT
+         id,
+         name,
+         data,
+         created_at AS "createdAt",
+         updated_at AS "updatedAt"
+
+       FROM followup_classes
+
+       WHERE teacher_id = $1
+
+       ORDER BY updated_at DESC`,
+      [req.teacher.id]
+    );
+
+    res.json({
+      followupClasses:rows
+    });
+
+  }catch(error){
+
+    console.error(
+      "GET followup classes:",
+      error
+    );
+
+    res.status(500).json({
+      error:"تعذر تحميل سجل المتابعة."
+    });
+  }
+});
+
+
+app.post("/api/followup-classes", requireTeacher, async (req, res) => {
+
+  try{
+
+    await ensureFollowupTable();
+
+    const name =
+      String(req.body.name || "")
+        .trim()
+        .slice(0,150);
+
+    if(!name){
+      return res.status(400).json({
+        error:"اسم الفصل مطلوب."
+      });
+    }
+
+    const id =
+      "FU-" +
+      Date.now().toString(36) +
+      "-" +
+      Math.random()
+        .toString(36)
+        .slice(2,9);
+
+    const initialData = {
+      students:[],
+      days:{}
+    };
+
+    const { rows } = await pool.query(
+      `INSERT INTO followup_classes
+       (
+         id,
+         teacher_id,
+         name,
+         data
+       )
+       VALUES
+       (
+         $1,
+         $2,
+         $3,
+         $4::jsonb
+       )
+
+       RETURNING
+         id,
+         name,
+         data,
+         created_at AS "createdAt",
+         updated_at AS "updatedAt"`,
+      [
+        id,
+        req.teacher.id,
+        name,
+        JSON.stringify(initialData)
+      ]
+    );
+
+    res.status(201).json({
+      followupClass:rows[0]
+    });
+
+  }catch(error){
+
+    console.error(
+      "POST followup class:",
+      error
+    );
+
+    res.status(500).json({
+      error:"تعذر إنشاء الفصل."
+    });
+  }
+});
+
+
+app.put("/api/followup-classes/:id", requireTeacher, async (req, res) => {
+
+  try{
+
+    await ensureFollowupTable();
+
+    const name =
+      String(req.body.name || "")
+        .trim()
+        .slice(0,150);
+
+    const data =
+      req.body.data &&
+      typeof req.body.data === "object"
+        ? req.body.data
+        : {
+            students:[],
+            days:{}
+          };
+
+    if(!name){
+      return res.status(400).json({
+        error:"اسم الفصل مطلوب."
+      });
+    }
+
+    const { rows } = await pool.query(
+      `UPDATE followup_classes
+
+       SET
+         name = $1,
+         data = $2::jsonb,
+         updated_at = NOW()
+
+       WHERE id = $3
+         AND teacher_id = $4
+
+       RETURNING
+         id,
+         name,
+         data,
+         created_at AS "createdAt",
+         updated_at AS "updatedAt"`,
+      [
+        name,
+        JSON.stringify(data),
+        req.params.id,
+        req.teacher.id
+      ]
+    );
+
+    if(!rows.length){
+      return res.status(404).json({
+        error:"الفصل غير موجود."
+      });
+    }
+
+    res.json({
+      followupClass:rows[0]
+    });
+
+  }catch(error){
+
+    console.error(
+      "PUT followup class:",
+      error
+    );
+
+    res.status(500).json({
+      error:"تعذر حفظ سجل المتابعة."
+    });
+  }
+});
+
+
+app.delete("/api/followup-classes/:id", requireTeacher, async (req, res) => {
+
+  try{
+
+    await ensureFollowupTable();
+
+    const result = await pool.query(
+      `DELETE FROM followup_classes
+
+       WHERE id = $1
+         AND teacher_id = $2`,
+      [
+        req.params.id,
+        req.teacher.id
+      ]
+    );
+
+    if(!result.rowCount){
+      return res.status(404).json({
+        error:"الفصل غير موجود."
+      });
+    }
+
+    res.json({
+      ok:true
+    });
+
+  }catch(error){
+
+    console.error(
+      "DELETE followup class:",
+      error
+    );
+
+    res.status(500).json({
+      error:"تعذر حذف الفصل."
+    });
+  }
+});
+
+
 app.get("/api/exams", requireTeacher, async (req, res) => {
   try {
     const { rows } = await pool.query(
@@ -2302,6 +2573,10 @@ app.delete("/api/admin/teachers/:id/permanent", requireAdmin, async (req, res) =
 
 app.get("/exams", teacherPage, (req, res) => {
   res.sendFile(path.join(PUBLIC_DIR, "exams.html"));
+});
+
+app.get("/followup", teacherPage, (req, res) => {
+  res.sendFile(path.join(PUBLIC_DIR, "followup.html"));
 });
 
 app.get("/support", teacherPage, (req, res) => {

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>سجل المتابعة - اختباري</title>
+<link rel="stylesheet" href="/dashboard.css">
+<link rel="stylesheet" href="/followup.css">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+  <aside class="sidebar">
+
+    <div class="brand">
+      <div>
+        <h2>اختباري</h2>
+        <span>منصة المعلم</span>
+      </div>
+    </div>
+
+    <nav>
+
+      <a class="nav-item" href="/dashboard">
+        <span>🏠</span>
+        الرئيسية
+      </a>
+
+      <a class="nav-item" href="/teacher">
+        <span>📝</span>
+        إنشاء اختبار جديد
+      </a>
+
+      <a class="nav-item" href="/exams">
+        <span>📁</span>
+        اختباراتي
+      </a>
+
+      <a class="nav-item active" href="/followup">
+        <span>📒</span>
+        سجل المتابعة
+      </a>
+
+      <a class="nav-item" href="/support">
+        <span>💬</span>
+        تواصل مع الإدارة
+      </a>
+
+      <a class="nav-item" href="/settings">
+        <span>⚙️</span>
+        الإعدادات
+      </a>
+
+    </nav>
+
+  </aside>
+
+
+  <main class="main-content followup-main">
+
+    <header class="followup-topbar">
+
+      <div>
+        <p class="followup-eyebrow">أدوات المعلم</p>
+        <h1>📒 سجل المتابعة</h1>
+        <p>
+          متابعة الحضور والواجب والمشاركة والدرجات والملاحظات لكل فصل.
+        </p>
+      </div>
+
+      <div class="followup-teacher">
+        <span>المعلم</span>
+        <strong id="teacherName">...</strong>
+      </div>
+
+    </header>
+
+
+    <section class="followup-toolbar">
+
+      <div class="toolbar-group class-create">
+        <label>إنشاء فصل جديد</label>
+
+        <div class="inline-control">
+          <input
+            id="newClassName"
+            type="text"
+            placeholder="مثال: الثالث المتوسط - أ"
+          >
+
+          <button id="createClassBtn" class="primary-action">
+            + إنشاء الفصل
+          </button>
+        </div>
+      </div>
+
+
+      <div class="toolbar-group">
+        <label>الفصل الحالي</label>
+
+        <select id="classSelect">
+          <option value="">اختر الفصل</option>
+        </select>
+      </div>
+
+
+      <div class="toolbar-group">
+        <label>تاريخ المتابعة</label>
+
+        <input
+          type="date"
+          id="followupDate"
+        >
+      </div>
+
+
+      <div class="toolbar-actions">
+
+        <button
+          type="button"
+          id="printFollowupBtn"
+          class="light-action"
+        >
+          🖨️ طباعة
+        </button>
+
+        <button
+          type="button"
+          id="deleteClassBtn"
+          class="danger-action"
+        >
+          🗑️ حذف الفصل
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <section id="emptyState" class="followup-empty">
+
+      <div class="empty-icon">📒</div>
+
+      <h2>ابدأ بإنشاء فصل</h2>
+
+      <p>
+        أنشئ الفصل ثم أضف أسماء الطلاب لتبدأ المتابعة اليومية.
+      </p>
+
+    </section>
+
+
+    <div id="followupWorkspace" class="followup-workspace hidden">
+
+
+      <section class="followup-stats">
+
+        <div class="follow-stat">
+          <span>عدد الطلاب</span>
+          <strong id="statStudents">0</strong>
+        </div>
+
+        <div class="follow-stat">
+          <span>الحضور</span>
+          <strong id="statPresent">0</strong>
+        </div>
+
+        <div class="follow-stat">
+          <span>الغياب</span>
+          <strong id="statAbsent">0</strong>
+        </div>
+
+        <div class="follow-stat">
+          <span>الواجب مكتمل</span>
+          <strong id="statHomework">0</strong>
+        </div>
+
+      </section>
+
+
+      <section class="students-manager no-print">
+
+        <div class="students-manager-head">
+          <div>
+            <h2>إضافة الطلاب</h2>
+            <p>أضف طالبًا واحدًا أو مجموعة أسماء دفعة واحدة.</p>
+          </div>
+
+          <span id="saveStatus" class="save-status saved">
+            ✓ محفوظ
+          </span>
+        </div>
+
+
+        <div class="single-student-row">
+
+          <input
+            type="text"
+            id="studentNameInput"
+            placeholder="اسم الطالب الثلاثي"
+          >
+
+          <button
+            type="button"
+            id="addStudentBtn"
+            class="primary-action"
+          >
+            + إضافة طالب
+          </button>
+
+        </div>
+
+
+        <details class="bulk-add-box">
+
+          <summary>
+            إضافة عدة طلاب دفعة واحدة
+          </summary>
+
+          <textarea
+            id="bulkStudents"
+            placeholder="اكتب كل اسم في سطر مستقل&#10;محمد أحمد علي&#10;خالد سعد محمد&#10;عبدالله سالم حسن"
+          ></textarea>
+
+          <button
+            type="button"
+            id="addBulkStudentsBtn"
+            class="light-action"
+          >
+            إضافة الأسماء
+          </button>
+
+        </details>
+
+      </section>
+
+
+      <section class="followup-sheet" id="followupPrintArea">
+
+        <div class="sheet-header">
+
+          <div>
+            <span>سجل المتابعة</span>
+            <h2 id="sheetClassName">-</h2>
+          </div>
+
+          <div class="sheet-date">
+            التاريخ:
+            <strong id="sheetDate">-</strong>
+          </div>
+
+        </div>
+
+
+        <div class="table-scroll">
+
+          <table class="followup-table">
+
+            <thead>
+
+              <tr>
+                <th>#</th>
+                <th class="student-name-col">اسم الطالب</th>
+                <th>الحضور</th>
+                <th>الواجب</th>
+                <th>المشاركة</th>
+                <th>درجة قصيرة</th>
+                <th class="notes-col">ملاحظات</th>
+                <th class="no-print">إجراء</th>
+              </tr>
+
+            </thead>
+
+            <tbody id="studentsTableBody"></tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+</div>
+
+<script src="/followup.js"></script>
+
+</body>
+</html>
