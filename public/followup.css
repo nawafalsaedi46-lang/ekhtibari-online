@@ -576,3 +576,191 @@
 
 /* === END FOLLOWUP TOOLBAR SAFE FIX === */
 
+
+
+/* === FOLLOWUP PROFESSIONAL TOOLBAR V2 START === */
+
+/* خانة إنشاء الفصل تأخذ سطر كامل */
+
+.followup-toolbar{
+  display:grid !important;
+
+  grid-template-columns:
+    minmax(220px,1fr)
+    minmax(220px,1fr)
+    auto !important;
+
+  gap:14px !important;
+
+  width:100% !important;
+  max-width:100% !important;
+
+  overflow:visible !important;
+}
+
+
+/* اسم الفصل الجديد */
+
+.class-create{
+  grid-column:1 / -1 !important;
+
+  padding:15px !important;
+
+  border:1px solid #dbe3ea !important;
+  border-radius:13px !important;
+
+  background:#f8fafc !important;
+}
+
+.class-create label{
+  display:block !important;
+
+  margin-bottom:8px !important;
+
+  font-size:13px !important;
+  font-weight:900 !important;
+
+  color:#0f172a !important;
+}
+
+.inline-control{
+  display:grid !important;
+
+  grid-template-columns:
+    minmax(0,1fr)
+    170px !important;
+
+  gap:10px !important;
+
+  width:100% !important;
+}
+
+#newClassName{
+  width:100% !important;
+  min-width:0 !important;
+
+  height:48px !important;
+
+  font-size:14px !important;
+
+  background:#fff !important;
+}
+
+#createClassBtn{
+  width:170px !important;
+  height:48px !important;
+
+  font-size:13px !important;
+}
+
+
+/* الفصل والتاريخ */
+
+.toolbar-group{
+  min-width:0 !important;
+}
+
+#classSelect,
+#followupDate{
+  width:100% !important;
+  height:47px !important;
+}
+
+
+/* الأزرار */
+
+.toolbar-actions{
+  display:flex !important;
+
+  align-items:end !important;
+
+  gap:8px !important;
+
+  flex-wrap:wrap !important;
+}
+
+
+/* زر الحفظ */
+
+.save-followup-btn{
+  border:0 !important;
+
+  min-width:135px !important;
+
+  padding:11px 16px !important;
+
+  border-radius:10px !important;
+
+  background:#0f766e !important;
+  color:#fff !important;
+
+  font-family:inherit !important;
+  font-size:13px !important;
+  font-weight:900 !important;
+
+  cursor:pointer !important;
+
+  box-shadow:0 5px 15px rgba(15,118,110,.16) !important;
+}
+
+.save-followup-btn:hover{
+  background:#0b615b !important;
+}
+
+.save-followup-btn:disabled{
+  opacity:.65 !important;
+  cursor:wait !important;
+}
+
+
+/* تابلت */
+
+@media(max-width:1000px){
+
+  .followup-toolbar{
+    grid-template-columns:1fr 1fr !important;
+  }
+
+  .class-create{
+    grid-column:1/-1 !important;
+  }
+
+  .toolbar-actions{
+    grid-column:1/-1 !important;
+  }
+}
+
+
+/* جوال */
+
+@media(max-width:650px){
+
+  .followup-toolbar{
+    grid-template-columns:1fr !important;
+  }
+
+  .class-create,
+  .toolbar-actions{
+    grid-column:auto !important;
+  }
+
+  .inline-control{
+    grid-template-columns:1fr !important;
+  }
+
+  #createClassBtn{
+    width:100% !important;
+  }
+
+  .toolbar-actions{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+  }
+
+  .save-followup-btn{
+    grid-column:1/-1 !important;
+    width:100% !important;
+  }
+}
+
+/* === FOLLOWUP PROFESSIONAL TOOLBAR V2 END === */

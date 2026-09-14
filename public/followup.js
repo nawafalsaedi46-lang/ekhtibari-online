@@ -10,6 +10,7 @@ const classSelect = $("classSelect");
 const followupDate = $("followupDate");
 const deleteClassBtn = $("deleteClassBtn");
 const printFollowupBtn = $("printFollowupBtn");
+const saveFollowupBtn = $("saveFollowupBtn");
 
 const emptyState = $("emptyState");
 const workspace = $("followupWorkspace");
@@ -831,6 +832,41 @@ deleteClassBtn.addEventListener(
 
       alert("❌ " + error.message);
     }
+  }
+);
+
+
+
+saveFollowupBtn.addEventListener(
+  "click",
+  async function(){
+
+    if(!currentClass){
+
+      alert("أنشئ فصلًا أولًا.");
+      newClassName.focus();
+      return;
+    }
+
+    const oldText =
+      saveFollowupBtn.textContent;
+
+    saveFollowupBtn.disabled = true;
+    saveFollowupBtn.textContent =
+      "⏳ جاري الحفظ...";
+
+    await saveCurrentClass();
+
+    saveFollowupBtn.textContent =
+      "✅ تم الحفظ";
+
+    setTimeout(function(){
+
+      saveFollowupBtn.disabled = false;
+      saveFollowupBtn.textContent =
+        oldText;
+
+    },1000);
   }
 );
 
