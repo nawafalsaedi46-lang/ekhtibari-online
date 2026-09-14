@@ -1,305 +1,218 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>سجل المتابعة - اختباري</title>
-<link rel="stylesheet" href="/dashboard.css">
+
 <link rel="stylesheet" href="/followup.css">
+
 </head>
 
 <body>
 
-<div class="dashboard">
+<div class="register-app no-print">
 
-  <aside class="sidebar">
+  <header class="register-top">
 
-    <div class="brand">
-      <div>
-        <h2>اختباري</h2>
-        <span>منصة المعلم</span>
-      </div>
+    <div>
+      <a href="/dashboard" class="back-btn">
+        ← الرئيسية
+      </a>
+
+      <h1>📒 سجل متابعة الطلاب</h1>
+
+      <p>
+        أنشئ سجل الفصل واطبعه، ثم استخدمه ورقيًا طوال الأسبوع.
+      </p>
     </div>
 
-    <nav>
-
-      <a class="nav-item" href="/dashboard">
-        <span>🏠</span>
-        الرئيسية
-      </a>
-
-      <a class="nav-item" href="/teacher">
-        <span>📝</span>
-        إنشاء اختبار جديد
-      </a>
-
-      <a class="nav-item" href="/exams">
-        <span>📁</span>
-        اختباراتي
-      </a>
-
-      <a class="nav-item active" href="/followup">
-        <span>📒</span>
-        سجل المتابعة
-      </a>
-
-      <a class="nav-item" href="/support">
-        <span>💬</span>
-        تواصل مع الإدارة
-      </a>
-
-      <a class="nav-item" href="/settings">
-        <span>⚙️</span>
-        الإعدادات
-      </a>
-
-    </nav>
-
-  </aside>
-
-
-  <main class="main-content followup-main">
-
-    <div class="followup-page-actions">
-      <a href="/dashboard" class="followup-back-home">
-        ← العودة للرئيسية
-      </a>
+    <div class="teacher-box">
+      <span>المعلم</span>
+      <strong id="teacherName">...</strong>
     </div>
 
-    <header class="followup-topbar">
+  </header>
 
+
+  <section class="register-card">
+
+    <div class="section-heading">
       <div>
-        <p class="followup-eyebrow">أدوات المعلم</p>
-        <h1>📒 سجل المتابعة</h1>
-        <p>
-          متابعة الحضور والواجب والمشاركة والدرجات والملاحظات لكل فصل.
-        </p>
+        <h2>بيانات السجل</h2>
+        <p>تظهر هذه البيانات تلقائيًا في ورقة الطباعة.</p>
       </div>
 
-      <div class="followup-teacher">
-        <span>المعلم</span>
-        <strong id="teacherName">...</strong>
+      <span id="saveStatus" class="save-status">
+        محفوظ
+      </span>
+    </div>
+
+
+    <div class="class-row">
+
+      <div class="field grow">
+        <label>اسم الفصل الجديد</label>
+
+        <input
+          id="newClassName"
+          type="text"
+          placeholder="مثال: الرابع ابتدائي - أ"
+        >
       </div>
 
-    </header>
+      <button
+        type="button"
+        id="createClassBtn"
+        class="primary-btn"
+      >
+        + إنشاء الفصل
+      </button>
 
 
-    <section class="followup-toolbar">
-
-      <div class="toolbar-group class-create">
-        <label>إنشاء فصل جديد</label>
-
-        <div class="inline-control">
-          <input
-            id="newClassName"
-            type="text"
-            placeholder="مثال: الثالث المتوسط - أ"
-          >
-
-          <button id="createClassBtn" class="primary-action">
-            + إنشاء الفصل
-          </button>
-        </div>
-      </div>
-
-
-      <div class="toolbar-group">
-        <label>الفصل الحالي</label>
+      <div class="field">
+        <label>الفصل المحفوظ</label>
 
         <select id="classSelect">
           <option value="">اختر الفصل</option>
         </select>
       </div>
 
-
-      <div class="toolbar-group">
-        <label>تاريخ المتابعة</label>
-
-        <input
-          type="date"
-          id="followupDate"
-        >
-      </div>
-
-
-      <div class="toolbar-actions">
-
-        <button
-          type="button"
-          id="saveFollowupBtn"
-          class="save-followup-btn"
-        >
-          💾 حفظ السجل
-        </button>
-
-        <button
-          type="button"
-          id="printFollowupBtn"
-          class="light-action"
-        >
-          🖨️ طباعة
-        </button>
-
-        <button
-          type="button"
-          id="deleteClassBtn"
-          class="danger-action"
-        >
-          🗑️ حذف الفصل
-        </button>
-
-      </div>
-
-    </section>
-
-
-    <section id="emptyState" class="followup-empty">
-
-      <div class="empty-icon">📒</div>
-
-      <h2>ابدأ بإنشاء فصل</h2>
-
-      <p>
-        أنشئ الفصل ثم أضف أسماء الطلاب لتبدأ المتابعة اليومية.
-      </p>
-
-    </section>
-
-
-    <div id="followupWorkspace" class="followup-workspace hidden">
-
-
-      <section class="followup-stats">
-
-        <div class="follow-stat">
-          <span>عدد الطلاب</span>
-          <strong id="statStudents">0</strong>
-        </div>
-
-        <div class="follow-stat">
-          <span>الحضور</span>
-          <strong id="statPresent">0</strong>
-        </div>
-
-        <div class="follow-stat">
-          <span>الغياب</span>
-          <strong id="statAbsent">0</strong>
-        </div>
-
-        <div class="follow-stat">
-          <span>الواجب مكتمل</span>
-          <strong id="statHomework">0</strong>
-        </div>
-
-      </section>
-
-
-      <section class="students-manager no-print">
-
-        <div class="students-manager-head">
-          <div>
-            <h2>إضافة الطلاب</h2>
-            <p>أضف طالبًا واحدًا أو مجموعة أسماء دفعة واحدة.</p>
-          </div>
-
-          <span id="saveStatus" class="save-status saved">
-            ✓ محفوظ
-          </span>
-        </div>
-
-
-        <div class="single-student-row">
-
-          <input
-            type="text"
-            id="studentNameInput"
-            placeholder="اسم الطالب الثلاثي"
-          >
-
-          <button
-            type="button"
-            id="addStudentBtn"
-            class="primary-action"
-          >
-            + إضافة طالب
-          </button>
-
-        </div>
-
-
-        <details class="bulk-add-box">
-
-          <summary>
-            إضافة عدة طلاب دفعة واحدة
-          </summary>
-
-          <textarea
-            id="bulkStudents"
-            placeholder="اكتب كل اسم في سطر مستقل&#10;محمد أحمد علي&#10;خالد سعد محمد&#10;عبدالله سالم حسن"
-          ></textarea>
-
-          <button
-            type="button"
-            id="addBulkStudentsBtn"
-            class="light-action"
-          >
-            إضافة الأسماء
-          </button>
-
-        </details>
-
-      </section>
-
-
-      <section class="followup-sheet" id="followupPrintArea">
-
-        <div class="sheet-header">
-
-          <div>
-            <span>سجل المتابعة</span>
-            <h2 id="sheetClassName">-</h2>
-          </div>
-
-          <div class="sheet-date">
-            التاريخ:
-            <strong id="sheetDate">-</strong>
-          </div>
-
-        </div>
-
-
-        <div class="table-scroll">
-
-          <table class="followup-table">
-
-            <thead>
-
-              <tr>
-                <th>#</th>
-                <th class="student-name-col">اسم الطالب</th>
-                <th>الحضور</th>
-                <th>الواجب</th>
-                <th>المشاركة</th>
-                <th>درجة قصيرة</th>
-                <th class="notes-col">ملاحظات</th>
-                <th class="no-print">إجراء</th>
-              </tr>
-
-            </thead>
-
-            <tbody id="studentsTableBody"></tbody>
-
-          </table>
-
-        </div>
-
-      </section>
+      <button
+        type="button"
+        id="deleteClassBtn"
+        class="danger-btn"
+      >
+        حذف الفصل
+      </button>
 
     </div>
 
-  </main>
+
+    <div class="data-grid">
+
+      <div class="field">
+        <label>الإدارة التعليمية</label>
+        <input id="administration" placeholder="الإدارة التعليمية">
+      </div>
+
+      <div class="field">
+        <label>اسم المدرسة</label>
+        <input id="school" placeholder="اسم المدرسة">
+      </div>
+
+      <div class="field">
+        <label>العام الدراسي</label>
+        <input id="academicYear" placeholder="1448 هـ">
+      </div>
+
+      <div class="field">
+        <label>الصف</label>
+        <input id="grade" placeholder="الرابع ابتدائي">
+      </div>
+
+      <div class="field">
+        <label>الفصل الدراسي</label>
+        <input id="semester" placeholder="الفصل الأول">
+      </div>
+
+      <div class="field">
+        <label>الأسبوع</label>
+        <input id="week" placeholder="الأسبوع الأول">
+      </div>
+
+      <div class="field">
+        <label>المادة / المقرر</label>
+        <input id="subject" placeholder="الدراسات الإسلامية">
+      </div>
+
+      <div class="field">
+        <label>تصميم السجل</label>
+
+        <select id="registerDesign">
+          <option value="weekly">
+            التصميم 1 — أسبوعي عمودي
+          </option>
+
+          <option value="performance">
+            التصميم 2 — أفقي احترافي
+          </option>
+        </select>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <section class="register-card">
+
+    <div class="section-heading">
+
+      <div>
+        <h2>أسماء الطلاب</h2>
+        <p>
+          اكتب كل طالب في سطر مستقل. تحفظ الأسماء مع الفصل.
+        </p>
+      </div>
+
+      <strong id="studentCount">0 طالب</strong>
+
+    </div>
+
+    <textarea
+      id="studentsInput"
+      class="students-input"
+      placeholder="محمد أحمد علي&#10;خالد عبدالله سالم&#10;سعد محمد أحمد"
+    ></textarea>
+
+
+    <div class="action-row">
+
+      <button
+        type="button"
+        id="saveBtn"
+        class="primary-btn"
+      >
+        💾 حفظ البيانات
+      </button>
+
+      <button
+        type="button"
+        id="printBtn"
+        class="print-btn"
+      >
+        🖨️ طباعة السجل
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <section class="preview-section">
+
+    <div class="preview-title">
+      معاينة السجل
+    </div>
+
+    <div class="preview-stage">
+
+      <div
+        id="printPreview"
+        class="print-preview"
+      ></div>
+
+    </div>
+
+  </section>
 
 </div>
+
+
+<style id="followupDynamicPrintStyle"></style>
 
 <script src="/followup.js"></script>
 
