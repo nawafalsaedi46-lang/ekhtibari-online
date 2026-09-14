@@ -1042,3 +1042,45 @@ html[data-exam-layout] .layout-meta-strip{
 
 /* === END REMOVE HEADER EXAM INFO TABLE === */
 
+
+
+/* === REMOVE CROSSED ITEMS FINAL START === */
+
+/* نحذف فقط العناصر المحددة بالأحمر */
+
+/* نسخة الطالب الخارجية */
+#versionBadge{
+  display:none !important;
+}
+
+/* نسخة الطالب الموجودة داخل رأس المعاينة والطباعة */
+#previewHeader .version-badge,
+.print-header-wrap .version-badge,
+.print-page .version-badge{
+  display:none !important;
+}
+
+/* شريط المادة + نوع الاختبار */
+html[data-exam-layout] .layout-hero,
+#examPaper .layout-hero,
+.print-page .layout-hero{
+  display:none !important;
+}
+
+/* الصف الصغير: الصف / الفصل / التاريخ / الزمن / الدرجة / المدرسة */
+html[data-exam-layout] .layout-meta-strip,
+#examPaper .layout-meta-strip,
+.print-page .layout-meta-strip{
+  display:none !important;
+}
+
+@media print{
+  #versionBadge,
+  .version-badge,
+  .layout-hero,
+  .layout-meta-strip{
+    display:none !important;
+  }
+}
+
+/* === REMOVE CROSSED ITEMS FINAL END === */
