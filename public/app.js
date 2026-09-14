@@ -1253,7 +1253,7 @@ function renderPreview(){
   paperQuestions.innerHTML=questions.map((q,qi)=>`
     <div class="paper-question">
       <div class="paper-question-title">
-        <span>السؤال ${qi+1}: ${escapeHTML(q.title)}</span>
+        <span>${typeof window.formatExamQuestionTitle==="function" ? window.formatExamQuestionTitle(q,qi,false) : `السؤال ${qi+1}: ${escapeHTML(q.title)}`}</span>
         <span class="question-score-box">${Number(q.score||0)}</span>
       </div>
       ${q.type==="reading" ? `<div class="reading-passage">${escapeHTML(q.passage||"").replaceAll("\n","<br>")}</div>` : ""}
@@ -1384,7 +1384,7 @@ function makeQuestionChunk(q,qi,continued=false){
   div.className="print-question";
   div.innerHTML=`
     <div class="print-question-title ${continued?"continued":""}">
-      <span>${continued?"تابع ": ""}السؤال ${qi+1}: ${escapeHTML(q.title)}</span>
+      <span>${typeof window.formatExamQuestionTitle==="function" ? window.formatExamQuestionTitle(q,qi,continued) : `${continued?"تابع ": ""}السؤال ${qi+1}: ${escapeHTML(q.title)}`}</span>
       <span class="print-score-box">${continued?"":Number(q.score||0)}</span>
     </div>
 
