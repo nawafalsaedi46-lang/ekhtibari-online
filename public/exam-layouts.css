@@ -1018,3 +1018,10 @@ html[data-exam-layout] .layout-meta-strip{
 }
 /* === HIDE DUPLICATE META STRIP END === */
 
+
+/* === REMOVE SUBJECT HERO START === */
+.layout-hero{
+  display:none !important;
+}
+/* === REMOVE SUBJECT HERO END === */
+
