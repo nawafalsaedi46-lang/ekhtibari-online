@@ -1025,3 +1025,20 @@ html[data-exam-layout] .layout-meta-strip{
 }
 /* === REMOVE SUBJECT HERO END === */
 
+
+/* === REMOVE HEADER EXAM INFO TABLE === */
+
+.exam-info{
+  display:none !important;
+}
+
+.exam-header{
+  grid-template-columns:minmax(0,1fr) 150px !important;
+}
+
+.print-header-wrap .exam-header{
+  grid-template-columns:minmax(0,1fr) 135px !important;
+}
+
+/* === END REMOVE HEADER EXAM INFO TABLE === */
+
