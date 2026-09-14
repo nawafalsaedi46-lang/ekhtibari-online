@@ -59,7 +59,163 @@
       <p>تظهر هذه البيانات تلقائيًا في ورقة الاختبار والطباعة.</p>
     </div>
 
-    <div class="form-grid">
+    
+    <style id="examTemplatesProStyle">
+      #examTemplatesPro{
+        margin:0 0 18px;
+        padding:18px;
+        border:1px solid #e2e8f0;
+        border-radius:18px;
+        background:linear-gradient(135deg,#ffffff,#f8fafc);
+        box-shadow:0 8px 24px rgba(15,23,42,.05);
+      }
+
+      #examTemplatesPro .et-head{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:12px;
+        margin-bottom:14px;
+      }
+
+      #examTemplatesPro .et-head h3{
+        margin:0;
+        font-size:17px;
+        color:#0f172a;
+      }
+
+      #examTemplatesPro .et-head p{
+        margin:4px 0 0;
+        font-size:11px;
+        color:#64748b;
+      }
+
+      #examTemplatesPro .et-badge{
+        background:#ecfdf5;
+        color:#047857;
+        padding:6px 10px;
+        border-radius:999px;
+        font-size:10px;
+        font-weight:800;
+      }
+
+      #examTemplatesPro .et-grid{
+        display:grid;
+        grid-template-columns:repeat(4,1fr);
+        gap:10px;
+      }
+
+      #examTemplatesPro .et-card{
+        border:1px solid #dbe3ec;
+        background:white;
+        border-radius:14px;
+        padding:14px 10px;
+        cursor:pointer;
+        font-family:inherit;
+        transition:.18s;
+        text-align:center;
+      }
+
+      #examTemplatesPro .et-card:hover{
+        transform:translateY(-2px);
+        border-color:#0f766e;
+        box-shadow:0 8px 20px rgba(15,118,110,.10);
+      }
+
+      #examTemplatesPro .et-card.active{
+        border:2px solid #0f766e;
+        background:#f0fdfa;
+      }
+
+      #examTemplatesPro .et-icon{
+        font-size:25px;
+        margin-bottom:6px;
+      }
+
+      #examTemplatesPro .et-name{
+        font-size:13px;
+        font-weight:900;
+        color:#0f172a;
+      }
+
+      #examTemplatesPro .et-info{
+        margin-top:7px;
+        font-size:10px;
+        color:#64748b;
+      }
+
+      @media(max-width:850px){
+        #examTemplatesPro .et-grid{
+          grid-template-columns:repeat(2,1fr);
+        }
+      }
+
+      @media(max-width:480px){
+        #examTemplatesPro .et-grid{
+          grid-template-columns:1fr;
+        }
+
+        #examTemplatesPro .et-badge{
+          display:none;
+        }
+      }
+    </style>
+
+    <div id="examTemplatesPro">
+      <div class="et-head">
+        <div>
+          <h3>📋 قوالب الاختبارات الجاهزة</h3>
+          <p>اختر قالبًا ثم عدّل البيانات كما تريد.</p>
+        </div>
+        <span class="et-badge">جاهز للاستخدام</span>
+      </div>
+
+      <div class="et-grid">
+
+        <button type="button" class="et-card"
+          data-type="اختبار قصير"
+          data-time="20 دقيقة"
+          data-score="10"
+          data-frame="simple">
+          <div class="et-icon">⚡</div>
+          <div class="et-name">اختبار قصير</div>
+          <div class="et-info">20 دقيقة • 10 درجات</div>
+        </button>
+
+        <button type="button" class="et-card"
+          data-type="اختبار فترة"
+          data-time="45 دقيقة"
+          data-score="20"
+          data-frame="official">
+          <div class="et-icon">📝</div>
+          <div class="et-name">اختبار فترة</div>
+          <div class="et-info">45 دقيقة • 20 درجة</div>
+        </button>
+
+        <button type="button" class="et-card"
+          data-type="اختبار منتصف الفصل"
+          data-time="60 دقيقة"
+          data-score="30"
+          data-frame="official">
+          <div class="et-icon">📘</div>
+          <div class="et-name">منتصف الفصل</div>
+          <div class="et-info">60 دقيقة • 30 درجة</div>
+        </button>
+
+        <button type="button" class="et-card"
+          data-type="اختبار نهائي"
+          data-time="90 دقيقة"
+          data-score="40"
+          data-frame="official">
+          <div class="et-icon">🏆</div>
+          <div class="et-name">اختبار نهائي</div>
+          <div class="et-info">90 دقيقة • 40 درجة</div>
+        </button>
+
+      </div>
+    </div>
+
+<div class="form-grid">
       <div class="field"><label>التاريخ</label><input type="date" id="examDate"></div>
       <div class="field"><label>المنطقة التعليمية</label><input type="text" id="region" placeholder="منطقة المدينة المنورة"></div>
       <div class="field"><label>اسم المدرسة</label><input type="text" id="school" placeholder="اسم المدرسة"></div>
@@ -231,6 +387,45 @@
 <script src="account.js"></script>
 <script src="question-bank.js"></script>
 <script src="leave-guard.js"></script>
-<script src="exam-templates.js"></script>
+
+<script>
+(function(){
+  const box = document.getElementById("examTemplatesPro");
+  if(!box) return;
+
+  box.addEventListener("click", function(e){
+
+    const card = e.target.closest(".et-card");
+    if(!card) return;
+
+    const examType = document.getElementById("examType");
+    const duration = document.getElementById("duration");
+    const totalScore = document.getElementById("totalScore");
+    const questionFontSize = document.getElementById("questionFontSize");
+    const paperFrame = document.getElementById("paperFrame");
+
+    examType.value = card.dataset.type;
+    duration.value = card.dataset.time;
+    totalScore.value = card.dataset.score;
+
+    if(questionFontSize) questionFontSize.value = "14";
+    if(paperFrame) paperFrame.value = card.dataset.frame;
+
+    [examType,duration,totalScore,questionFontSize,paperFrame]
+      .filter(Boolean)
+      .forEach(function(el){
+        el.dispatchEvent(new Event("input",{bubbles:true}));
+        el.dispatchEvent(new Event("change",{bubbles:true}));
+      });
+
+    box.querySelectorAll(".et-card").forEach(function(btn){
+      btn.classList.remove("active");
+    });
+
+    card.classList.add("active");
+  });
+})();
+</script>
+
 </body>
 </html>
