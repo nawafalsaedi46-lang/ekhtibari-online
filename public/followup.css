@@ -764,3 +764,101 @@
 }
 
 /* === FOLLOWUP PROFESSIONAL TOOLBAR V2 END === */
+
+
+/* === FOLLOWUP CENTERED PAGE START === */
+
+/* نخفي القائمة الجانبية في سجل المتابعة فقط */
+.followup-main ~ *{
+  box-sizing:border-box;
+}
+
+body .dashboard > .sidebar{
+  display:none !important;
+}
+
+/* نخلي الصفحة كلها تستفيد من عرض الشاشة */
+body .dashboard{
+  display:block !important;
+  width:100% !important;
+  max-width:none !important;
+  min-height:100vh !important;
+}
+
+/* المحتوى في المنتصف */
+.followup-main{
+  width:calc(100% - 40px) !important;
+  max-width:1250px !important;
+
+  margin:0 auto !important;
+  padding:24px 20px 50px !important;
+}
+
+/* زر الرجوع */
+.followup-page-actions{
+  display:flex;
+  justify-content:flex-start;
+  margin-bottom:14px;
+}
+
+.followup-back-home{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  min-height:40px;
+
+  padding:8px 14px;
+
+  border:1px solid #dbe3ea;
+  border-radius:10px;
+
+  background:#fff;
+  color:#334155;
+
+  text-decoration:none;
+  font-size:12px;
+  font-weight:900;
+}
+
+.followup-back-home:hover{
+  background:#f8fafc;
+  border-color:#94a3b8;
+}
+
+/* رأس الصفحة */
+.followup-topbar{
+  width:100% !important;
+}
+
+/* صندوق إنشاء الفصل */
+.followup-toolbar{
+  width:100% !important;
+}
+
+/* منطقة السجل */
+.followup-workspace{
+  width:100% !important;
+}
+
+.followup-sheet{
+  width:100% !important;
+}
+
+@media(max-width:700px){
+
+  .followup-main{
+    width:100% !important;
+    padding:14px 10px 35px !important;
+  }
+}
+
+@media print{
+
+  .followup-page-actions{
+    display:none !important;
+  }
+}
+
+/* === FOLLOWUP CENTERED PAGE END === */
+
