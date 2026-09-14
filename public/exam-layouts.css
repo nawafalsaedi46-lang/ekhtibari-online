@@ -704,3 +704,295 @@ html[data-exam-layout="5"] .option-letter + span{
     print-color-adjust:exact !important;
   }
 }
+
+/* === SAFE HEADER AND CONTINUATION FIX START === */
+
+/* =========================================================
+   رأس موحد لكل التصاميم
+========================================================= */
+
+html[data-exam-layout] .exam-header{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) 145px minmax(0,1fr) !important;
+  align-items:center !important;
+  gap:10px !important;
+  min-height:94px !important;
+  width:100% !important;
+}
+
+html[data-exam-layout] .exam-header .ministry-info{
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
+  align-items:flex-start !important;
+  text-align:right !important;
+  gap:3px !important;
+  min-width:0 !important;
+}
+
+html[data-exam-layout] .exam-header .ministry-info strong{
+  font-size:12px !important;
+  line-height:1.5 !important;
+}
+
+html[data-exam-layout] .exam-header .ministry-info span{
+  font-size:10px !important;
+  line-height:1.45 !important;
+}
+
+
+/* شعار الوزارة - نفس المكان والحجم في الجميع */
+
+html[data-exam-layout] .exam-header .ministry-logo{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:145px !important;
+  min-width:145px !important;
+  max-width:145px !important;
+  padding:6px 8px !important;
+  margin:auto !important;
+  background:#fff !important;
+  box-sizing:border-box !important;
+}
+
+html[data-exam-layout] .exam-header .ministry-logo img{
+  display:block !important;
+  width:125px !important;
+  max-width:125px !important;
+  height:auto !important;
+  max-height:78px !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  margin:auto !important;
+}
+
+
+/* بيانات الاختبار يمين الرأس */
+
+html[data-exam-layout="1"] .exam-header .exam-info,
+html[data-exam-layout="2"] .exam-header .exam-info,
+html[data-exam-layout="3"] .exam-header .exam-info,
+html[data-exam-layout="4"] .exam-header .exam-info,
+html[data-exam-layout="5"] .exam-header .exam-info{
+  display:block !important;
+  width:100% !important;
+  min-width:0 !important;
+  align-self:stretch !important;
+}
+
+html[data-exam-layout] .exam-header .exam-info table{
+  width:100% !important;
+  height:100% !important;
+  table-layout:fixed !important;
+  border-collapse:collapse !important;
+}
+
+html[data-exam-layout] .exam-header .exam-info th,
+html[data-exam-layout] .exam-header .exam-info td{
+  vertical-align:middle !important;
+  text-align:center !important;
+  line-height:1.35 !important;
+}
+
+
+/* عنوان الاختبار مرتب وموحد */
+
+html[data-exam-layout] .exam-title{
+  display:block !important;
+  width:100% !important;
+  box-sizing:border-box !important;
+  text-align:center !important;
+  margin:8px 0 !important;
+  padding:7px 10px !important;
+  font-weight:900 !important;
+  line-height:1.5 !important;
+  overflow-wrap:anywhere !important;
+}
+
+html[data-exam-layout] .version-badge{
+  text-align:center !important;
+  line-height:1.4 !important;
+}
+
+
+/* شعار المدرسة */
+
+html[data-exam-layout] .school-logo-area{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-height:48px !important;
+  padding:4px !important;
+}
+
+html[data-exam-layout] .school-logo-area img{
+  display:block !important;
+  width:auto !important;
+  height:auto !important;
+  max-width:85px !important;
+  max-height:48px !important;
+  object-fit:contain !important;
+  margin:auto !important;
+}
+
+
+/* =========================================================
+   ترتيب عنوان كل سؤال
+========================================================= */
+
+html[data-exam-layout] .paper-question-title,
+html[data-exam-layout] .print-question-title{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:10px !important;
+  box-sizing:border-box !important;
+  width:100% !important;
+}
+
+html[data-exam-layout] .paper-question-title > span:first-child,
+html[data-exam-layout] .print-question-title > span:first-child{
+  flex:1 1 auto !important;
+  min-width:0 !important;
+  text-align:right !important;
+  line-height:1.6 !important;
+  overflow-wrap:anywhere !important;
+}
+
+html[data-exam-layout] .question-score-box,
+html[data-exam-layout] .print-score-box{
+  flex:0 0 auto !important;
+  box-sizing:border-box !important;
+  text-align:center !important;
+}
+
+
+/* =========================================================
+   رأس الطباعة - أصغر قليلًا حتى لا يضغط الصفحة
+========================================================= */
+
+html[data-exam-layout] .print-header-wrap .exam-header{
+  grid-template-columns:minmax(0,1fr) 120px minmax(0,1fr) !important;
+  min-height:82px !important;
+  gap:8px !important;
+}
+
+html[data-exam-layout] .print-header-wrap .ministry-logo{
+  width:120px !important;
+  min-width:120px !important;
+  max-width:120px !important;
+  padding:4px 7px !important;
+}
+
+html[data-exam-layout] .print-header-wrap .ministry-logo img{
+  width:105px !important;
+  max-width:105px !important;
+  max-height:62px !important;
+}
+
+html[data-exam-layout] .print-header-wrap .ministry-info strong{
+  font-size:9.5px !important;
+}
+
+html[data-exam-layout] .print-header-wrap .ministry-info span{
+  font-size:8.5px !important;
+}
+
+html[data-exam-layout] .print-header-wrap .exam-info th,
+html[data-exam-layout] .print-header-wrap .exam-info td{
+  font-size:8.5px !important;
+}
+
+
+/* =========================================================
+   يتبع - تلقائي بكل الصفحات ما عدا الأخيرة
+========================================================= */
+
+html[data-exam-layout] .print-page{
+  position:relative !important;
+}
+
+html[data-exam-layout] .print-page:not(:last-child)::after{
+  content:"يتبع  ⟵" !important;
+
+  position:absolute !important;
+  left:12mm !important;
+  right:auto !important;
+  bottom:8mm !important;
+
+  display:block !important;
+
+  width:auto !important;
+  height:auto !important;
+  min-width:0 !important;
+
+  padding:0 !important;
+  margin:0 !important;
+
+  border:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  clip-path:none !important;
+
+  color:#111 !important;
+  font-size:13px !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+  white-space:nowrap !important;
+
+  transform:none !important;
+  z-index:100 !important;
+}
+
+html[data-exam-layout] .print-page:last-child::after{
+  content:none !important;
+  display:none !important;
+}
+
+
+/* أي عناوين إضافية قديمة لا تخرب ترتيب الرأس */
+
+html[data-exam-layout] .layout-hero{
+  margin-top:8px !important;
+  margin-bottom:8px !important;
+}
+
+html[data-exam-layout] .layout-meta-strip{
+  margin-top:6px !important;
+  margin-bottom:9px !important;
+}
+
+
+/* موبايل */
+
+@media(max-width:700px){
+
+  html[data-exam-layout] .exam-header{
+    grid-template-columns:1fr !important;
+  }
+
+  html[data-exam-layout] .exam-header .ministry-logo{
+    grid-row:1 !important;
+    margin:auto !important;
+  }
+
+  html[data-exam-layout] .exam-header .ministry-info{
+    align-items:center !important;
+    text-align:center !important;
+  }
+}
+
+
+@media print{
+
+  html[data-exam-layout] .print-page:not(:last-child)::after{
+    display:block !important;
+  }
+
+  html[data-exam-layout] .print-page:last-child::after{
+    display:none !important;
+  }
+}
+
+/* === SAFE HEADER AND CONTINUATION FIX END === */
