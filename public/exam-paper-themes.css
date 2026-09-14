@@ -1,0 +1,331 @@
+﻿/* =========================================================
+   اختباري - 5 PAPER THEMES
+   لا يغير محتوى الأسئلة، فقط شكل الورقة
+========================================================= */
+
+.exam-paper-themes{
+  margin-top:14px;
+  grid-column:1/-1;
+}
+
+.exam-paper-themes > label{
+  display:block;
+  margin-bottom:8px;
+  font-weight:900;
+}
+
+.paper-theme-grid{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(110px,1fr));
+  gap:8px;
+}
+
+.paper-theme-btn{
+  appearance:none;
+  border:1px solid #d6dee8;
+  background:#fff;
+  border-radius:12px;
+  padding:9px;
+  cursor:pointer;
+  font:inherit;
+  transition:.15s;
+}
+
+.paper-theme-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 18px rgba(0,0,0,.06);
+}
+
+.paper-theme-btn.active{
+  border:2px solid #0f766e;
+  box-shadow:0 0 0 3px rgba(15,118,110,.08);
+}
+
+.paper-theme-preview{
+  height:68px;
+  background:#fff;
+  border:1px solid #cbd5e1;
+  margin-bottom:7px;
+  padding:6px;
+  position:relative;
+  overflow:hidden;
+}
+
+.paper-theme-preview::before,
+.paper-theme-preview::after{
+  content:"";
+  display:block;
+}
+
+/* 1 - التصميم الحالي */
+.paper-theme-1-preview{
+  border:2px solid #111;
+}
+.paper-theme-1-preview::before{
+  height:13px;
+  border-bottom:1px solid #111;
+}
+.paper-theme-1-preview::after{
+  margin-top:8px;
+  height:28px;
+  border-top:1px solid #111;
+  border-bottom:1px solid #111;
+}
+
+/* 2 - رسمي أخضر */
+.paper-theme-2-preview{
+  border:3px double #0d5b49;
+}
+.paper-theme-2-preview::before{
+  height:9px;
+  background:#0d5b49;
+  margin-bottom:7px;
+}
+.paper-theme-2-preview::after{
+  height:28px;
+  border:1px solid #0d5b49;
+  background:#f1faf7;
+}
+
+/* 3 - حديث */
+.paper-theme-3-preview{
+  border:0;
+  box-shadow:inset 0 0 0 1px #cbd5e1;
+}
+.paper-theme-3-preview::before{
+  height:16px;
+  background:linear-gradient(90deg,#0f766e,#155e75);
+  border-radius:4px;
+}
+.paper-theme-3-preview::after{
+  height:28px;
+  margin-top:7px;
+  border-radius:5px;
+  background:#eef6f7;
+}
+
+/* 4 - أكاديمي فاخر */
+.paper-theme-4-preview{
+  border:2px solid #0f2942;
+}
+.paper-theme-4-preview::before{
+  height:17px;
+  background:#0f2942;
+}
+.paper-theme-4-preview::after{
+  height:25px;
+  margin-top:7px;
+  border:1px solid #0f2942;
+}
+
+/* 5 - سماوي */
+.paper-theme-5-preview{
+  border:2px solid #446d86;
+  background:#fbfdff;
+}
+.paper-theme-5-preview::before{
+  height:14px;
+  background:#dcecf5;
+  border-bottom:2px solid #446d86;
+}
+.paper-theme-5-preview::after{
+  height:27px;
+  margin-top:6px;
+  background:#edf6fb;
+  border:1px solid #93b7ca;
+}
+
+.paper-theme-name{
+  display:block;
+  font-size:11px;
+  font-weight:900;
+  color:#0f172a;
+  text-align:center;
+}
+
+
+/* =========================================================
+   قاعدة تطبيق الثيم
+========================================================= */
+
+.paper-theme-2,
+.paper-theme-3,
+.paper-theme-4,
+.paper-theme-5{
+  -webkit-print-color-adjust:exact !important;
+  print-color-adjust:exact !important;
+}
+
+
+/* =========================================================
+   THEME 2 - رسمي أخضر
+========================================================= */
+
+.paper-inner-border.paper-theme-2,
+.paper-theme-2 .paper-inner-border{
+  border:3px double #145c4b !important;
+  padding:10mm !important;
+}
+
+.paper-theme-2 #previewHeader,
+.paper-theme-2 .preview-header{
+  border-bottom:3px solid #145c4b !important;
+  padding-bottom:10px !important;
+  margin-bottom:12px !important;
+}
+
+.paper-theme-2 .version-badge{
+  color:#145c4b !important;
+  font-weight:900 !important;
+}
+
+.paper-theme-2 .student-info{
+  border:1px solid #145c4b !important;
+  background:#f6fbf9 !important;
+  padding:7px !important;
+}
+
+.paper-theme-2 .teacher-footer{
+  border-top:2px solid #145c4b !important;
+  color:#145c4b !important;
+}
+
+
+/* =========================================================
+   THEME 3 - حديث احترافي
+========================================================= */
+
+.paper-inner-border.paper-theme-3,
+.paper-theme-3 .paper-inner-border{
+  border:1px solid #aac5cc !important;
+  border-radius:10px !important;
+  padding:9mm !important;
+}
+
+.paper-theme-3 #previewHeader,
+.paper-theme-3 .preview-header{
+  background:linear-gradient(135deg,#f1f8f8,#edf5f7) !important;
+  border:1px solid #bed6dc !important;
+  border-radius:8px !important;
+  padding:10px !important;
+  margin-bottom:12px !important;
+}
+
+.paper-theme-3 .student-info{
+  background:#f6fafb !important;
+  border:1px solid #c9dce1 !important;
+  border-radius:7px !important;
+  padding:8px !important;
+}
+
+.paper-theme-3 .question-title,
+.paper-theme-3 .question-header,
+.paper-theme-3 .question-head{
+  background:linear-gradient(90deg,#0f766e,#155e75) !important;
+  color:white !important;
+  border-radius:6px !important;
+  padding:6px 9px !important;
+}
+
+.paper-theme-3 .teacher-footer{
+  border-top:2px solid #155e75 !important;
+}
+
+
+/* =========================================================
+   THEME 4 - أكاديمي فاخر
+========================================================= */
+
+.paper-inner-border.paper-theme-4,
+.paper-theme-4 .paper-inner-border{
+  border:2px solid #102f4a !important;
+  padding:9mm !important;
+}
+
+.paper-theme-4 #previewHeader,
+.paper-theme-4 .preview-header{
+  border:2px solid #102f4a !important;
+  background:#f8fafc !important;
+  padding:8px !important;
+}
+
+.paper-theme-4 .version-badge{
+  background:#102f4a !important;
+  color:#fff !important;
+  padding:4px 10px !important;
+}
+
+.paper-theme-4 .student-info{
+  border:2px solid #102f4a !important;
+  background:#f6f8fb !important;
+  padding:7px !important;
+}
+
+.paper-theme-4 .question-title,
+.paper-theme-4 .question-header,
+.paper-theme-4 .question-head{
+  border-right:6px solid #102f4a !important;
+  background:#eaf0f5 !important;
+  padding:6px 8px !important;
+}
+
+.paper-theme-4 .teacher-footer{
+  border-top:2px solid #102f4a !important;
+  font-weight:700 !important;
+}
+
+
+/* =========================================================
+   THEME 5 - سماوي هندسي
+========================================================= */
+
+.paper-inner-border.paper-theme-5,
+.paper-theme-5 .paper-inner-border{
+  border:2px solid #4e7188 !important;
+  padding:9mm !important;
+  background:#fff !important;
+}
+
+.paper-theme-5 #previewHeader,
+.paper-theme-5 .preview-header{
+  background:#edf6fb !important;
+  border-top:5px solid #4e7188 !important;
+  border-bottom:1px solid #8db1c5 !important;
+  padding:9px !important;
+}
+
+.paper-theme-5 .student-info{
+  background:#f4f9fc !important;
+  border:1px solid #9bbdce !important;
+  padding:8px !important;
+}
+
+.paper-theme-5 .question-title,
+.paper-theme-5 .question-header,
+.paper-theme-5 .question-head{
+  background:#dcecf5 !important;
+  border-right:5px solid #4e7188 !important;
+  padding:6px 9px !important;
+}
+
+.paper-theme-5 .teacher-footer{
+  background:#edf6fb !important;
+  border-top:2px solid #4e7188 !important;
+  padding:5px !important;
+}
+
+@media(max-width:900px){
+  .paper-theme-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media print{
+  .exam-paper-themes{
+    display:none !important;
+  }
+
+  .paper-theme-btn{
+    display:none !important;
+  }
+}
