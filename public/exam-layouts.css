@@ -996,3 +996,18 @@ html[data-exam-layout] .layout-meta-strip{
 }
 
 /* === SAFE HEADER AND CONTINUATION FIX END === */
+
+/* === HIDE EXTRA PRINT TITLES START === */
+@media print {
+
+  .version-badge{
+    display:none !important;
+  }
+
+  .layout-hero{
+    display:none !important;
+  }
+
+}
+/* === HIDE EXTRA PRINT TITLES END === */
+
