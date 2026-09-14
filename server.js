@@ -142,7 +142,7 @@ async function initDb() {
   `);
 
   await pool.query(`
-﻿CREATE TABLE IF NOT EXISTS question_bank (
+CREATE TABLE IF NOT EXISTS question_bank (
   id TEXT PRIMARY KEY,
   teacher_id TEXT NOT NULL
     REFERENCES teachers(id)
@@ -913,7 +913,7 @@ app.post("/api/support/tickets/:id/messages", requireTeacher, async (req, res) =
 });
 
 
-﻿/* =========================
+/* =========================
    بنك أسئلة المعلم
    كل معلم يرى بنكه فقط
 ========================= */
