@@ -1,4 +1,4 @@
-﻿(function(){
+(function(){
   "use strict";
 
   const KEY = "ekhtibari_full_exam_layout";
@@ -6,8 +6,8 @@
   const layouts = [
     ["1","التصميم الأصلي"],
     ["2","وزاري رسمي"],
-    ["3","حديث منظم"],
-    ["4","أكاديمي"],
+    ["3","حديث احترافي"],
+    ["4","أكاديمي هادئ"],
     ["5","كلاسيكي فاخر"]
   ];
 
@@ -20,101 +20,221 @@
     "التاسع عشر","العشرون"
   ];
 
-  const typeNames = {
-    mcq:"اختيار من متعدد",
-    tf:"صح أو خطأ",
-    fill:"أكمل الفراغ",
-    match:"وصل",
-    essay:"سؤال مقالي",
-    order:"رتّب",
-    image:"سؤال بصورة أو رسم",
-    math:"مسائل رياضيات",
-    reading:"قطعة قراءة",
-    mention:"اذكري",
-    table:"جدول"
-  };
+  const sections = [
+    "",
+    "أولاً","ثانيًا","ثالثًا","رابعًا","خامسًا",
+    "سادسًا","سابعًا","ثامنًا","تاسعًا","عاشرًا"
+  ];
 
-  function esc(value){
-    return String(value ?? "")
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
-  }
-
-  function getType(q){
-    try{
-      if(typeof qTypeName === "function"){
-        return qTypeName(q.type);
-      }
-    }catch(e){}
-
-    return typeNames[q?.type] || "سؤال";
+  function val(id, fallback=""){
+    const el = document.getElementById(id);
+    const value = String(el?.value || "").trim();
+    return value || fallback;
   }
 
   function getLayout(){
     return localStorage.getItem(KEY) || "1";
   }
 
-  window.formatExamQuestionTitle = function(q, qi, continued){
+  function setText(el, value){
+    if(el && el.textContent !== value){
+      el.textContent = value;
+    }
+  }
 
-    const layout = getLayout();
-    const num = Number(qi) + 1;
-    const title = String(q?.title || "");
-    const type = getType(q);
-    const follow = continued ? "تابع " : "";
+  function formatDate(value){
+    if(!value) return "-";
+    const p = value.split("-");
+    return p.length === 3
+      ? `${p[2]}/${p[1]}/${p[0]}`
+      : value;
+  }
 
-    let text = "";
+  function ensureHeaderExtras(header){
+
+    const parent = header.parentElement;
+    if(!parent) return;
+
+    let hero = [...parent.children]
+      .find(el=>el.classList?.contains("layout-hero"));
+
+    if(!hero){
+      hero = document.createElement("div");
+      hero.className = "layout-hero";
+
+      hero.innerHTML = `
+        <div class="layout-hero-main">
+          <strong class="layout-hero-subject"></strong>
+          <span class="layout-hero-type"></span>
+        </div>
+        <div class="layout-hero-side"></div>
+      `;
+
+      parent.insertBefore(hero, header);
+    }
+
+    let meta = [...parent.children]
+      .find(el=>el.classList?.contains("layout-meta-strip"));
+
+    if(!meta){
+      meta = document.createElement("div");
+      meta.className = "layout-meta-strip";
+
+      meta.innerHTML = `
+        <span data-meta="grade"></span>
+        <span data-meta="semester"></span>
+        <span data-meta="date"></span>
+        <span data-meta="duration"></span>
+        <span data-meta="score"></span>
+        <span data-meta="school"></span>
+      `;
+
+      header.insertAdjacentElement("afterend", meta);
+    }
+
+    setText(
+      hero.querySelector(".layout-hero-subject"),
+      val("subject","المادة")
+    );
+
+    setText(
+      hero.querySelector(".layout-hero-type"),
+      val("examType","اختبار")
+    );
+
+    setText(
+      hero.querySelector(".layout-hero-side"),
+      val("school","اسم المدرسة")
+    );
+
+    const values = {
+      grade: "الصف: " + val("grade","-"),
+      semester: "الفصل: " + val("semester","-"),
+      date: "التاريخ: " + formatDate(val("examDate","")),
+      duration: "الزمن: " + val("duration","-"),
+      score: "الدرجة: " + val("totalScore","-"),
+      school: val("school","اسم المدرسة")
+    };
+
+    Object.entries(values).forEach(([key,value])=>{
+      setText(
+        meta.querySelector(`[data-meta="${key}"]`),
+        value
+      );
+    });
+  }
+
+
+  function parseQuestionTitle(text){
+
+    const match = String(text || "").match(
+      /^(تابع\s+)?السؤال\s+(\d+)\s*:\s*(.*)$/s
+    );
+
+    if(!match) return null;
+
+    return {
+      continued:Boolean(match[1]),
+      number:Number(match[2]),
+      title:match[3]
+    };
+  }
+
+
+  function formatQuestionTitle(info, layout){
+
+    const n = info.number;
+    const title = info.title;
+    const follow = info.continued;
 
     if(layout === "2"){
-      text =
-        follow +
+      return (
+        (follow ? "تابع " : "") +
         "السؤال " +
-        (ordinal[num] || num) +
-        " — " +
-        type +
-        ": " +
-        title;
-    }
-    else if(layout === "3"){
-      text =
-        follow +
-        String(num).padStart(2,"0") +
-        " | " +
-        type +
-        " — " +
-        title;
-    }
-    else if(layout === "4"){
-      text =
-        follow +
-        (ordinal[num] || ("السؤال " + num)) +
-        ": " +
-        title +
-        " (" + type + ")";
-    }
-    else if(layout === "5"){
-      text =
-        follow +
-        "السؤال رقم (" +
-        num +
-        ") — " +
-        type +
-        ": " +
-        title;
-    }
-    else{
-      text =
-        follow +
-        "السؤال " +
-        num +
-        ": " +
-        title;
+        (ordinal[n] || n) +
+        "  |  " +
+        title
+      );
     }
 
-    return esc(text);
-  };
+    if(layout === "3"){
+      return (
+        (follow ? "متابعة " : "") +
+        String(n).padStart(2,"0") +
+        "  /  " +
+        title
+      );
+    }
+
+    if(layout === "4"){
+      return (
+        (follow ? "تابع " : "") +
+        (sections[n] || ("السؤال " + n)) +
+        ": " +
+        title
+      );
+    }
+
+    if(layout === "5"){
+      return (
+        (follow ? "تابع " : "") +
+        "السؤال رقم (" +
+        n +
+        ")  ◆  " +
+        title
+      );
+    }
+
+    return (
+      (follow ? "تابع " : "") +
+      "السؤال " +
+      n +
+      ": " +
+      title
+    );
+  }
+
+
+  function decorateQuestionTitle(node){
+
+    if(!node) return;
+
+    if(!node.dataset.examOriginalTitle){
+      node.dataset.examOriginalTitle =
+        node.textContent || "";
+    }
+
+    const original =
+      node.dataset.examOriginalTitle;
+
+    const info =
+      parseQuestionTitle(original);
+
+    if(!info) return;
+
+    const wanted =
+      formatQuestionTitle(
+        info,
+        getLayout()
+      );
+
+    setText(node, wanted);
+  }
+
+
+  function decorateAll(){
+
+    document
+      .querySelectorAll(".exam-header")
+      .forEach(ensureHeaderExtras);
+
+    document
+      .querySelectorAll(
+        ".paper-question-title > span:first-child," +
+        ".print-question-title > span:first-child"
+      )
+      .forEach(decorateQuestionTitle);
+  }
 
 
   const paperFrame =
@@ -122,20 +242,30 @@
 
   if(!paperFrame) return;
 
-  const field = paperFrame.closest(".field");
+  const field =
+    paperFrame.closest(".field");
+
   if(!field) return;
 
 
-  const picker = document.createElement("div");
+  let picker =
+    document.querySelector(".exam-layout-picker");
+
+  if(picker){
+    picker.remove();
+  }
+
+  picker = document.createElement("div");
   picker.className = "exam-layout-picker";
 
   picker.innerHTML = `
     <div class="exam-layout-picker-title">
       <strong>🎨 تصميم ورقة الاختبار</strong>
-      <span>اختر الشكل الذي سيظهر للطالب وفي الطباعة</span>
+      <span>كل تصميم يغيّر شكل الورقة وصياغة عناوين الأسئلة</span>
     </div>
 
     <div class="exam-layout-grid">
+
       ${layouts.map(([id,name])=>`
         <button
           type="button"
@@ -143,11 +273,18 @@
           data-layout="${id}"
         >
           <span class="exam-layout-mini">
-            <i></i><i></i><i></i><i></i>
+            <i class="mini-head"></i>
+            <i class="mini-line"></i>
+            <i class="mini-line short"></i>
+            <i class="mini-line"></i>
           </span>
-          <span class="exam-layout-name">${name}</span>
+
+          <span class="exam-layout-name">
+            ${name}
+          </span>
         </button>
       `).join("")}
+
     </div>
   `;
 
@@ -158,6 +295,7 @@
 
 
   function updateButtons(id){
+
     picker
       .querySelectorAll(".exam-layout-btn")
       .forEach(btn=>{
@@ -183,11 +321,7 @@
 
     updateButtons(id);
 
-    try{
-      if(typeof renderPreview === "function"){
-        renderPreview();
-      }
-    }catch(e){}
+    decorateAll();
   }
 
 
@@ -209,24 +343,74 @@
   );
 
 
-  document.documentElement
-    .setAttribute(
-      "data-exam-layout",
-      getLayout()
-    );
+  [
+    "subject",
+    "examType",
+    "school",
+    "grade",
+    "semester",
+    "examDate",
+    "duration",
+    "totalScore"
+  ].forEach(id=>{
 
-  updateButtons(getLayout());
+    document
+      .getElementById(id)
+      ?.addEventListener(
+        "input",
+        decorateAll
+      );
+
+    document
+      .getElementById(id)
+      ?.addEventListener(
+        "change",
+        decorateAll
+      );
+  });
+
+
+  let queued = false;
+
+  const observer =
+    new MutationObserver(function(){
+
+      if(queued) return;
+
+      queued = true;
+
+      queueMicrotask(function(){
+        queued = false;
+        decorateAll();
+      });
+    });
+
+  observer.observe(
+    document.body,
+    {
+      childList:true,
+      subtree:true
+    }
+  );
 
 
   window.addEventListener(
     "beforeprint",
     function(){
+
       document.documentElement
         .setAttribute(
           "data-exam-layout",
           getLayout()
         );
+
+      decorateAll();
     }
+  );
+
+
+  applyLayout(
+    getLayout()
   );
 
 })();

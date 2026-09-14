@@ -1,27 +1,29 @@
-﻿/* =========================================================
-   اختباري - FULL EXAM LAYOUTS
-   التصميم 1 = التصميم الأصلي بدون تغيير
+/* =========================================================
+   اختباري - PROFESSIONAL FULL PAPER DESIGNS
+   التصميم 1 لا يغير التصميم الأصلي
 ========================================================= */
+
+/* ---------- اختيار التصميم ---------- */
 
 .exam-layout-picker{
   grid-column:1/-1;
-  margin-top:12px;
-  padding:15px;
-  border:1px solid #e2e8f0;
+  margin-top:16px;
+  padding:16px;
+  border:1px solid #dbe3ea;
   border-radius:16px;
   background:#f8fafc;
 }
 
 .exam-layout-picker-title{
   display:flex;
-  align-items:center;
   justify-content:space-between;
-  gap:10px;
-  margin-bottom:11px;
+  align-items:center;
+  gap:12px;
+  margin-bottom:12px;
 }
 
 .exam-layout-picker-title strong{
-  font-size:14px;
+  font-size:15px;
   color:#0f172a;
 }
 
@@ -33,22 +35,22 @@
 .exam-layout-grid{
   display:grid;
   grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:8px;
+  gap:9px;
 }
 
 .exam-layout-btn{
-  border:1px solid #d9e1ea;
-  border-radius:12px;
-  background:white;
-  padding:8px;
+  border:1px solid #d7e0e8;
+  border-radius:13px;
+  background:#fff;
+  padding:9px;
   cursor:pointer;
   font-family:inherit;
-  transition:.15s ease;
+  transition:.18s ease;
 }
 
 .exam-layout-btn:hover{
   transform:translateY(-2px);
-  border-color:#0f766e;
+  box-shadow:0 8px 18px rgba(15,23,42,.07);
 }
 
 .exam-layout-btn.active{
@@ -58,295 +60,625 @@
 
 .exam-layout-mini{
   display:block;
-  height:70px;
+  height:78px;
   margin-bottom:7px;
-  border:1px solid #b9c4cf;
   background:#fff;
-  padding:5px;
+  position:relative;
   overflow:hidden;
 }
 
-.exam-layout-mini i{
+.exam-layout-mini .mini-head{
+  display:block;
+  height:20px;
+  margin:5px;
+}
+
+.exam-layout-mini .mini-line{
   display:block;
   height:6px;
-  margin-bottom:4px;
-  background:#dbe3ea;
+  margin:5px 7px;
 }
 
-.exam-layout-mini i:nth-child(1){
-  height:12px;
-}
-
-.exam-layout-mini i:nth-child(3){
-  width:75%;
+.exam-layout-mini .mini-line.short{
+  width:58%;
 }
 
 .exam-layout-name{
   display:block;
-  text-align:center;
   font-size:10px;
   font-weight:900;
   color:#1e293b;
+  text-align:center;
 }
 
-/* mini 2 */
-.exam-layout-btn[data-layout="2"] .exam-layout-mini{
-  border:3px double #111;
-}
-.exam-layout-btn[data-layout="2"] .exam-layout-mini i:nth-child(1){
-  background:#1f2937;
+/* صور مصغرة مختلفة فعلاً */
+
+.exam-layout-btn[data-layout="1"] .exam-layout-mini{
+  border:1px solid #cbd5e1;
 }
 
-/* mini 3 */
-.exam-layout-btn[data-layout="3"] .exam-layout-mini{
-  border-radius:8px;
-  background:#f8fafc;
-}
-.exam-layout-btn[data-layout="3"] .exam-layout-mini i{
-  border-radius:5px;
-}
-.exam-layout-btn[data-layout="3"] .exam-layout-mini i:nth-child(1){
-  background:#155e75;
-}
-
-/* mini 4 */
-.exam-layout-btn[data-layout="4"] .exam-layout-mini{
-  border:2px solid #334155;
-}
-.exam-layout-btn[data-layout="4"] .exam-layout-mini i{
-  background:#cbd5e1;
-}
-.exam-layout-btn[data-layout="4"] .exam-layout-mini i:nth-child(1){
-  background:#334155;
-}
-
-/* mini 5 */
-.exam-layout-btn[data-layout="5"] .exam-layout-mini{
-  border:4px double #475569;
-}
-.exam-layout-btn[data-layout="5"] .exam-layout-mini i:nth-child(1){
-  border-bottom:2px solid #475569;
+.exam-layout-btn[data-layout="1"] .mini-head,
+.exam-layout-btn[data-layout="1"] .mini-line{
   background:#e2e8f0;
 }
 
 
+.exam-layout-btn[data-layout="2"] .exam-layout-mini{
+  border:3px double #111;
+}
+
+.exam-layout-btn[data-layout="2"] .mini-head{
+  border:1px solid #111;
+  background:#f4f4f4;
+}
+
+.exam-layout-btn[data-layout="2"] .mini-line{
+  background:#555;
+}
+
+
+.exam-layout-btn[data-layout="3"] .exam-layout-mini{
+  border-radius:9px;
+  border:1px solid #b9d4da;
+  background:#f6fafb;
+}
+
+.exam-layout-btn[data-layout="3"] .mini-head{
+  border-radius:6px;
+  background:#0f6674;
+}
+
+.exam-layout-btn[data-layout="3"] .mini-line{
+  border-radius:99px;
+  background:#cae2e6;
+}
+
+
+.exam-layout-btn[data-layout="4"] .exam-layout-mini{
+  border-top:5px solid #1e3a5f;
+  border-bottom:2px solid #1e3a5f;
+}
+
+.exam-layout-btn[data-layout="4"] .mini-head{
+  background:#fff;
+  border-bottom:2px solid #1e3a5f;
+}
+
+.exam-layout-btn[data-layout="4"] .mini-line{
+  background:#b8c5d3;
+}
+
+
+.exam-layout-btn[data-layout="5"] .exam-layout-mini{
+  border:4px double #634b36;
+  background:#fffdf9;
+}
+
+.exam-layout-btn[data-layout="5"] .mini-head{
+  background:#ede4d9;
+  border-bottom:2px solid #634b36;
+}
+
+.exam-layout-btn[data-layout="5"] .mini-line{
+  background:#c9b9a7;
+}
+
+
+/* ---------- عناصر يضيفها النظام ---------- */
+
+.layout-hero,
+.layout-meta-strip{
+  display:none;
+}
+
+
 /* =========================================================
-   DESIGN 2 — وزاري رسمي
+   DESIGN 2
+   وزاري رسمي
 ========================================================= */
 
 html[data-exam-layout="2"] #examPaper .paper-inner-border{
-  border:3px double #111 !important;
+  border:4px double #111 !important;
   border-radius:0 !important;
+  padding:9mm !important;
 }
 
-html[data-exam-layout="2"] #examPaper #previewHeader{
-  border-bottom:3px double #111 !important;
-  padding-bottom:10px !important;
-  margin-bottom:10px !important;
+html[data-exam-layout="2"] .print-page-inner{
+  border:4px double #111 !important;
+  padding:5mm !important;
 }
 
-html[data-exam-layout="2"] #examPaper .student-info,
-html[data-exam-layout="2"] .print-page .student-info{
-  border:2px solid #222 !important;
-  background:#fff !important;
-  padding:7px !important;
+html[data-exam-layout="2"] .exam-header{
+  display:grid !important;
+  grid-template-columns:1fr 105px 1fr !important;
+  align-items:center !important;
+  gap:12px !important;
+  border-bottom:2px solid #111 !important;
+  padding-bottom:9px !important;
 }
 
-html[data-exam-layout="2"] #examPaper .paper-question,
-html[data-exam-layout="2"] .print-page .print-question{
-  border-bottom:1px solid #777 !important;
-  padding-bottom:7px !important;
-  margin-bottom:8px !important;
+html[data-exam-layout="2"] .exam-header .ministry-info{
+  text-align:right !important;
 }
 
-html[data-exam-layout="2"] #examPaper .paper-question-title,
-html[data-exam-layout="2"] .print-page .print-question-title{
-  border:1px solid #222 !important;
-  border-right:6px solid #111 !important;
-  background:#f5f5f5 !important;
+html[data-exam-layout="2"] .exam-header .ministry-logo{
+  text-align:center !important;
+}
+
+html[data-exam-layout="2"] .exam-header .exam-info{
+  display:none !important;
+}
+
+html[data-exam-layout="2"] .layout-meta-strip{
+  display:grid !important;
+  grid-template-columns:repeat(3,1fr) !important;
+  border:1px solid #111 !important;
+  margin:9px 0 !important;
+}
+
+html[data-exam-layout="2"] .layout-meta-strip span{
   padding:6px 8px !important;
+  border:1px solid #aaa !important;
+  font-size:11px !important;
+  text-align:center !important;
+}
+
+html[data-exam-layout="2"] .exam-title{
+  border:2px solid #111 !important;
+  background:#eee !important;
+  padding:7px !important;
+  font-weight:900 !important;
+  text-align:center !important;
+  margin:8px 0 !important;
+}
+
+html[data-exam-layout="2"] .student-info{
+  display:grid !important;
+  grid-template-columns:2fr 1fr !important;
+  border:2px solid #111 !important;
+  border-radius:0 !important;
+  background:#fff !important;
+  padding:0 !important;
+}
+
+html[data-exam-layout="2"] .student-info > div{
+  padding:7px !important;
+  border-left:1px solid #111 !important;
+}
+
+html[data-exam-layout="2"] .paper-question,
+html[data-exam-layout="2"] .print-question{
+  margin:10px 0 !important;
+}
+
+html[data-exam-layout="2"] .paper-question-title,
+html[data-exam-layout="2"] .print-question-title{
+  border:1px solid #111 !important;
+  border-right:7px solid #111 !important;
+  border-radius:0 !important;
+  background:#f3f3f3 !important;
+  padding:7px 9px !important;
   font-weight:900 !important;
 }
 
-html[data-exam-layout="2"] #examPaper .question-score-box,
-html[data-exam-layout="2"] .print-page .print-score-box{
+html[data-exam-layout="2"] .question-score-box,
+html[data-exam-layout="2"] .print-score-box{
   border:2px solid #111 !important;
   border-radius:0 !important;
+  background:#fff !important;
   min-width:38px !important;
   text-align:center !important;
 }
 
+html[data-exam-layout="2"] .paper-question-item,
+html[data-exam-layout="2"] .print-question-item{
+  border-bottom:1px dotted #777 !important;
+  padding:7px 3px !important;
+}
+
+html[data-exam-layout="2"] .option-letter{
+  display:inline-grid !important;
+  place-items:center !important;
+  min-width:25px !important;
+  height:25px !important;
+  border:1px solid #111 !important;
+  margin-left:5px !important;
+}
+
 
 /* =========================================================
-   DESIGN 3 — حديث منظم
+   DESIGN 3
+   حديث احترافي - بطاقات
 ========================================================= */
 
 html[data-exam-layout="3"] #examPaper .paper-inner-border{
   border:0 !important;
-  border-radius:12px !important;
-  box-shadow:inset 0 0 0 1px #bac8d3 !important;
+  box-shadow:inset 0 0 0 1px #b6ccd2 !important;
+  border-radius:14px !important;
+  padding:9mm !important;
 }
 
-html[data-exam-layout="3"] #examPaper #previewHeader{
-  padding:12px !important;
-  border:1px solid #cbd5e1 !important;
+html[data-exam-layout="3"] .print-page-inner{
+  border:1px solid #b6ccd2 !important;
   border-radius:10px !important;
-  background:#f8fafc !important;
-  margin-bottom:11px !important;
 }
 
-html[data-exam-layout="3"] #examPaper .student-info,
-html[data-exam-layout="3"] .print-page .student-info{
+html[data-exam-layout="3"] .layout-hero{
+  display:flex !important;
+  justify-content:space-between !important;
+  align-items:center !important;
+  gap:20px !important;
+  padding:12px 16px !important;
+  margin-bottom:10px !important;
+  background:#0f6674 !important;
+  color:#fff !important;
+  border-radius:10px !important;
+}
+
+html[data-exam-layout="3"] .layout-hero-main{
+  display:flex !important;
+  flex-direction:column !important;
+}
+
+html[data-exam-layout="3"] .layout-hero-main strong{
+  font-size:19px !important;
+}
+
+html[data-exam-layout="3"] .layout-hero-main span{
+  font-size:11px !important;
+  opacity:.85 !important;
+}
+
+html[data-exam-layout="3"] .layout-hero-side{
+  font-size:12px !important;
+  font-weight:800 !important;
+}
+
+html[data-exam-layout="3"] .exam-header{
+  display:grid !important;
+  grid-template-columns:1fr 75px !important;
+  align-items:center !important;
+  padding:5px 4px !important;
+}
+
+html[data-exam-layout="3"] .exam-header .exam-info{
+  display:none !important;
+}
+
+html[data-exam-layout="3"] .exam-header .ministry-info{
+  font-size:10px !important;
+}
+
+html[data-exam-layout="3"] .exam-title{
+  display:none !important;
+}
+
+html[data-exam-layout="3"] .layout-meta-strip{
+  display:flex !important;
+  gap:6px !important;
+  flex-wrap:wrap !important;
+  margin:8px 0 11px !important;
+}
+
+html[data-exam-layout="3"] .layout-meta-strip span{
+  padding:5px 9px !important;
+  border-radius:999px !important;
+  background:#e8f2f4 !important;
+  border:1px solid #c6dde1 !important;
+  font-size:10px !important;
+}
+
+html[data-exam-layout="3"] .student-info{
   border:0 !important;
   border-radius:9px !important;
-  background:#f1f5f9 !important;
+  background:#edf5f6 !important;
   padding:9px !important;
 }
 
-html[data-exam-layout="3"] #examPaper .paper-question,
-html[data-exam-layout="3"] .print-page .print-question{
-  border:1px solid #d8e1e8 !important;
-  border-radius:10px !important;
-  padding:9px !important;
-  margin-bottom:9px !important;
+html[data-exam-layout="3"] .paper-question,
+html[data-exam-layout="3"] .print-question{
+  border:1px solid #d1e0e4 !important;
+  border-radius:12px !important;
+  padding:10px !important;
+  margin:11px 0 !important;
   background:#fff !important;
 }
 
-html[data-exam-layout="3"] #examPaper .paper-question-title,
-html[data-exam-layout="3"] .print-page .print-question-title{
+html[data-exam-layout="3"] .paper-question-title,
+html[data-exam-layout="3"] .print-question-title{
   border:0 !important;
   border-radius:8px !important;
-  background:#eaf2f4 !important;
-  padding:7px 9px !important;
-  font-weight:900 !important;
+  background:#e7f0f2 !important;
+  padding:8px 10px !important;
 }
 
-html[data-exam-layout="3"] #examPaper .question-score-box,
-html[data-exam-layout="3"] .print-page .print-score-box{
+html[data-exam-layout="3"] .question-score-box,
+html[data-exam-layout="3"] .print-score-box{
   border:0 !important;
   border-radius:999px !important;
-  background:#155e75 !important;
+  background:#0f6674 !important;
   color:#fff !important;
-  padding:3px 9px !important;
+  min-width:35px !important;
+  padding:4px 9px !important;
+}
+
+html[data-exam-layout="3"] .paper-item-question strong{
+  display:inline-grid !important;
+  place-items:center !important;
+  width:27px !important;
+  height:27px !important;
+  border-radius:50% !important;
+  background:#0f6674 !important;
+  color:#fff !important;
+  margin-left:5px !important;
+}
+
+html[data-exam-layout="3"] .paper-options{
+  gap:7px !important;
+}
+
+html[data-exam-layout="3"] .paper-options > div{
+  background:#f6fafb !important;
+  border:1px solid #d6e5e8 !important;
+  border-radius:8px !important;
+  padding:6px 8px !important;
 }
 
 
 /* =========================================================
-   DESIGN 4 — أكاديمي
+   DESIGN 4
+   أكاديمي هادئ
 ========================================================= */
 
 html[data-exam-layout="4"] #examPaper .paper-inner-border{
-  border:2px solid #334155 !important;
-  border-radius:0 !important;
-}
-
-html[data-exam-layout="4"] #examPaper #previewHeader{
-  border:2px solid #334155 !important;
-  padding:9px !important;
-  margin-bottom:11px !important;
-}
-
-html[data-exam-layout="4"] #examPaper .student-info,
-html[data-exam-layout="4"] .print-page .student-info{
-  border-top:2px solid #334155 !important;
-  border-bottom:2px solid #334155 !important;
-  border-left:0 !important;
-  border-right:0 !important;
-  background:#fff !important;
-  padding:8px 2px !important;
-}
-
-html[data-exam-layout="4"] #examPaper .paper-question,
-html[data-exam-layout="4"] .print-page .print-question{
-  margin-bottom:10px !important;
-}
-
-html[data-exam-layout="4"] #examPaper .paper-question-title,
-html[data-exam-layout="4"] .print-page .print-question-title{
-  background:transparent !important;
   border:0 !important;
-  border-bottom:2px solid #334155 !important;
-  padding:5px 0 6px !important;
-  font-weight:900 !important;
+  border-top:7px solid #1e3a5f !important;
+  border-bottom:3px solid #1e3a5f !important;
+  border-radius:0 !important;
+  padding:10mm !important;
 }
 
-html[data-exam-layout="4"] #examPaper .question-score-box,
-html[data-exam-layout="4"] .print-page .print-score-box{
-  width:34px !important;
-  height:34px !important;
+html[data-exam-layout="4"] .print-page-inner{
+  border-top:7px solid #1e3a5f !important;
+  border-bottom:3px solid #1e3a5f !important;
+}
+
+html[data-exam-layout="4"] .layout-hero{
+  display:block !important;
+  text-align:center !important;
+  padding:10px 5px !important;
+  margin:2px 0 8px !important;
+  border-bottom:2px solid #1e3a5f !important;
+}
+
+html[data-exam-layout="4"] .layout-hero-main strong{
+  display:block !important;
+  font-size:21px !important;
+  color:#1e3a5f !important;
+}
+
+html[data-exam-layout="4"] .layout-hero-main span{
+  font-size:12px !important;
+  color:#64748b !important;
+}
+
+html[data-exam-layout="4"] .layout-hero-side{
+  display:none !important;
+}
+
+html[data-exam-layout="4"] .exam-header{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  text-align:center !important;
+  gap:4px !important;
+}
+
+html[data-exam-layout="4"] .exam-header .ministry-logo{
+  order:1 !important;
+}
+
+html[data-exam-layout="4"] .exam-header .ministry-info{
+  order:2 !important;
+  text-align:center !important;
+  font-size:10px !important;
+}
+
+html[data-exam-layout="4"] .exam-header .exam-info{
+  display:none !important;
+}
+
+html[data-exam-layout="4"] .exam-title{
+  display:none !important;
+}
+
+html[data-exam-layout="4"] .layout-meta-strip{
+  display:grid !important;
+  grid-template-columns:repeat(3,1fr) !important;
+  gap:0 !important;
+  margin:10px 0 !important;
+  border-top:1px solid #94a3b8 !important;
+  border-bottom:1px solid #94a3b8 !important;
+}
+
+html[data-exam-layout="4"] .layout-meta-strip span{
+  text-align:center !important;
+  padding:6px !important;
+  font-size:10px !important;
+}
+
+html[data-exam-layout="4"] .student-info{
+  border:0 !important;
+  border-top:1px solid #64748b !important;
+  border-bottom:1px solid #64748b !important;
+  border-radius:0 !important;
+  background:#fff !important;
+  padding:8px 0 !important;
+}
+
+html[data-exam-layout="4"] .paper-question,
+html[data-exam-layout="4"] .print-question{
+  margin:13px 0 !important;
+  padding:0 !important;
+  border:0 !important;
+}
+
+html[data-exam-layout="4"] .paper-question-title,
+html[data-exam-layout="4"] .print-question-title{
+  border:0 !important;
+  border-bottom:2px solid #1e3a5f !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  color:#1e3a5f !important;
+  padding:6px 0 !important;
+  font-size:1.05em !important;
+}
+
+html[data-exam-layout="4"] .question-score-box,
+html[data-exam-layout="4"] .print-score-box{
   display:inline-grid !important;
   place-items:center !important;
-  border:2px solid #334155 !important;
+  width:34px !important;
+  height:34px !important;
+  border:2px solid #1e3a5f !important;
   border-radius:50% !important;
+  background:#fff !important;
+}
+
+html[data-exam-layout="4"] .paper-question-item,
+html[data-exam-layout="4"] .print-question-item{
+  padding:7px 0 !important;
+}
+
+html[data-exam-layout="4"] .paper-options > div{
+  border-bottom:1px solid #d4dce5 !important;
+  padding:5px 2px !important;
 }
 
 
 /* =========================================================
-   DESIGN 5 — كلاسيكي فاخر
+   DESIGN 5
+   كلاسيكي فاخر
 ========================================================= */
 
 html[data-exam-layout="5"] #examPaper .paper-inner-border{
-  border:5px double #475569 !important;
+  border:6px double #634b36 !important;
   border-radius:0 !important;
+  background:#fffdf9 !important;
+  padding:9mm !important;
 }
 
-html[data-exam-layout="5"] #examPaper #previewHeader{
-  border-bottom:4px double #475569 !important;
-  padding-bottom:12px !important;
-  margin-bottom:12px !important;
+html[data-exam-layout="5"] .print-page-inner{
+  border:6px double #634b36 !important;
+  background:#fffdf9 !important;
+  padding:4mm !important;
 }
 
-html[data-exam-layout="5"] #examPaper .student-info,
-html[data-exam-layout="5"] .print-page .student-info{
-  border:1px solid #64748b !important;
-  outline:1px solid #cbd5e1 !important;
-  outline-offset:2px !important;
-  background:#f8fafc !important;
+html[data-exam-layout="5"] .layout-hero{
+  display:block !important;
+  text-align:center !important;
+  padding:8px !important;
+  margin-bottom:8px !important;
+  border-top:1px solid #94775b !important;
+  border-bottom:3px double #634b36 !important;
+}
+
+html[data-exam-layout="5"] .layout-hero-main strong{
+  display:block !important;
+  color:#5b4330 !important;
+  font-size:20px !important;
+}
+
+html[data-exam-layout="5"] .layout-hero-main span{
+  color:#806b57 !important;
+  font-size:11px !important;
+}
+
+html[data-exam-layout="5"] .layout-hero-side{
+  display:none !important;
+}
+
+html[data-exam-layout="5"] .exam-header{
+  display:grid !important;
+  grid-template-columns:1fr 100px 1fr !important;
+  align-items:center !important;
+  gap:10px !important;
+}
+
+html[data-exam-layout="5"] .exam-header .exam-info{
+  display:none !important;
+}
+
+html[data-exam-layout="5"] .exam-title{
+  display:none !important;
+}
+
+html[data-exam-layout="5"] .layout-meta-strip{
+  display:grid !important;
+  grid-template-columns:repeat(3,1fr) !important;
+  margin:8px 0 12px !important;
+  border:2px double #94775b !important;
+  background:#f8f2eb !important;
+}
+
+html[data-exam-layout="5"] .layout-meta-strip span{
+  text-align:center !important;
+  padding:6px !important;
+  border:1px solid #d7c7b6 !important;
+  font-size:10px !important;
+}
+
+html[data-exam-layout="5"] .student-info{
+  border:2px double #80664e !important;
+  border-radius:0 !important;
+  background:#fff !important;
   padding:8px !important;
 }
 
-html[data-exam-layout="5"] #examPaper .paper-question,
-html[data-exam-layout="5"] .print-page .print-question{
-  padding:7px 0 !important;
-  border-bottom:1px dashed #94a3b8 !important;
+html[data-exam-layout="5"] .paper-question,
+html[data-exam-layout="5"] .print-question{
+  margin:12px 0 !important;
+  padding-bottom:8px !important;
+  border-bottom:1px dotted #aa927a !important;
 }
 
-html[data-exam-layout="5"] #examPaper .paper-question-title,
-html[data-exam-layout="5"] .print-page .print-question-title{
-  background:#e2e8f0 !important;
-  border:0 !important;
-  border-right:7px solid #475569 !important;
-  padding:7px 9px !important;
-  font-weight:900 !important;
-}
-
-html[data-exam-layout="5"] #examPaper .question-score-box,
-html[data-exam-layout="5"] .print-page .print-score-box{
-  border:2px double #475569 !important;
+html[data-exam-layout="5"] .paper-question-title,
+html[data-exam-layout="5"] .print-question-title{
+  border:2px double #634b36 !important;
   border-radius:0 !important;
-  background:#fff !important;
+  background:#eee5dc !important;
+  color:#4b3828 !important;
+  padding:7px 10px !important;
+}
+
+html[data-exam-layout="5"] .question-score-box,
+html[data-exam-layout="5"] .print-score-box{
+  border:2px double #634b36 !important;
+  border-radius:0 !important;
+  background:#fffdf9 !important;
+}
+
+html[data-exam-layout="5"] .paper-question-item,
+html[data-exam-layout="5"] .print-question-item{
+  padding:7px 3px !important;
+}
+
+html[data-exam-layout="5"] .option-letter{
+  display:inline-grid !important;
+  place-items:center !important;
+  width:25px !important;
+  height:25px !important;
+  border:1px solid #80664e !important;
+  transform:rotate(45deg) !important;
+  margin:0 5px !important;
+}
+
+html[data-exam-layout="5"] .option-letter + span{
+  margin-right:5px !important;
 }
 
 
-/* شكل صفحة الطباعة نفسها */
-html[data-exam-layout="2"] .print-page-body{
-  box-shadow:inset 0 0 0 3px #222 !important;
-}
-
-html[data-exam-layout="3"] .print-page-body{
-  box-shadow:inset 0 0 0 1px #cbd5e1 !important;
-}
-
-html[data-exam-layout="4"] .print-page-body{
-  box-shadow:inset 0 0 0 2px #334155 !important;
-}
-
-html[data-exam-layout="5"] .print-page-body{
-  box-shadow:
-    inset 0 0 0 2px #475569,
-    inset 0 0 0 6px #fff,
-    inset 0 0 0 7px #94a3b8 !important;
-}
+/* ---------- موبايل ---------- */
 
 @media(max-width:900px){
   .exam-layout-grid{
@@ -354,13 +686,21 @@ html[data-exam-layout="5"] .print-page-body{
   }
 }
 
+@media(max-width:520px){
+  .exam-layout-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+/* ---------- طباعة ---------- */
+
 @media print{
   .exam-layout-picker{
     display:none !important;
   }
 
   *{
-    -webkit-print-color-adjust:exact;
-    print-color-adjust:exact;
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
   }
 }
