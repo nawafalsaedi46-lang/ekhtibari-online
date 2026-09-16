@@ -1773,3 +1773,34 @@ button{
     print-color-adjust:exact;
   }
 }
+
+/* √·Ê«‰ Â«œ∆… Ãœ« ·√⁄„œ… «·€Ì«» */
+.att-table .absence-excused{
+  background:#fbf7ea !important;
+}
+
+.att-table .absence-unexcused{
+  background:#f9eeee !important;
+}
+
+.att-table th.absence-excused{
+  color:#6f6547 !important;
+}
+
+.att-table th.absence-unexcused{
+  color:#765858 !important;
+}
+
+@media print{
+  .att-table .absence-excused{
+    background:#fbf7ea !important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+
+  .att-table .absence-unexcused{
+    background:#f9eeee !important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+}
