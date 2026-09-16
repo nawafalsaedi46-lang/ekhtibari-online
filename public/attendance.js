@@ -18,6 +18,7 @@ const fieldIds = [
   "academicYear",
   "startDate",
   "weekCount",
+  "studentType",
   "students",
   "dateSystem",
   "excludedDates",
@@ -51,6 +52,28 @@ function safe(value){
     .replace(/>/g,"&gt;")
     .replace(/"/g,"&quot;")
     .replace(/'/g,"&#039;");
+}
+
+function femaleRegister(){
+  return $("studentType")?.value === "female";
+}
+
+function studentNameTitle(){
+  return femaleRegister()
+    ? "اسم الطالبة"
+    : "اسم الطالب";
+}
+
+function studentsCountTitle(){
+  return femaleRegister()
+    ? "عدد الطالبات"
+    : "عدد الطلاب";
+}
+
+function studentsTypeTitle(){
+  return femaleRegister()
+    ? "طالبات"
+    : "طلاب";
 }
 
 function dateFromInput(value){
@@ -715,7 +738,14 @@ function setRecords(records){
 }
 
 function suggestedRegisterName(data){
+
+  const type =
+    data.studentType === "female"
+      ? "طالبات"
+      : "طلاب";
+
   const parts=[
+    type,
     data.grade,
     data.className,
     data.subject
@@ -723,8 +753,9 @@ function suggestedRegisterName(data){
 
   return parts.length
     ? parts.join(" - ")
-    : "سجل حضور";
+    : "سجل حضور " + type;
 }
+
 
 function saveRegister(){
   const data=getFormData();
@@ -1011,7 +1042,7 @@ function tableHtml(weeks,students,studentPageIndex,rows){
 
         <tr>
           <th rowspan="2" class="col-number">م</th>
-          <th rowspan="2" class="col-name">اسم الطالب</th>
+          <th rowspan="2" class="col-name">${studentNameTitle()}</th>
 
           ${weekHeaders}
 
@@ -1292,7 +1323,7 @@ function coverSheetHtml(){
             </div>
 
             <div class="att-cover-detail">
-              <strong>عدد الطلاب:</strong>
+              <strong>${studentsCountTitle()}:</strong>
               ${getStudents().length}
             </div>
 
@@ -1977,4 +2008,5 @@ $("logoutBtn").addEventListener("click",async()=>{
 
 setStep(1);
 loadTeacher();
+
 
