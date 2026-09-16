@@ -23,6 +23,7 @@ const fieldIds = [
   "dateSystem",
   "excludedDates",
   "template",
+  "printOrientation",
   "studentsPerPage",
   "weeksPerPage",
   "fontSize",
@@ -74,6 +75,152 @@ function studentsTypeTitle(){
   return femaleRegister()
     ? "طالبات"
     : "طلاب";
+}
+
+function getPrintOrientation(){
+  return $("printOrientation")?.value === "portrait"
+    ? "portrait"
+    : "landscape";
+}
+
+
+function syncPrintOrientation(){
+
+  const orientation =
+    getPrintOrientation();
+
+  const portrait =
+    orientation === "portrait";
+
+
+  document.body.classList.toggle(
+    "print-portrait",
+    portrait
+  );
+
+  document.body.classList.toggle(
+    "print-landscape",
+    !portrait
+  );
+
+
+  /* ضبط ورقة الطباعة نفسها */
+  let style =
+    document.getElementById(
+      "printOrientationStyle"
+    );
+
+  if(!style){
+
+    style =
+      document.createElement("style");
+
+    style.id =
+      "printOrientationStyle";
+
+    style.media =
+      "print";
+
+    document.head.appendChild(style);
+  }
+
+
+  const pageWidth =
+    portrait ? 210 : 297;
+
+  const pageHeight =
+    portrait ? 296.5 : 209.5;
+
+
+  style.textContent = `
+    @page{
+      size:A4 ${orientation};
+      margin:0;
+    }
+
+    html,
+    body{
+      width:${pageWidth}mm !important;
+      height:auto !important;
+      margin:0 !important;
+      padding:0 !important;
+    }
+
+    .att-sheet{
+      box-sizing:border-box !important;
+
+      width:${pageWidth}mm !important;
+      height:${pageHeight}mm !important;
+
+      min-height:${pageHeight}mm !important;
+      max-height:${pageHeight}mm !important;
+
+      margin:0 !important;
+
+      page-break-inside:avoid !important;
+      break-inside:avoid-page !important;
+    }
+
+    .att-sheet-inner{
+      box-sizing:border-box !important;
+
+      height:100% !important;
+      min-height:0 !important;
+      max-height:100% !important;
+    }
+  `;
+
+
+  /* العمودي = أسبوعان تلقائيًا */
+  const weeksSelect =
+    $("weeksPerPage");
+
+  if(weeksSelect){
+
+    if(portrait){
+
+      weeksSelect.value = "2";
+      weeksSelect.disabled = true;
+
+    }else{
+
+      weeksSelect.disabled = false;
+
+      if(weeksSelect.value === "2"){
+        weeksSelect.value = "4";
+      }
+    }
+  }
+
+
+  const hint =
+    $("orientationHint");
+
+  if(hint){
+
+    hint.textContent =
+      portrait
+        ? "عمودي: يتم ضبط أسبوعين في الصفحة تلقائيًا لقراءة أوضح."
+        : "أفقي: مناسب لأربعة أسابيع في الصفحة.";
+  }
+
+
+  if($("printBtn")){
+
+    $("printBtn").textContent =
+      portrait
+        ? "طباعة A4 — عمودي"
+        : "طباعة A4 — أفقي";
+  }
+
+
+  if($("quickPrintBtn")){
+
+    $("quickPrintBtn").textContent =
+      portrait
+        ? "طباعة السجل — عمودي"
+        : "طباعة السجل — أفقي";
+  }
 }
 
 function dateFromInput(value){
@@ -286,26 +433,60 @@ function getFormData(){
 }
 
 function applyFormData(data={}){
+
   fieldIds.forEach(id=>{
-    if($(id) && data[id]!==undefined){
-      $(id).value=data[id];
+
+    if(
+      $(id) &&
+      data[id] !== undefined
+    ){
+      $(id).value = data[id];
     }
+
   });
+
+
+  /* السجلات القديمة تفتح أفقيًا */
+  if(
+    $("printOrientation") &&
+    data.printOrientation === undefined
+  ){
+    $("printOrientation").value =
+      "landscape";
+  }
+
 
   checkIds.forEach(id=>{
-    if($(id) && data[id]!==undefined){
-      $(id).checked=Boolean(data[id]);
+
+    if(
+      $(id) &&
+      data[id] !== undefined
+    ){
+      $(id).checked =
+        Boolean(data[id]);
     }
+
   });
 
-  logoData=data.logoData || "";
-  currentRegisterId=data.currentRegisterId || null;
+
+  logoData =
+    data.logoData || "";
+
+  currentRegisterId =
+    data.currentRegisterId || null;
+
 
   refreshLogoPreview();
+
   syncTemplateCards();
+
+  syncPrintOrientation();
+
   renderCalendar();
+
   updateCounts();
 }
+
 
 function saveDraft(){
   try{
@@ -934,6 +1115,8 @@ function newRegister(){
       el.value="hijri";
     }else if(id==="template"){
       el.value="official";
+    }else if(id==="printOrientation"){
+      el.value="landscape";
     }else if(id==="studentsPerPage"){
       el.value="28";
     }else if(id==="weeksPerPage"){
@@ -1878,8 +2061,20 @@ fieldIds.forEach(id=>{
 
   ["input","change"].forEach(eventName=>{
     el.addEventListener(eventName,()=>{
+
+      if(id==="printOrientation"){
+        syncPrintOrientation();
+      }
+
       saveDraft();
       updateCounts();
+
+      if(
+        id==="printOrientation" &&
+        document.querySelector(".att-sheet")
+      ){
+        generateRegister(false);
+      }
 
       if(
         id==="startDate" ||
@@ -2046,6 +2241,9 @@ function printRegister(){
   }
 
   if(document.querySelector(".att-sheet")){
+
+    syncPrintOrientation();
+
     window.print();
   }
 }
@@ -2072,6 +2270,7 @@ $("logoutBtn").addEventListener("click",async()=>{
 
 setStep(1);
 loadTeacher();
+
 
 
 

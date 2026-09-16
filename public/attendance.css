@@ -1,4 +1,4 @@
-*{box-sizing:border-box}
+ï»¿*{box-sizing:border-box}
 
 :root{
   --att-blue:#1769e8;
@@ -1745,7 +1745,7 @@ button{
   }
 
 }
-/* ÊãííÒ ÃÚãÏÉ ÇáÛíÇÈ ÇáÃÓÈæÚíÉ */
+/* ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 .absence-head{
   font-weight:800;
 }
@@ -1774,7 +1774,7 @@ button{
   }
 }
 
-/* ÃáæÇä åÇÏÆÉ ÌÏğÇ áÃÚãÏÉ ÇáÛíÇÈ */
+/* ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 .att-table .absence-excused{
   background:#fbf7ea !important;
 }
@@ -1805,7 +1805,7 @@ button{
   }
 }
 
-/* ÅÒÇáÉ ÃáæÇä ÃÚãÏÉ ÇáÛíÇÈ */
+/* ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 .att-table .absence-excused,
 .att-table .absence-unexcused,
 .att-table th.absence-excused,
@@ -1821,7 +1821,7 @@ button{
   }
 }
 
-/* ÅáÛÇÁ Ãí Êáæíä ÓÇÈŞ áÎÇäÇÊ ÇáÛíÇÈ */
+/* ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 .att-table th.absence-head,
 .att-table th.absence-excused,
 .att-table th.absence-unexcused,
@@ -1837,7 +1837,7 @@ button{
 
 /* =========================================================
    PROFESSIONAL A4 PRINT FIX
-   ãäÚ ÇáÕİÍÇÊ ÇáİÇÑÛÉ æÇáãÍÇİÙÉ Úáì ÕİÍÉ A4 æÇÍÏÉ áßá ÓÌá
+   ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ A4 ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 ========================================================= */
 
 @media print{
@@ -1893,5 +1893,89 @@ button{
     page-break-after:auto !important;
     break-after:auto !important;
   }
+}
+
+
+/* =========================================================
+   ATTENDANCE PRINT ORIENTATION PRO
+   Ø£ÙÙ‚ÙŠ / Ø¹Ù…ÙˆØ¯ÙŠ
+========================================================= */
+
+.print-orientation-field select{
+  font-weight:800;
+  cursor:pointer;
+}
+
+.orientation-hint{
+  display:block;
+  margin-top:6px;
+  color:#748197;
+  font-size:9px;
+  line-height:1.6;
+}
+
+
+/* Ø§Ù„Ù…Ø¹Ø§ÙŠÙ†Ø© Ø§Ù„Ø£ÙÙ‚ÙŠØ© */
+body.print-landscape .att-sheet{
+  box-sizing:border-box;
+  width:297mm;
+  height:209.5mm;
+  min-height:209.5mm;
+  max-height:209.5mm;
+}
+
+
+/* Ø§Ù„Ù…Ø¹Ø§ÙŠÙ†Ø© Ø§Ù„Ø¹Ù…ÙˆØ¯ÙŠØ© */
+body.print-portrait .att-sheet{
+  box-sizing:border-box;
+  width:210mm;
+  height:296.5mm;
+  min-height:296.5mm;
+  max-height:296.5mm;
+}
+
+
+/* Ø¯Ø§Ø®Ù„ Ø§Ù„ÙˆØ±Ù‚Ø© Ø¯Ø§Ø¦Ù…Ù‹Ø§ Ø¶Ù…Ù† Ø­Ø¯ÙˆØ¯ A4 */
+body.print-landscape .att-sheet-inner,
+body.print-portrait .att-sheet-inner{
+  box-sizing:border-box;
+  height:100% !important;
+  min-height:0 !important;
+  max-height:100% !important;
+}
+
+
+/* ØªØ­Ø³ÙŠÙ† ØªÙˆØ²ÙŠØ¹ Ø§Ù„Ø¬Ø¯ÙˆÙ„ ÙÙŠ Ø§Ù„ÙˆØ¶Ø¹ Ø§Ù„Ø¹Ù…ÙˆØ¯ÙŠ */
+body.print-portrait .att-table .col-number{
+  width:6mm;
+}
+
+body.print-portrait .att-table .col-name{
+  width:36mm;
+}
+
+body.print-portrait .att-table .col-notes{
+  width:14mm;
+}
+
+
+/* Ø§Ù„Ù…Ø¹Ø§ÙŠÙ†Ø© ØªØ¸Ù„ ÙÙŠ Ø§Ù„Ù…Ù†ØªØµÙ */
+body.print-portrait .print-stage .att-sheet,
+body.print-landscape .print-stage .att-sheet{
+  margin-left:auto;
+  margin-right:auto;
+}
+
+
+/* Ø§Ù„Ø·Ø¨Ø§Ø¹Ø© */
+@media print{
+
+  body.print-landscape .att-sheet,
+  body.print-portrait .att-sheet{
+    margin:0 !important;
+    box-shadow:none !important;
+    overflow:hidden !important;
+  }
+
 }
 

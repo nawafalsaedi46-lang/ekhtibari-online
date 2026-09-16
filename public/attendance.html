@@ -77,7 +77,7 @@
         <h2>سجل مدرسي جاهز للطباعة خلال دقائق</h2>
         <p>
           رتّب الطلاب، أنشئ الأسابيع تلقائيًا، استبعد الإجازات،
-          واختر الشكل المناسب ثم اطبع A4 أفقيًا.
+          واختر الشكل المناسب ثم اطبع A4 أفقيًا أو عموديًا.
         </p>
       </div>
 
@@ -424,6 +424,26 @@
 
         <div class="design-options">
 
+          <label class="print-orientation-field">
+            <span>اتجاه الطباعة</span>
+
+            <select id="printOrientation">
+              <option value="landscape" selected>
+                ↔ أفقي — الأنسب للسجلات
+              </option>
+
+              <option value="portrait">
+                ↕ عمودي — أسبوعان في الصفحة
+              </option>
+            </select>
+
+            <small
+              id="orientationHint"
+              class="orientation-hint">
+              أفقي: مناسب لأربعة أسابيع في الصفحة.
+            </small>
+          </label>
+
           <label>
             <span>الطلاب في الصفحة</span>
             <select id="studentsPerPage">
@@ -438,6 +458,7 @@
           <label>
             <span>الأسابيع في الصفحة</span>
             <select id="weeksPerPage">
+              <option value="2">2 أسبوعان</option>
               <option value="3">3 أسابيع</option>
               <option value="4" selected>4 أسابيع</option>
             </select>
@@ -607,6 +628,7 @@
 
 </body>
 </html>
+
 
 
 
