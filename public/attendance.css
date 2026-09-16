@@ -1834,3 +1834,64 @@ button{
   box-shadow: none !important;
 }
 
+
+/* =========================================================
+   PROFESSIONAL A4 PRINT FIX
+   „‰⁄ «·’›Õ«  «·›«—€… Ê«·„Õ«›Ÿ… ⁄·Ï ’›Õ… A4 Ê«Õœ… ·ﬂ· ”Ã·
+========================================================= */
+
+@media print{
+
+  @page{
+    size:A4 landscape;
+    margin:0;
+  }
+
+  html,
+  body{
+    width:297mm !important;
+    height:auto !important;
+    margin:0 !important;
+    padding:0 !important;
+  }
+
+  .att-sheet{
+    box-sizing:border-box !important;
+
+    width:297mm !important;
+    height:209.5mm !important;
+    min-height:209.5mm !important;
+    max-height:209.5mm !important;
+
+    margin:0 !important;
+    padding:7mm !important;
+
+    overflow:hidden !important;
+
+    page-break-inside:avoid !important;
+    break-inside:avoid-page !important;
+
+    page-break-before:auto !important;
+    break-before:auto !important;
+
+    page-break-after:always !important;
+    break-after:page !important;
+  }
+
+  .att-sheet-inner{
+    box-sizing:border-box !important;
+
+    width:100% !important;
+    height:100% !important;
+    min-height:0 !important;
+    max-height:100% !important;
+
+    overflow:hidden !important;
+  }
+
+  .att-sheet:last-child{
+    page-break-after:auto !important;
+    break-after:auto !important;
+  }
+}
+
