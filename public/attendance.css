@@ -1979,3 +1979,288 @@ body.print-landscape .print-stage .att-sheet{
 
 }
 
+/* ===== ATTENDANCE PORTRAIT PREMIUM V1 START ===== */
+
+/*
+   تصميم احترافي للسجل العمودي فقط
+   لا يؤثر على النسخة الأفقية
+*/
+
+body.print-portrait .att-sheet{
+  background:#fff;
+}
+
+
+/* الإطار الداخلي */
+body.print-portrait .att-sheet-inner{
+  padding:4mm !important;
+  border:1.2px solid #273444 !important;
+}
+
+
+/* =========================
+   رأس الصفحة
+========================= */
+
+body.print-portrait .att-print-header{
+  min-height:27mm !important;
+  padding:2mm 3mm 3mm !important;
+
+  grid-template-columns:1.05fr 1.55fr 1.05fr !important;
+
+  border-bottom:2.2px solid #173f67 !important;
+}
+
+body.print-portrait .att-title h2{
+  font-size:20px !important;
+  font-weight:900 !important;
+  letter-spacing:.1px;
+  color:#162b42;
+}
+
+body.print-portrait .att-title p{
+  margin-top:2mm !important;
+  font-size:8px !important;
+  color:#647184;
+}
+
+body.print-portrait .att-ministry,
+body.print-portrait .att-year{
+  font-size:8px !important;
+  line-height:1.9 !important;
+}
+
+body.print-portrait .att-print-logo{
+  width:18mm !important;
+  height:18mm !important;
+}
+
+
+/* =========================
+   بيانات السجل
+========================= */
+
+body.print-portrait .att-meta{
+  grid-template-columns:repeat(3,1fr) !important;
+
+  margin-top:3mm !important;
+  margin-bottom:2.5mm !important;
+
+  overflow:hidden;
+
+  border:1px solid #687789 !important;
+  border-radius:2mm;
+  background:#fff;
+}
+
+body.print-portrait .att-meta > div{
+  min-height:9mm !important;
+
+  padding:1.5mm 2mm !important;
+
+  font-size:7.7px !important;
+  line-height:1.5;
+
+  border-left:1px solid #c6ced7 !important;
+  border-bottom:1px solid #c6ced7 !important;
+}
+
+body.print-portrait .att-meta > div:nth-child(3n){
+  border-left:0 !important;
+}
+
+body.print-portrait .att-meta > div:nth-last-child(-n+3){
+  border-bottom:0 !important;
+}
+
+body.print-portrait .att-meta > div:nth-child(odd){
+  background:#f8fafc;
+}
+
+
+/* =========================
+   الجدول
+========================= */
+
+body.print-portrait .att-table{
+  width:100% !important;
+  margin-top:0 !important;
+
+  border-collapse:collapse;
+  table-layout:fixed;
+
+  border:1.4px solid #263646 !important;
+}
+
+body.print-portrait .att-table th,
+body.print-portrait .att-table td{
+  border-color:#637080 !important;
+}
+
+
+/* رأس الجدول */
+body.print-portrait .att-table thead th{
+  height:7.5mm !important;
+
+  padding:1mm !important;
+
+  font-size:7px !important;
+  font-weight:800;
+
+  line-height:1.3 !important;
+
+  background:#f4f6f8;
+}
+
+
+/* عنوان الأسبوع */
+body.print-portrait .att-week{
+  background:#e8edf3 !important;
+
+  font-size:8px !important;
+  font-weight:900 !important;
+
+  color:#172b40;
+}
+
+
+/* اليوم */
+body.print-portrait .att-day-name{
+  display:block;
+
+  font-size:6.7px !important;
+  font-weight:800;
+}
+
+
+/* التاريخ */
+body.print-portrait .att-day-date{
+  display:block;
+
+  margin-top:1px;
+
+  font-size:5.6px !important;
+  color:#4f5d6d;
+}
+
+
+/* =========================
+   صفوف الطلاب
+========================= */
+
+body.print-portrait .att-table tbody td{
+  height:6.35mm !important;
+
+  padding:1px 2px !important;
+
+  font-size:7.5px !important;
+
+  vertical-align:middle;
+}
+
+
+/* الوضع المضغوط */
+body.print-portrait .att-sheet.row-compact .att-table tbody td{
+  height:5.5mm !important;
+}
+
+
+/* الوضع الكبير */
+body.print-portrait .att-sheet.row-large .att-table tbody td{
+  height:6.9mm !important;
+}
+
+
+/* رقم الطالب */
+body.print-portrait .att-table .col-number{
+  width:7mm !important;
+
+  text-align:center;
+  font-weight:800;
+}
+
+
+/* اسم الطالب */
+body.print-portrait .att-table .col-name{
+  width:48mm !important;
+
+  padding-right:2.5mm !important;
+
+  text-align:right !important;
+
+  font-size:7.8px !important;
+}
+
+
+/* الملاحظات */
+body.print-portrait .att-table .col-notes{
+  width:17mm !important;
+}
+
+
+/* فصل الأسابيع بصريًا */
+body.print-portrait .att-week{
+  border-left:1.6px solid #33475b !important;
+}
+
+body.print-portrait .absence-head{
+  font-size:6.2px !important;
+}
+
+
+/* =========================
+   التذييل
+========================= */
+
+body.print-portrait .att-footer{
+  margin-top:auto !important;
+
+  padding-top:3mm !important;
+
+  border-top:1px solid #c6ced7;
+}
+
+
+/* دليل الرموز */
+body.print-portrait .att-legend{
+  min-height:9mm;
+
+  justify-content:center !important;
+  align-items:center;
+
+  gap:6mm !important;
+
+  padding:1.7mm 3mm !important;
+
+  border:1px solid #8995a3;
+  border-radius:1.5mm;
+
+  background:#f7f9fb;
+
+  font-size:7px !important;
+  font-weight:700;
+}
+
+
+/* =========================
+   ضبط الطباعة
+========================= */
+
+@media print{
+
+  body.print-portrait .att-sheet-inner{
+    padding:4mm !important;
+  }
+
+  body.print-portrait .att-week,
+  body.print-portrait .att-table thead th,
+  body.print-portrait .att-meta > div,
+  body.print-portrait .att-legend{
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+
+}
+
+/* ===== ATTENDANCE PORTRAIT PREMIUM V1 END ===== */
+
