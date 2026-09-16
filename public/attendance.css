@@ -1820,3 +1820,17 @@ button{
     background:transparent !important;
   }
 }
+
+/* ≈·€«¡ √Ì  ·ÊÌ‰ ”«»ﬁ ·Œ«‰«  «·€Ì«» */
+.att-table th.absence-head,
+.att-table th.absence-excused,
+.att-table th.absence-unexcused,
+.att-table td.absence-cell,
+.att-table td.absence-excused,
+.att-table td.absence-unexcused{
+  background: transparent !important;
+  background-color: transparent !important;
+  color: inherit !important;
+  box-shadow: none !important;
+}
+
