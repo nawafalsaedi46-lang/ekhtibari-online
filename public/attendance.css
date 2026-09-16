@@ -2264,3 +2264,220 @@ body.print-portrait .att-legend{
 
 /* ===== ATTENDANCE PORTRAIT PREMIUM V1 END ===== */
 
+/* ===== ATTENDANCE PORTRAIT PREMIUM V2 START ===== */
+
+/*
+   المرحلة الثانية
+   تذييل احترافي للسجل العمودي فقط
+*/
+
+
+/* =========================================================
+   منطقة التذييل
+========================================================= */
+
+body.print-portrait .att-footer{
+  margin-top:auto !important;
+  padding-top:3.5mm !important;
+
+  display:flex;
+  flex-direction:column;
+  gap:2.5mm;
+
+  border-top:1.3px solid #35475a !important;
+}
+
+
+/* =========================================================
+   دليل رموز الحضور
+========================================================= */
+
+body.print-portrait .att-legend{
+  min-height:10mm !important;
+
+  display:grid !important;
+  grid-template-columns:repeat(4,1fr);
+
+  gap:0 !important;
+
+  padding:0 !important;
+
+  overflow:hidden;
+
+  border:1px solid #8290a0 !important;
+  border-radius:1.8mm !important;
+
+  background:#f7f9fb !important;
+}
+
+body.print-portrait .att-legend span{
+  min-height:9mm;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  gap:1.5mm;
+
+  padding:1.5mm 2mm;
+
+  border-left:1px solid #d1d7de;
+
+  font-size:7.2px !important;
+  font-weight:700;
+  color:#26384b;
+}
+
+body.print-portrait .att-legend span:last-child{
+  border-left:0;
+}
+
+body.print-portrait .att-legend strong{
+  width:6mm;
+  height:6mm;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  border:1px solid #8391a1;
+  border-radius:1.2mm;
+
+  background:#fff;
+
+  font-size:7.5px;
+  font-weight:900;
+  color:#172b40;
+}
+
+
+/* =========================================================
+   التوقيعات
+========================================================= */
+
+body.print-portrait .att-signatures{
+  min-height:20mm !important;
+
+  display:grid !important;
+  grid-template-columns:repeat(3,1fr);
+
+  gap:2.5mm !important;
+
+  padding:0 !important;
+
+  font-size:7px !important;
+}
+
+body.print-portrait .att-signatures > div{
+  min-height:19mm;
+
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+
+  padding:3mm 2mm 2.5mm;
+
+  border:1px solid #a5afb9;
+  border-radius:1.8mm;
+
+  background:#fff;
+
+  text-align:center;
+  line-height:1.9;
+
+  color:#26384a;
+}
+
+
+/* لمسة علوية رسمية لكل خانة توقيع */
+body.print-portrait .att-signatures > div::before{
+  content:"";
+
+  position:absolute;
+
+  width:18mm;
+  height:1px;
+
+  margin-bottom:9mm;
+
+  background:#b1bac4;
+}
+
+body.print-portrait .att-signatures > div{
+  position:relative;
+}
+
+
+/* =========================================================
+   رقم الصفحة
+========================================================= */
+
+body.print-portrait .att-page-number{
+  align-self:center;
+
+  min-width:28mm;
+
+  padding:1.2mm 4mm !important;
+
+  border:1px solid #c0c8d1;
+  border-radius:99px;
+
+  background:#f8fafc;
+
+  text-align:center;
+
+  font-size:6.5px !important;
+  font-weight:700;
+
+  color:#5b6877;
+}
+
+
+/* =========================================================
+   تحسين نهائي للجدول العمودي
+========================================================= */
+
+/* الحد الخارجي أوضح */
+body.print-portrait .att-table{
+  border:1.6px solid #26384a !important;
+}
+
+
+/* فصل كل أسبوع بصريًا */
+body.print-portrait .att-week{
+  border-right:1.5px solid #46596c !important;
+  border-left:1.5px solid #46596c !important;
+}
+
+
+/* صفوف الطلاب أنظف */
+body.print-portrait .att-table tbody tr:nth-child(even) td{
+  background:#fcfdfe;
+}
+
+
+/* خانة الاسم أوضح */
+body.print-portrait .att-table tbody .col-name{
+  font-weight:600;
+  color:#1f3042;
+}
+
+
+/* =========================================================
+   الطباعة الفعلية
+========================================================= */
+
+@media print{
+
+  body.print-portrait .att-legend,
+  body.print-portrait .att-signatures > div,
+  body.print-portrait .att-page-number,
+  body.print-portrait .att-table tbody tr:nth-child(even) td{
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+
+}
+
+/* ===== ATTENDANCE PORTRAIT PREMIUM V2 END ===== */
+
