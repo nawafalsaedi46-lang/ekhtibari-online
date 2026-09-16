@@ -1804,3 +1804,19 @@ button{
     print-color-adjust:exact;
   }
 }
+
+/* ≈“«·… √·Ê«‰ √⁄„œ… «·€Ì«» */
+.att-table .absence-excused,
+.att-table .absence-unexcused,
+.att-table th.absence-excused,
+.att-table th.absence-unexcused{
+  background:transparent !important;
+  color:inherit !important;
+}
+
+@media print{
+  .att-table .absence-excused,
+  .att-table .absence-unexcused{
+    background:transparent !important;
+  }
+}
