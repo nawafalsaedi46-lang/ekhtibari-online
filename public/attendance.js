@@ -1,4 +1,4 @@
-const $ = id => document.getElementById(id);
+﻿const $ = id => document.getElementById(id);
 
 let currentTeacher = null;
 let currentStep = 1;
@@ -411,9 +411,7 @@ function calculatePageStats(){
     );
 
   const studentsPerPage =
-    Number(
-      $("studentsPerPage").value || 28
-    );
+    getSafeRowsPerPage();
 
 
   const attendanceWeekGroups =
@@ -1567,10 +1565,7 @@ function generateRegister(scroll=true){
 
 
   const rows =
-    Number(
-      $("studentsPerPage").value ||
-      28
-    );
+    getSafeRowsPerPage();
 
 
   const weeksPerPage =
@@ -1982,3 +1977,4 @@ $("logoutBtn").addEventListener("click",async()=>{
 
 setStep(1);
 loadTeacher();
+
