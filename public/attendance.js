@@ -795,7 +795,7 @@ function renderCalendar(){
             data-calendar-date="${iso(day.date)}">
 
             <strong>${safe(day.name)}</strong>
-            <span>${safe(formatDate(day.date))}</span>
+            <span>${safe(formatHeaderNumericDate(day.date))}</span>
 
           </button>
         `).join("")}
@@ -1172,6 +1172,31 @@ function studentPages(students,rows){
   return pages;
 }
 
+
+function formatHeaderNumericDate(value){
+
+  const d =
+    value instanceof Date
+      ? value
+      : new Date(value);
+
+  if(Number.isNaN(d.getTime())){
+    return "";
+  }
+
+  const raw =
+    new Intl.DateTimeFormat(
+      "ar-SA-u-ca-islamic",
+      {
+        day: "2-digit",
+        month: "2-digit"
+      }
+    ).format(d);
+
+  return raw
+    .replace(/\s+/g,"")
+    .replace(/[^\d٠-٩\/-]/g,"");
+}
 function tableHtml(weeks,students,studentPageIndex,rows){
 
   const weekHeaders = weeks.map(week=>`
@@ -1192,7 +1217,7 @@ function tableHtml(weeks,students,studentPageIndex,rows){
         </span>
 
         <span class="att-day-date">
-          ${safe(formatDate(day.date))}
+          ${safe(formatHeaderNumericDate(day.date))}
         </span>
       </th>
     `).join("");
@@ -2270,6 +2295,7 @@ $("logoutBtn").addEventListener("click",async()=>{
 
 setStep(1);
 loadTeacher();
+
 
 
 
