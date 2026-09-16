@@ -1202,74 +1202,55 @@ function tableHtml(weeks,students,studentPageIndex,rows){
   const weekHeaders = weeks.map(week=>`
     <th
       class="att-week"
-      colspan="${week.days.length + 2}">
+      colspan="${week.days.length}">
       ${safe(week.title)}
     </th>
   `).join("");
 
 
-  const dayHeaders = weeks.map(week=>{
+  const dayHeaders = weeks.map(week=>
 
-    const days = week.days.map(day=>`
+    week.days.map(day=>`
       <th>
         <span class="att-day-name">
           ${safe(day.name)}
         </span>
 
         <span class="att-day-date">
-          ${safe(formatHeaderNumericDate(day.date))}
+          ${safe(
+            typeof formatHeaderNumericDate === "function"
+              ? formatHeaderNumericDate(day.date)
+              : formatDate(day.date)
+          )}
         </span>
       </th>
-    `).join("");
+    `).join("")
 
-    return `
-      ${days}
-
-      <th class="absence-head">
-        <span class="att-day-name">
-          غياب
-        </span>
-        <span class="att-day-date">
-          بعذر
-        </span>
-      </th>
-
-      <th class="absence-head">
-        <span class="att-day-name">
-          غياب
-        </span>
-        <span class="att-day-date">
-          بدون عذر
-        </span>
-      </th>
-    `;
-
-  }).join("");
+  ).join("");
 
 
-  const totalColumns = weeks.reduce(
-    (sum,week)=>sum + week.days.length + 2,
+  const totalDays = weeks.reduce(
+    (sum,week)=>sum + week.days.length,
     0
   );
 
 
   const body = students.map((student,index)=>{
 
-    const number = student
-      ? studentPageIndex * rows + index + 1
-      : "";
+    const number =
+      student
+        ? studentPageIndex * rows + index + 1
+        : "";
 
-    const cells = Array.from(
-      {length:totalColumns},
-      ()=>"<td></td>"
-    ).join("");
+    const cells =
+      Array.from(
+        {length:totalDays},
+        ()=>"<td></td>"
+      ).join("");
 
     return `
       <tr>
-
-        <td>
-          ${number}
-        </td>
+        <td>${number}</td>
 
         <td class="col-name">
           ${safe(student)}
@@ -1278,9 +1259,9 @@ function tableHtml(weeks,students,studentPageIndex,rows){
         ${cells}
 
         <td></td>
-
       </tr>
     `;
+
   }).join("");
 
 
@@ -1296,7 +1277,6 @@ function tableHtml(weeks,students,studentPageIndex,rows){
       <thead>
 
         <tr>
-
           <th
             rowspan="2"
             class="col-number">
@@ -1316,16 +1296,13 @@ function tableHtml(weeks,students,studentPageIndex,rows){
             class="col-notes">
             ملاحظات
           </th>
-
         </tr>
-
 
         <tr>
           ${dayHeaders}
         </tr>
 
       </thead>
-
 
       <tbody>
         ${body}
@@ -1334,6 +1311,7 @@ function tableHtml(weeks,students,studentPageIndex,rows){
     </table>
   `;
 }
+
 
 function sheetHtml({
   weeks,
@@ -2295,6 +2273,7 @@ $("logoutBtn").addEventListener("click",async()=>{
 
 setStep(1);
 loadTeacher();
+
 
 
 
