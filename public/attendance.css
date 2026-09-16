@@ -1834,38 +1834,3 @@ button{
   box-shadow: none !important;
 }
 
-
-/*  „ÌÌ“ Œ›Ì› Ãœ« ·Œ«‰«  «·€Ì«» */
-.att-table th.absence-excused,
-.att-table td.absence-excused{
-  background-color:#fbf8ef !important;
-}
-
-.att-table th.absence-unexcused,
-.att-table td.absence-unexcused{
-  background-color:#f9f1f1 !important;
-}
-
-.att-table th.absence-excused{
-  color:#6b624d !important;
-}
-
-.att-table th.absence-unexcused{
-  color:#745b5b !important;
-}
-
-@media print{
-  .att-table th.absence-excused,
-  .att-table td.absence-excused{
-    background-color:#fbf8ef !important;
-    -webkit-print-color-adjust:exact;
-    print-color-adjust:exact;
-  }
-
-  .att-table th.absence-unexcused,
-  .att-table td.absence-unexcused{
-    background-color:#f9f1f1 !important;
-    -webkit-print-color-adjust:exact;
-    print-color-adjust:exact;
-  }
-}
