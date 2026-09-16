@@ -2481,3 +2481,314 @@ body.print-portrait .att-table tbody .col-name{
 
 /* ===== ATTENDANCE PORTRAIT PREMIUM V2 END ===== */
 
+/* ===== ATTENDANCE LANDSCAPE PREMIUM V1 START ===== */
+
+/*
+   تحسين احترافي للأفقي فقط
+   بدون المساس بالعمودي أو الجافاسكربت
+*/
+
+body.print-landscape .att-sheet{
+  background:#fff;
+}
+
+body.print-landscape .att-sheet:not(.att-cover-sheet) .att-sheet-inner{
+  padding:3.5mm !important;
+  border:1.1px solid #243648 !important;
+}
+
+
+/* =========================
+   رأس الصفحة
+========================= */
+
+body.print-landscape .att-print-header{
+  min-height:19mm !important;
+  padding:1.5mm 2.5mm 2.5mm !important;
+
+  border-bottom:2px solid #173f67 !important;
+  grid-template-columns:1.05fr 1.45fr 1.05fr !important;
+}
+
+body.print-landscape .att-title h2{
+  font-size:17px !important;
+  font-weight:900 !important;
+  color:#162c42 !important;
+  line-height:1.2 !important;
+}
+
+body.print-landscape .att-title p{
+  margin-top:1.2mm !important;
+  font-size:7px !important;
+  color:#657487 !important;
+}
+
+body.print-landscape .att-ministry,
+body.print-landscape .att-year{
+  font-size:7px !important;
+  line-height:1.8 !important;
+  color:#26384a !important;
+}
+
+body.print-landscape .att-print-logo{
+  width:15mm !important;
+  height:15mm !important;
+}
+
+
+/* =========================
+   بيانات السجل
+========================= */
+
+body.print-landscape .att-meta{
+  margin-top:2.2mm !important;
+  margin-bottom:2.2mm !important;
+
+  border:1px solid #738294 !important;
+  border-radius:1.3mm;
+  overflow:hidden;
+  background:#fff;
+}
+
+body.print-landscape .att-meta > div{
+  min-height:8mm !important;
+  padding:1.1mm 1.6mm !important;
+
+  font-size:7px !important;
+  line-height:1.45 !important;
+
+  border-left:1px solid #c8d0d9 !important;
+}
+
+body.print-landscape .att-meta > div:nth-child(odd){
+  background:#f8fafc;
+}
+
+body.print-landscape .att-meta strong{
+  font-weight:900;
+  color:#203449;
+}
+
+
+/* =========================
+   الجدول
+========================= */
+
+body.print-landscape .att-table{
+  width:100% !important;
+  table-layout:fixed;
+  border-collapse:collapse;
+  border:1.4px solid #243649 !important;
+  background:#fff;
+}
+
+body.print-landscape .att-table th,
+body.print-landscape .att-table td{
+  border-color:#697786 !important;
+}
+
+body.print-landscape .att-table thead th{
+  height:6.8mm !important;
+  padding:1px !important;
+
+  font-size:6.6px !important;
+  font-weight:800 !important;
+  line-height:1.25 !important;
+
+  background:#f4f6f8;
+}
+
+body.print-landscape .att-week{
+  background:#e9eef4 !important;
+  color:#172c42 !important;
+
+  font-size:7.4px !important;
+  font-weight:900 !important;
+}
+
+body.print-landscape .att-day-name{
+  display:block;
+  font-size:6.2px !important;
+  font-weight:800 !important;
+}
+
+body.print-landscape .att-day-date{
+  display:block;
+  margin-top:1px;
+  font-size:5.3px !important;
+  color:#58697a !important;
+}
+
+body.print-landscape .att-table tbody td{
+  height:5.45mm !important;
+  padding:1px 1.4px !important;
+
+  font-size:6.9px !important;
+  vertical-align:middle !important;
+}
+
+body.print-landscape .att-table tbody tr:nth-child(even) td{
+  background:#fcfdfe;
+}
+
+body.print-landscape .att-table tbody .col-name{
+  text-align:right !important;
+  padding-right:2mm !important;
+  font-weight:700 !important;
+  color:#213447;
+}
+
+body.print-landscape .att-table .col-number{
+  width:6.5mm !important;
+}
+
+body.print-landscape .att-table .col-name{
+  width:34mm !important;
+}
+
+body.print-landscape .att-table .col-notes{
+  width:14mm !important;
+}
+
+body.print-landscape .absence-head{
+  background:#f3f5f7 !important;
+  font-size:5.8px !important;
+  line-height:1.2 !important;
+}
+
+
+/* =========================
+   التذييل
+========================= */
+
+body.print-landscape .att-footer{
+  margin-top:auto !important;
+  padding-top:2.5mm !important;
+
+  display:flex;
+  flex-direction:column;
+  gap:2mm;
+
+  border-top:1px solid #c5ced8;
+}
+
+body.print-landscape .att-legend{
+  display:grid !important;
+  grid-template-columns:repeat(4,1fr);
+  gap:0 !important;
+
+  min-height:8.5mm;
+  padding:0 !important;
+
+  border:1px solid #8a97a6;
+  border-radius:1.3mm;
+  overflow:hidden;
+
+  background:#f7f9fb;
+}
+
+body.print-landscape .att-legend span{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:1.4mm;
+
+  min-height:8mm;
+  padding:1mm 1.6mm;
+
+  border-left:1px solid #d2d8de;
+
+  font-size:6.7px !important;
+  font-weight:700;
+
+  color:#26384b;
+}
+
+body.print-landscape .att-legend span:last-child{
+  border-left:0;
+}
+
+body.print-landscape .att-legend strong{
+  width:5.2mm;
+  height:5.2mm;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  border:1px solid #8693a1;
+  border-radius:1mm;
+
+  background:#fff;
+  font-size:6.7px;
+  font-weight:900;
+}
+
+body.print-landscape .att-signatures{
+  display:grid !important;
+  grid-template-columns:repeat(3,1fr);
+  gap:2mm !important;
+
+  min-height:15mm;
+  font-size:6.7px !important;
+}
+
+body.print-landscape .att-signatures > div{
+  min-height:14mm;
+
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+
+  padding:2mm 1.5mm 1.8mm;
+
+  border:1px solid #a6b0ba;
+  border-radius:1.3mm;
+
+  background:#fff;
+
+  text-align:center;
+  font-weight:700;
+  color:#324457;
+}
+
+body.print-landscape .att-page-number{
+  align-self:center;
+
+  min-width:24mm;
+  padding:1mm 3mm !important;
+
+  border:1px solid #c1c9d2;
+  border-radius:99px;
+
+  background:#f8fafc;
+
+  text-align:center;
+  font-size:6px !important;
+  font-weight:700;
+  color:#5c6978;
+}
+
+
+/* =========================
+   تحسين الطباعة
+========================= */
+
+@media print{
+
+  body.print-landscape .att-meta,
+  body.print-landscape .att-week,
+  body.print-landscape .att-table thead th,
+  body.print-landscape .absence-head,
+  body.print-landscape .att-legend,
+  body.print-landscape .att-signatures > div,
+  body.print-landscape .att-page-number,
+  body.print-landscape .att-table tbody tr:nth-child(even) td{
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+
+}
+
+/* ===== ATTENDANCE LANDSCAPE PREMIUM V1 END ===== */
+
