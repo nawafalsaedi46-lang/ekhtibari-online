@@ -1386,13 +1386,350 @@ button{
 }
 
 /* =========================================================
-   A4 SAFE PAGINATION FIX
+   ATTENDANCE PRO PHASE 2
+   COVER + MONTHLY SUMMARY
+========================================================= */
+
+.premium-toggle{
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(
+      135deg,
+      #ffffff,
+      #f6f9ff
+    );
+}
+
+.premium-toggle::before{
+  content:"";
+  position:absolute;
+  top:0;
+  right:0;
+  bottom:0;
+  width:3px;
+  background:#1769e8;
+}
+
+
+/* =========================================================
+   الغلاف
+========================================================= */
+
+.att-cover-sheet .att-sheet-inner{
+  position:relative;
+  overflow:hidden;
+
+  justify-content:center;
+  align-items:center;
+
+  padding:12mm;
+}
+
+.att-cover-sheet .att-sheet-inner::before{
+  content:"";
+
+  position:absolute;
+
+  width:150mm;
+  height:150mm;
+
+  border:24mm solid #f5f8fd;
+  border-radius:50%;
+
+  left:-72mm;
+  bottom:-90mm;
+}
+
+.att-cover-sheet .att-sheet-inner::after{
+  content:"";
+
+  position:absolute;
+
+  width:70mm;
+  height:70mm;
+
+  border:15mm solid #f8fafc;
+  border-radius:50%;
+
+  right:-32mm;
+  top:-38mm;
+}
+
+.att-cover-content{
+  position:relative;
+  z-index:2;
+
+  width:100%;
+
+  text-align:center;
+}
+
+.att-cover-logo{
+  width:28mm;
+  height:28mm;
+
+  margin:0 auto 5mm;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.att-cover-logo img{
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+}
+
+.att-cover-country{
+  font-size:10px;
+  line-height:1.8;
+}
+
+.att-cover-divider{
+  width:45mm;
+  height:1.2mm;
+
+  margin:5mm auto;
+
+  border-radius:999px;
+
+  background:#1769e8;
+}
+
+.att-cover-title{
+  margin:0;
+
+  font-size:28px;
+  line-height:1.5;
+}
+
+.att-cover-subtitle{
+  margin:2mm 0 8mm;
+
+  color:#4b5c73;
+
+  font-size:11px;
+}
+
+.att-cover-details{
+  width:185mm;
+
+  margin:0 auto;
+
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+
+  border:1px solid #111;
+}
+
+.att-cover-detail{
+  min-height:13mm;
+
+  display:flex;
+  align-items:center;
+
+  padding:2mm 4mm;
+
+  border-left:1px solid #111;
+  border-bottom:1px solid #111;
+
+  text-align:right;
+
+  font-size:10px;
+}
+
+.att-cover-detail:nth-child(even){
+  border-left:0;
+}
+
+.att-cover-detail:nth-last-child(-n+2){
+  border-bottom:0;
+}
+
+.att-cover-detail strong{
+  min-width:31mm;
+}
+
+.att-cover-footer{
+  margin-top:9mm;
+
+  font-size:9px;
+  line-height:2;
+}
+
+
+/* =========================================================
+   الملخص الشهري
+========================================================= */
+
+.att-summary-sheet .att-sheet-inner{
+  padding:4mm;
+}
+
+.att-summary-header{
+  display:grid;
+  grid-template-columns:1fr 1.35fr 1fr;
+
+  align-items:center;
+
+  min-height:22mm;
+
+  padding-bottom:3mm;
+
+  border-bottom:2px solid #111;
+}
+
+.att-summary-school{
+  font-size:8px;
+  line-height:1.9;
+}
+
+.att-summary-title{
+  text-align:center;
+}
+
+.att-summary-title h2{
+  margin:0;
+
+  font-size:18px;
+}
+
+.att-summary-title p{
+  margin:3px 0 0;
+
+  font-size:9px;
+}
+
+.att-summary-info{
+  text-align:left;
+
+  font-size:8px;
+  line-height:1.9;
+}
+
+.att-summary-meta{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+
+  margin:2.5mm 0;
+
+  border:1px solid #111;
+}
+
+.att-summary-meta div{
+  min-height:8mm;
+
+  display:flex;
+  align-items:center;
+
+  padding:1.5mm 2mm;
+
+  border-left:1px solid #111;
+
+  font-size:8px;
+}
+
+.att-summary-meta div:last-child{
+  border-left:0;
+}
+
+.att-summary-table{
+  width:100%;
+
+  border-collapse:collapse;
+  table-layout:fixed;
+
+  direction:rtl;
+}
+
+.att-summary-table th,
+.att-summary-table td{
+  border:1px solid #111;
+
+  text-align:center;
+}
+
+.att-summary-table th{
+  height:10mm;
+
+  background:#f1f4f8;
+
+  font-size:8px;
+}
+
+.att-summary-table td{
+  height:5mm;
+
+  font-size:8px;
+}
+
+.att-summary-table .summary-number{
+  width:9mm;
+}
+
+.att-summary-table .summary-name{
+  width:58mm;
+
+  padding-right:3mm;
+
+  text-align:right;
+}
+
+.att-summary-table .summary-notes{
+  width:40mm;
+}
+
+.att-summary-footer{
+  margin-top:auto;
+
+  padding-top:3mm;
+
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+
+  text-align:center;
+
+  font-size:8px;
+}
+
+
+/* الحديث */
+
+.att-cover-sheet.modern .att-cover-divider{
+  background:#1769e8;
+}
+
+.att-cover-sheet.modern .att-cover-title{
+  color:#0d47a1;
+}
+
+.att-summary-sheet.modern .att-summary-header{
+  border-bottom-color:#1769e8;
+}
+
+.att-summary-sheet.modern .att-summary-title h2{
+  color:#0d47a1;
+}
+
+
+/* البسيط */
+
+.att-summary-sheet.clean .att-summary-table th,
+.att-summary-sheet.clean .att-summary-table td,
+.att-summary-sheet.clean .att-summary-meta{
+  border-color:#94a3b8;
+}
+
+/* =========================================================
+   ATTENDANCE A4 SAFE FIX
 ========================================================= */
 
 .att-sheet{
   overflow:hidden;
-  break-inside:avoid-page;
   page-break-inside:avoid;
+  break-inside:avoid-page;
 }
 
 .att-sheet-inner{
@@ -1403,8 +1740,8 @@ button{
 
   .att-sheet{
     overflow:hidden !important;
-    break-inside:avoid-page !important;
     page-break-inside:avoid !important;
+    break-inside:avoid-page !important;
   }
 
 }

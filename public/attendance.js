@@ -31,7 +31,9 @@ const fieldIds = [
 const checkIds = [
   "showLegend",
   "showSignatures",
-  "showPageNumber"
+  "showPageNumber",
+  "showCover",
+  "showMonthlySummary"
 ];
 
 const dayNames = {
@@ -341,59 +343,181 @@ function defaultValues(){
   }
 }
 
+function getMonthGroups(weeks){
+
+  const map = new Map();
+
+  weeks.forEach(week=>{
+
+    week.days.forEach(day=>{
+
+      const label =
+        monthLabel(day.date);
+
+      if(!map.has(label)){
+
+        map.set(label,{
+          label,
+          dates:[]
+        });
+      }
+
+      map.get(label).dates.push(
+        day.date
+      );
+
+    });
+  });
+
+  return Array.from(
+    map.values()
+  );
+}
+
+
 function getSafeRowsPerPage(){
 
   const requested =
     Number($("studentsPerPage").value || 28);
 
-  const mode =
+  const rowMode =
     $("rowSize")?.value || "normal";
 
-  const maximum =
-    mode === "compact"
+  const safeMaximum =
+    rowMode === "compact"
       ? 30
-      : mode === "large"
+      : rowMode === "large"
         ? 24
         : 28;
 
   return Math.min(
     requested,
-    maximum
+    safeMaximum
   );
+}
+
+
+function calculatePageStats(){
+
+  const students =
+    getStudents();
+
+  const weeks =
+    buildWeeks();
+
+  const weeksPerPage =
+    Number(
+      $("weeksPerPage").value || 4
+    );
+
+  const studentsPerPage =
+    Number(
+      $("studentsPerPage").value || 28
+    );
+
+
+  const attendanceWeekGroups =
+    chunk(
+      weeks,
+      weeksPerPage
+    );
+
+
+  const studentPageCount =
+    Math.max(
+      1,
+      Math.ceil(
+        students.length /
+        studentsPerPage
+      )
+    );
+
+
+  const attendancePages =
+    Math.max(
+      1,
+      attendanceWeekGroups.length
+    ) *
+    studentPageCount;
+
+
+  const coverPages =
+    $("showCover") &&
+    $("showCover").checked
+      ? 1
+      : 0;
+
+
+  const monthCount =
+    getMonthGroups(weeks).length;
+
+
+  const summaryPages =
+    $("showMonthlySummary") &&
+    $("showMonthlySummary").checked
+      ? monthCount *
+        studentPageCount
+      : 0;
+
+
+  return {
+    attendancePages,
+    coverPages,
+    summaryPages,
+    totalPages:
+      attendancePages +
+      coverPages +
+      summaryPages,
+    studentPageCount,
+    monthCount
+  };
 }
 
 
 function updateCounts(){
-  const students=getStudents();
-  const weeks=buildWeeks();
-  const groups=chunk(
-    weeks,
-    Number($("weeksPerPage").value || 4)
-  );
 
-  const studentPages=Math.max(
-    1,
-    Math.ceil(
-      students.length /
-      Number($("studentsPerPage").value || 28)
-    )
-  );
+  const students =
+    getStudents();
 
-  const pages=Math.max(
-    1,
-    groups.length * studentPages
-  );
+  const weeks =
+    buildWeeks();
 
-  $("studentCount").textContent=students.length;
-  $("heroStudentCount").textContent=students.length;
-  $("heroWeekCount").textContent=weeks.length;
-  $("heroPageCount").textContent=pages;
+  const stats =
+    calculatePageStats();
 
-  $("summaryStudents").textContent=students.length;
-  $("summaryWeeks").textContent=weeks.length;
-  $("summaryExcluded").textContent=excludedSet().size;
-  $("summaryPages").textContent=pages;
+
+  $("studentCount").textContent =
+    students.length;
+
+
+  $("heroStudentCount").textContent =
+    students.length;
+
+
+  $("heroWeekCount").textContent =
+    weeks.length;
+
+
+  $("heroPageCount").textContent =
+    stats.totalPages;
+
+
+  $("summaryStudents").textContent =
+    students.length;
+
+
+  $("summaryWeeks").textContent =
+    weeks.length;
+
+
+  $("summaryExcluded").textContent =
+    excludedSet().size;
+
+
+  $("summaryPages").textContent =
+    stats.totalPages;
 }
+
 
 function setStep(step){
   currentStep=Math.max(1,Math.min(5,step));
@@ -1062,70 +1186,515 @@ function sheetHtml({
   `;
 }
 
+function coverSheetHtml(){
+
+  const logo =
+    logoData
+      ? `
+        <div class="att-cover-logo">
+          <img
+            src="${logoData}"
+            alt="شعار المدرسة">
+        </div>
+      `
+      : "";
+
+
+  return `
+    <section
+      class="att-sheet att-cover-sheet ${safe($("template").value)}">
+
+      <div class="att-sheet-inner">
+
+        <div class="att-cover-content">
+
+          ${logo}
+
+          <div class="att-cover-country">
+
+            <strong>
+              المملكة العربية السعودية
+            </strong>
+
+            <div>
+              وزارة التعليم
+            </div>
+
+          </div>
+
+
+          <div class="att-cover-divider"></div>
+
+
+          <h1 class="att-cover-title">
+            سجل الحضور والغياب
+          </h1>
+
+          <div class="att-cover-subtitle">
+            سجل المتابعة اليومية للحضور والانضباط
+          </div>
+
+
+          <div class="att-cover-details">
+
+            <div class="att-cover-detail">
+              <strong>اسم المدرسة:</strong>
+              ${safe(
+                $("school").value ||
+                "................................"
+              )}
+            </div>
+
+            <div class="att-cover-detail">
+              <strong>اسم المعلم:</strong>
+              ${safe(
+                $("teacher").value ||
+                "................................"
+              )}
+            </div>
+
+            <div class="att-cover-detail">
+              <strong>المادة:</strong>
+              ${safe(
+                $("subject").value ||
+                "................................"
+              )}
+            </div>
+
+            <div class="att-cover-detail">
+              <strong>الصف:</strong>
+              ${safe(
+                $("grade").value ||
+                "................................"
+              )}
+            </div>
+
+            <div class="att-cover-detail">
+              <strong>الفصل:</strong>
+              ${safe(
+                $("className").value ||
+                "................................"
+              )}
+            </div>
+
+            <div class="att-cover-detail">
+              <strong>الفصل الدراسي:</strong>
+              ${safe(
+                $("semester").value ||
+                "................................"
+              )}
+            </div>
+
+            <div class="att-cover-detail">
+              <strong>العام الدراسي:</strong>
+              ${safe(
+                $("academicYear").value ||
+                "................................"
+              )}
+            </div>
+
+            <div class="att-cover-detail">
+              <strong>عدد الطلاب:</strong>
+              ${getStudents().length}
+            </div>
+
+          </div>
+
+
+          <div class="att-cover-footer">
+
+            <div>
+              بداية السجل:
+              ${safe(
+                formatDate(
+                  dateFromInput(
+                    $("startDate").value
+                  )
+                )
+              )}
+            </div>
+
+            <div>
+              عدد الأسابيع:
+              ${safe(
+                $("weekCount").value
+              )}
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+  `;
+}
+
+
+function monthlySummarySheetHtml({
+  month,
+  students,
+  studentPageIndex,
+  rows
+}){
+
+  const body =
+    students.map(
+      (student,index)=>{
+
+        const number =
+          student
+            ? (
+                studentPageIndex *
+                rows
+              ) + index + 1
+            : "";
+
+
+        return `
+          <tr>
+
+            <td>
+              ${number}
+            </td>
+
+            <td class="summary-name">
+              ${safe(student)}
+            </td>
+
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+
+            <td></td>
+
+          </tr>
+        `;
+
+      }
+    ).join("");
+
+
+  return `
+    <section
+      class="att-sheet att-summary-sheet ${safe($("template").value)}">
+
+      <div class="att-sheet-inner">
+
+
+        <header class="att-summary-header">
+
+          <div class="att-summary-school">
+
+            <strong>
+              المملكة العربية السعودية
+            </strong>
+
+            <div>
+              وزارة التعليم
+            </div>
+
+            <div>
+              ${safe(
+                $("school").value ||
+                "........................"
+              )}
+            </div>
+
+          </div>
+
+
+          <div class="att-summary-title">
+
+            <h2>
+              الملخص الشهري للحضور والغياب
+            </h2>
+
+            <p>
+              ${safe(month.label)}
+            </p>
+
+          </div>
+
+
+          <div class="att-summary-info">
+
+            <div>
+              المعلم:
+              ${safe(
+                $("teacher").value ||
+                "......................"
+              )}
+            </div>
+
+            <div>
+              العام:
+              ${safe(
+                $("academicYear").value ||
+                "................"
+              )}
+            </div>
+
+          </div>
+
+        </header>
+
+
+        <div class="att-summary-meta">
+
+          <div>
+            <strong>المادة:&nbsp;</strong>
+            ${safe(
+              $("subject").value ||
+              "..............."
+            )}
+          </div>
+
+          <div>
+            <strong>الصف:&nbsp;</strong>
+            ${safe(
+              $("grade").value ||
+              "..............."
+            )}
+          </div>
+
+          <div>
+            <strong>الفصل:&nbsp;</strong>
+            ${safe(
+              $("className").value ||
+              "......."
+            )}
+          </div>
+
+          <div>
+            <strong>الشهر:&nbsp;</strong>
+            ${safe(month.label)}
+          </div>
+
+        </div>
+
+
+        <table class="att-summary-table">
+
+          <thead>
+
+            <tr>
+
+              <th class="summary-number">
+                م
+              </th>
+
+              <th class="summary-name">
+                اسم الطالب
+              </th>
+
+              <th>
+                الحضور
+              </th>
+
+              <th>
+                الغياب
+              </th>
+
+              <th>
+                بعذر
+              </th>
+
+              <th>
+                التأخر
+              </th>
+
+              <th class="summary-notes">
+                ملاحظات
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+            ${body}
+          </tbody>
+
+        </table>
+
+
+        <footer class="att-summary-footer">
+
+          <div>
+            توقيع المعلم:
+            ________________
+          </div>
+
+          <div>
+            وكيل المدرسة:
+            ________________
+          </div>
+
+          <div>
+            مدير المدرسة:
+            ________________
+          </div>
+
+        </footer>
+
+      </div>
+
+    </section>
+  `;
+}
+
+
 function generateRegister(scroll=true){
-  const weeks=buildWeeks();
+
+  const weeks =
+    buildWeeks();
+
 
   if(!weeks.length){
+
     if(scroll){
-      alert("حدد تاريخ بداية السجل.");
+      alert(
+        "حدد تاريخ بداية السجل."
+      );
     }
+
     return;
   }
 
-  const rows=
-    Number($("studentsPerPage").value || 28);
 
-  const weeksPerPage=
-    Number($("weeksPerPage").value || 4);
+  const rows =
+    Number(
+      $("studentsPerPage").value ||
+      28
+    );
 
-  const students=studentPages(
-    getStudents(),
-    rows
-  );
 
-  const weekGroups=chunk(
-    weeks,
-    weeksPerPage
-  );
+  const weeksPerPage =
+    Number(
+      $("weeksPerPage").value ||
+      4
+    );
 
-  const totalPages=
+
+  const students =
+    studentPages(
+      getStudents(),
+      rows
+    );
+
+
+  const weekGroups =
+    chunk(
+      weeks,
+      weeksPerPage
+    );
+
+
+  const attendancePages =
     students.length *
     weekGroups.length;
 
-  let html="";
-  let pageNumber=1;
+
+  let html = "";
+
+
+  /* الغلاف */
+
+  if(
+    $("showCover") &&
+    $("showCover").checked
+  ){
+    html +=
+      coverSheetHtml();
+  }
+
+
+  /* صفحات الحضور */
+
+  let attendancePageNumber = 1;
+
 
   students.forEach(
     (studentGroup,studentPageIndex)=>{
 
-      weekGroups.forEach(weekGroup=>{
+      weekGroups.forEach(
+        weekGroup=>{
 
-        html+=sheetHtml({
-          weeks:weekGroup,
-          students:studentGroup,
-          studentPageIndex,
-          rows,
-          pageNumber,
-          totalPages
-        });
+          html += sheetHtml({
+            weeks:weekGroup,
+            students:studentGroup,
+            studentPageIndex,
+            rows,
+            pageNumber:
+              attendancePageNumber,
+            totalPages:
+              attendancePages
+          });
 
-        pageNumber++;
-      });
+
+          attendancePageNumber++;
+
+        }
+      );
+
     }
   );
 
-  $("preview").innerHTML=html;
+
+  /* الملخص الشهري */
+
+  if(
+    $("showMonthlySummary") &&
+    $("showMonthlySummary").checked
+  ){
+
+    const months =
+      getMonthGroups(weeks);
+
+
+    months.forEach(month=>{
+
+      students.forEach(
+        (studentGroup,studentPageIndex)=>{
+
+          html +=
+            monthlySummarySheetHtml({
+              month,
+              students:studentGroup,
+              studentPageIndex,
+              rows
+            });
+
+        }
+      );
+
+    });
+
+  }
+
+
+  $("preview").innerHTML =
+    html;
+
 
   updateCounts();
   saveDraft();
 
+
   if(scroll){
+
     $("preview").scrollIntoView({
       behavior:"smooth",
       block:"start"
     });
+
   }
 }
+
 
 async function loadTeacher(){
   try{
