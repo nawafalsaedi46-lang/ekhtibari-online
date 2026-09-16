@@ -1745,3 +1745,31 @@ button{
   }
 
 }
+/*  „ÌÌ“ √⁄„œ… «·€Ì«» «·√”»Ê⁄Ì… */
+.absence-head{
+  font-weight:800;
+}
+
+.absence-head:first-of-type{
+  background:#fff4cc !important;
+  color:#7a5a00 !important;
+}
+
+.absence-head:last-of-type{
+  background:#ffe0e0 !important;
+  color:#8a1c1c !important;
+}
+
+@media print{
+  .absence-head:first-of-type{
+    background:#fff4cc !important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+
+  .absence-head:last-of-type{
+    background:#ffe0e0 !important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+}
