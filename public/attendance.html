@@ -1,0 +1,388 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>سجل الحضور والغياب - اختباري</title>
+
+<link rel="stylesheet" href="/dashboard.css">
+<link rel="stylesheet" href="/attendance.css">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+  <aside class="sidebar no-print">
+
+    <div class="brand">
+      <div class="brand-icon">📄</div>
+      <div>
+        <h2>اختباري</h2>
+        <span>منصة المعلم</span>
+      </div>
+    </div>
+
+    <nav>
+
+      <a class="nav-item" href="/dashboard">
+        <span>🏠</span>
+        الرئيسية
+      </a>
+
+      <a class="nav-item" href="/teacher">
+        <span>📝</span>
+        إنشاء اختبار جديد
+      </a>
+
+      <a class="nav-item" href="/exams">
+        <span>📁</span>
+        اختباراتي
+      </a>
+
+      <a class="nav-item" href="/followup">
+        <span>📒</span>
+        سجل المتابعة
+      </a>
+
+      <a class="nav-item active" href="/attendance">
+        <span>📋</span>
+        سجل الحضور والغياب
+      </a>
+
+      <a class="nav-item" href="/support">
+        <span>💬</span>
+        تواصل مع الإدارة
+      </a>
+
+      <a class="nav-item" href="/settings">
+        <span>⚙️</span>
+        الإعدادات
+      </a>
+
+    </nav>
+
+    <button id="logoutBtn" class="logout-btn">
+      <span>🚪</span>
+      تسجيل الخروج
+    </button>
+
+  </aside>
+
+
+  <main class="main attendance-main">
+
+    <header class="top no-print">
+
+      <div>
+        <p class="welcome">أدوات المعلم</p>
+        <h1>سجل الحضور والغياب</h1>
+      </div>
+
+      <div class="account-box">
+        <span>المعلم</span>
+        <strong id="teacherAccount">...</strong>
+      </div>
+
+    </header>
+
+
+    <section class="attendance-hero no-print">
+
+      <div class="attendance-hero-content">
+
+        <div class="hero-chip">
+          📋 سجل ورقي احترافي
+        </div>
+
+        <h2>أنشئ سجل حضور جاهز للطباعة</h2>
+
+        <p>
+          جهّز أسماء الطلاب والأسابيع والأيام والتواريخ تلقائيًا،
+          ثم اطبع السجل وسجّل الحضور والغياب يدويًا.
+        </p>
+
+      </div>
+
+      <div class="hero-register-icon">
+        <span>✓</span>
+        <span>غ</span>
+        <span>ع</span>
+      </div>
+
+    </section>
+
+
+    <section class="attendance-builder no-print">
+
+
+      <div class="attendance-card">
+
+        <div class="card-heading">
+          <div class="card-step">1</div>
+
+          <div>
+            <h2>بيانات السجل</h2>
+            <p>بيانات المدرسة والفصل</p>
+          </div>
+        </div>
+
+
+        <div class="attendance-grid">
+
+          <label>
+            <span>اسم المدرسة</span>
+            <input id="school" placeholder="اسم المدرسة">
+          </label>
+
+          <label>
+            <span>اسم المعلم</span>
+            <input id="teacher" placeholder="اسم المعلم">
+          </label>
+
+          <label>
+            <span>المادة</span>
+            <input id="subject" placeholder="مثال: الدراسات الإسلامية">
+          </label>
+
+          <label>
+            <span>الصف</span>
+            <input id="grade" placeholder="مثال: السادس الابتدائي">
+          </label>
+
+          <label>
+            <span>الفصل</span>
+            <input id="className" placeholder="مثال: أ">
+          </label>
+
+          <label>
+            <span>الفصل الدراسي</span>
+
+            <select id="semester">
+              <option>الفصل الدراسي الأول</option>
+              <option>الفصل الدراسي الثاني</option>
+              <option>الفصل الدراسي الثالث</option>
+            </select>
+          </label>
+
+          <label>
+            <span>العام الدراسي</span>
+            <input id="academicYear" placeholder="مثال: 1448هـ">
+          </label>
+
+          <label>
+            <span>تاريخ بداية السجل</span>
+            <input id="startDate" type="date">
+          </label>
+
+          <label>
+            <span>عدد الأسابيع</span>
+
+            <select id="weekCount">
+              <option value="1">أسبوع واحد</option>
+              <option value="2">أسبوعان</option>
+              <option value="3">3 أسابيع</option>
+              <option value="4">4 أسابيع</option>
+              <option value="5">5 أسابيع</option>
+              <option value="6">6 أسابيع</option>
+              <option value="8">8 أسابيع</option>
+              <option value="10">10 أسابيع</option>
+              <option value="12">12 أسبوعًا</option>
+              <option value="14">14 أسبوعًا</option>
+              <option value="16" selected>16 أسبوعًا</option>
+              <option value="18">18 أسبوعًا</option>
+            </select>
+          </label>
+
+        </div>
+
+      </div>
+
+
+      <div class="attendance-card students-card">
+
+        <div class="card-heading">
+
+          <div class="card-step">2</div>
+
+          <div>
+            <h2>أسماء الطلاب</h2>
+            <p>كل طالب في سطر مستقل</p>
+          </div>
+
+          <strong id="studentCount" class="students-count">
+            0 طالب
+          </strong>
+
+        </div>
+
+        <textarea
+          id="students"
+          class="students-input"
+          placeholder="محمد أحمد علي&#10;عبدالله خالد سالم&#10;سعد محمد أحمد"></textarea>
+
+      </div>
+
+
+      <div class="attendance-card settings-card">
+
+        <div class="card-heading">
+
+          <div class="card-step">3</div>
+
+          <div>
+            <h2>إعدادات الطباعة</h2>
+            <p>خصص شكل السجل قبل الطباعة</p>
+          </div>
+
+        </div>
+
+
+        <div class="attendance-grid">
+
+          <label>
+            <span>طريقة تقسيم الصفحات</span>
+
+            <select id="pageMode">
+              <option value="weeks">كل 4 أسابيع في صفحة</option>
+              <option value="month">تقسيم حسب الشهر</option>
+            </select>
+          </label>
+
+
+          <label>
+            <span>نوع التاريخ</span>
+
+            <select id="dateSystem">
+              <option value="hijri">هجري - أم القرى</option>
+              <option value="gregorian">ميلادي</option>
+            </select>
+          </label>
+
+
+          <label>
+            <span>عدد الطلاب في الصفحة</span>
+
+            <select id="studentsPerPage">
+              <option value="24">24 طالب</option>
+              <option value="26">26 طالب</option>
+              <option value="28" selected>28 طالب</option>
+              <option value="30">30 طالب</option>
+              <option value="32">32 طالب</option>
+            </select>
+          </label>
+
+
+          <label>
+            <span>حجم خط الطلاب</span>
+
+            <select id="fontSize">
+              <option value="small">صغير</option>
+              <option value="normal" selected>متوسط</option>
+              <option value="large">كبير</option>
+            </select>
+          </label>
+
+
+          <label>
+            <span>تصميم السجل</span>
+
+            <select id="template">
+              <option value="official">رسمي</option>
+              <option value="clean">بسيط</option>
+              <option value="modern">حديث</option>
+            </select>
+          </label>
+
+
+          <label>
+            <span>إظهار الرموز</span>
+
+            <select id="showLegend">
+              <option value="yes">نعم</option>
+              <option value="no">لا</option>
+            </select>
+          </label>
+
+
+          <label class="full-field">
+            <span>أيام مستبعدة / إجازات</span>
+
+            <textarea
+              id="excludedDates"
+              rows="4"
+              placeholder="ضع كل تاريخ في سطر مستقل&#10;مثال:&#10;2026-09-23&#10;2026-10-05"></textarea>
+
+            <small>
+              الجمعة والسبت مستبعدان تلقائيًا.
+            </small>
+          </label>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="attendance-actions no-print">
+
+      <button id="generateBtn" class="action-primary">
+        ✨ إنشاء السجل
+      </button>
+
+      <button id="printBtn" class="action-dark">
+        🖨️ طباعة A4
+      </button>
+
+      <button id="clearBtn" class="action-danger">
+        تفريغ البيانات
+      </button>
+
+      <div class="autosave-status" id="saveStatus">
+        ✓ حفظ تلقائي
+      </div>
+
+    </section>
+
+
+    <section class="preview-section">
+
+      <div class="preview-header no-print">
+
+        <div>
+          <span>المعاينة النهائية</span>
+          <h2>سجل الحضور والغياب</h2>
+        </div>
+
+        <strong>A4 أفقي</strong>
+
+      </div>
+
+
+      <div id="preview" class="attendance-preview">
+
+        <div class="empty-preview no-print">
+
+          <div class="empty-icon">📋</div>
+
+          <h3>جاهز لإنشاء السجل</h3>
+
+          <p>
+            أدخل بيانات الفصل وأسماء الطلاب، ثم اضغط «إنشاء السجل».
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+<script src="/attendance.js"></script>
+
+</body>
+</html>

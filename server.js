@@ -1,4 +1,4 @@
-const express = require("express");
+﻿const express = require("express");
 const session = require("express-session");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
@@ -2579,6 +2579,10 @@ app.get("/followup", teacherPage, (req, res) => {
   res.sendFile(path.join(PUBLIC_DIR, "followup.html"));
 });
 
+app.get("/attendance", teacherPage, (req, res) => {
+  res.sendFile(path.join(PUBLIC_DIR, "attendance.html"));
+});
+
 app.get("/support", teacherPage, (req, res) => {
   res.sendFile(path.join(PUBLIC_DIR, "support.html"));
 });
@@ -2627,3 +2631,4 @@ initDb()
     console.error("❌ تعذر تهيئة قاعدة البيانات:", err);
     process.exit(1);
   });
+

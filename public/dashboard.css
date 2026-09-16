@@ -469,3 +469,107 @@ nav{
   }
 
 }
+
+/* ==========================================================
+   ATTENDANCE DASHBOARD TOOL
+========================================================== */
+
+.attendance-dashboard-section{
+  padding:24px;
+  margin-bottom:24px;
+
+  border:1px solid #e7ecf3;
+  border-radius:20px;
+
+  background:#fff;
+}
+
+.attendance-dashboard-card{
+  display:flex;
+  align-items:center;
+  gap:17px;
+
+  padding:19px;
+
+  border:1px solid #e2e9f3;
+  border-radius:17px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fff 0%,
+      #f6f9ff 100%
+    );
+
+  color:inherit;
+  text-decoration:none;
+
+  transition:.18s ease;
+}
+
+.attendance-dashboard-card:hover{
+  transform:translateY(-2px);
+
+  border-color:#bdd3f5;
+
+  box-shadow:0 12px 28px rgba(15,23,42,.07);
+}
+
+.attendance-dashboard-icon{
+  width:60px;
+  height:60px;
+  min-width:60px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:17px;
+
+  background:#e9f2ff;
+
+  font-size:30px;
+}
+
+.attendance-dashboard-content{
+  min-width:0;
+}
+
+.attendance-dashboard-title{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.attendance-dashboard-title h3{
+  margin:0;
+
+  font-size:16px;
+}
+
+.attendance-dashboard-title span{
+  padding:4px 8px;
+
+  border-radius:999px;
+
+  background:#e8f8ef;
+  color:#16814a;
+
+  font-size:10px;
+  font-weight:700;
+}
+
+.attendance-dashboard-content p{
+  margin:7px 0 9px;
+
+  color:#7b8798;
+
+  font-size:12px;
+  line-height:1.7;
+}
+
+.attendance-dashboard-content strong{
+  color:#1769e8;
+
+  font-size:12px;
+}
+

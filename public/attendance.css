@@ -1,0 +1,787 @@
+﻿*{
+  box-sizing:border-box;
+}
+
+.attendance-main{
+  padding-bottom:60px;
+}
+
+.attendance-hero{
+  position:relative;
+  overflow:hidden;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:30px;
+
+  padding:31px 34px;
+  margin-bottom:22px;
+
+  color:#fff;
+
+  border-radius:24px;
+
+  background:
+    radial-gradient(circle at 5% 0%,rgba(255,255,255,.16),transparent 32%),
+    linear-gradient(135deg,#0a3e8c 0%,#1769e8 55%,#2678eb 100%);
+
+  box-shadow:0 18px 45px rgba(23,105,232,.15);
+}
+
+.attendance-hero::after{
+  content:"";
+  position:absolute;
+  width:250px;
+  height:250px;
+  border:35px solid rgba(255,255,255,.05);
+  border-radius:50%;
+  left:-90px;
+  bottom:-145px;
+}
+
+.hero-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+
+  padding:7px 12px;
+
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:999px;
+
+  background:rgba(255,255,255,.12);
+
+  font-size:11px;
+  font-weight:700;
+}
+
+.attendance-hero h2{
+  margin:11px 0 8px;
+  font-size:28px;
+  line-height:1.5;
+}
+
+.attendance-hero p{
+  max-width:720px;
+
+  margin:0;
+
+  opacity:.9;
+
+  font-size:13px;
+  line-height:1.9;
+}
+
+.hero-register-icon{
+  position:relative;
+  z-index:2;
+
+  width:100px;
+  height:100px;
+  min-width:100px;
+
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  place-items:center;
+  gap:5px;
+
+  padding:15px;
+
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:27px;
+
+  background:rgba(255,255,255,.11);
+  backdrop-filter:blur(4px);
+
+  font-size:22px;
+  font-weight:800;
+}
+
+.hero-register-icon span:first-child{
+  grid-column:1/-1;
+  width:100%;
+  text-align:center;
+  border-bottom:1px solid rgba(255,255,255,.18);
+  padding-bottom:7px;
+}
+
+
+.attendance-builder{
+  display:grid;
+  grid-template-columns:1.12fr .88fr;
+  gap:18px;
+}
+
+.attendance-card{
+  padding:23px;
+
+  border:1px solid #e4eaf2;
+  border-radius:20px;
+
+  background:#fff;
+
+  box-shadow:0 7px 22px rgba(15,23,42,.035);
+}
+
+.settings-card{
+  grid-column:1/-1;
+}
+
+.card-heading{
+  display:flex;
+  align-items:center;
+  gap:11px;
+
+  margin-bottom:19px;
+}
+
+.card-step{
+  width:34px;
+  height:34px;
+  min-width:34px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:11px;
+
+  background:#eaf2ff;
+  color:#1769e8;
+
+  font-size:13px;
+  font-weight:800;
+}
+
+.card-heading h2{
+  margin:0 0 3px;
+  font-size:17px;
+}
+
+.card-heading p{
+  margin:0;
+
+  color:#8a96a8;
+
+  font-size:11px;
+}
+
+.students-count{
+  margin-right:auto;
+
+  padding:7px 12px;
+
+  border-radius:999px;
+
+  color:#1769e8;
+  background:#eef5ff;
+
+  font-size:11px;
+}
+
+
+.attendance-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+
+.attendance-grid label{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.attendance-grid label > span{
+  color:#46566d;
+
+  font-size:12px;
+  font-weight:700;
+}
+
+.attendance-grid input,
+.attendance-grid select,
+.attendance-grid textarea,
+.students-input{
+  width:100%;
+
+  padding:11px 12px;
+
+  border:1px solid #dae2ed;
+  border-radius:11px;
+
+  outline:0;
+
+  background:#fbfcfe;
+
+  font-family:inherit;
+  font-size:13px;
+
+  transition:
+    border-color .15s ease,
+    box-shadow .15s ease,
+    background .15s ease;
+}
+
+.attendance-grid input:focus,
+.attendance-grid select:focus,
+.attendance-grid textarea:focus,
+.students-input:focus{
+  border-color:#1769e8;
+
+  background:#fff;
+
+  box-shadow:0 0 0 3px rgba(23,105,232,.08);
+}
+
+.students-input{
+  min-height:310px;
+  resize:vertical;
+  line-height:1.9;
+}
+
+.full-field{
+  grid-column:1/-1;
+}
+
+.full-field textarea{
+  resize:vertical;
+}
+
+.full-field small{
+  color:#8c98a9;
+  font-size:10px;
+  font-weight:400;
+}
+
+
+.attendance-actions{
+  position:sticky;
+  bottom:14px;
+  z-index:50;
+
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  padding:13px;
+  margin:18px 0 25px;
+
+  border:1px solid #e1e7ef;
+  border-radius:17px;
+
+  background:rgba(255,255,255,.96);
+
+  box-shadow:0 14px 35px rgba(15,23,42,.1);
+}
+
+.attendance-actions button{
+  padding:12px 19px;
+
+  border:0;
+  border-radius:11px;
+
+  cursor:pointer;
+
+  font-family:inherit;
+  font-size:13px;
+  font-weight:700;
+
+  transition:.15s;
+}
+
+.attendance-actions button:hover{
+  transform:translateY(-1px);
+}
+
+.action-primary{
+  background:#1769e8;
+  color:#fff;
+}
+
+.action-dark{
+  background:#172236;
+  color:#fff;
+}
+
+.action-danger{
+  background:#fff1f1;
+  color:#c62828;
+}
+
+.autosave-status{
+  margin-right:auto;
+
+  color:#18864b;
+
+  font-size:11px;
+  font-weight:700;
+}
+
+
+.preview-section{
+  margin-top:5px;
+}
+
+.preview-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  margin-bottom:13px;
+}
+
+.preview-header span{
+  color:#8b97a8;
+  font-size:11px;
+}
+
+.preview-header h2{
+  margin:4px 0 0;
+  font-size:19px;
+}
+
+.preview-header strong{
+  padding:8px 11px;
+
+  border-radius:10px;
+
+  background:#eaf2ff;
+  color:#1769e8;
+
+  font-size:11px;
+}
+
+.attendance-preview{
+  overflow:auto;
+
+  padding:24px;
+
+  border:1px solid #d1d9e3;
+  border-radius:20px;
+
+  background:#dfe5ec;
+}
+
+.empty-preview{
+  padding:60px 25px;
+
+  border:1px dashed #b7c2d0;
+  border-radius:16px;
+
+  background:#fff;
+
+  text-align:center;
+  color:#7d8999;
+}
+
+.empty-icon{
+  font-size:48px;
+}
+
+.empty-preview h3{
+  margin:11px 0 7px;
+  color:#35445a;
+}
+
+.empty-preview p{
+  margin:0;
+  font-size:12px;
+}
+
+
+/* =========================================================
+   الورقة
+========================================================= */
+
+.att-sheet{
+  width:297mm;
+  height:210mm;
+
+  margin:0 auto 22px;
+  padding:7mm;
+
+  background:#fff;
+  color:#111;
+
+  box-shadow:0 12px 34px rgba(15,23,42,.16);
+
+  font-family:Tahoma,Arial,sans-serif;
+}
+
+.att-sheet-inner{
+  width:100%;
+  height:196mm;
+
+  display:flex;
+  flex-direction:column;
+
+  padding:3mm;
+
+  border:1.4px solid #111;
+
+  box-sizing:border-box;
+}
+
+
+.att-print-header{
+  min-height:21mm;
+
+  display:grid;
+  grid-template-columns:1fr 1.35fr 1fr;
+  align-items:center;
+
+  padding:0 2mm 2.5mm;
+
+  border-bottom:1.5px solid #111;
+}
+
+.att-ministry{
+  font-size:9px;
+  line-height:1.8;
+}
+
+.att-title{
+  text-align:center;
+}
+
+.att-title h2{
+  margin:0;
+  font-size:18px;
+}
+
+.att-title p{
+  margin:4px 0 0;
+  font-size:9px;
+}
+
+.att-year{
+  text-align:left;
+  font-size:9px;
+  line-height:1.8;
+}
+
+
+.att-meta{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+
+  margin-top:2.5mm;
+
+  border:1px solid #111;
+  border-bottom:0;
+}
+
+.att-meta > div{
+  min-height:7mm;
+
+  display:flex;
+  align-items:center;
+  gap:3px;
+
+  padding:1.3mm 1.7mm;
+
+  border-left:1px solid #111;
+
+  font-size:7.7px;
+}
+
+.att-meta > div:last-child{
+  border-left:0;
+}
+
+
+.att-table{
+  width:100%;
+
+  border-collapse:collapse;
+  table-layout:fixed;
+
+  direction:rtl;
+}
+
+.att-table th,
+.att-table td{
+  border:1px solid #111;
+
+  padding:1px;
+
+  overflow:hidden;
+
+  text-align:center;
+}
+
+.att-table thead th{
+  height:6mm;
+
+  font-size:7px;
+  line-height:1.25;
+}
+
+.att-table tbody td{
+  height:4.45mm;
+
+  font-size:7.3px;
+}
+
+.att-table .col-number{
+  width:7mm;
+}
+
+.att-table .col-name{
+  width:42mm;
+
+  padding-right:2.5mm;
+
+  text-align:right;
+
+  font-size:8px;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+
+.att-table .col-notes{
+  width:19mm;
+}
+
+.att-week{
+  background:#edf1f5;
+
+  font-size:8px !important;
+}
+
+.att-day-name{
+  display:block;
+}
+
+.att-day-date{
+  display:block;
+
+  margin-top:1px;
+
+  font-size:5.8px;
+}
+
+
+.att-sheet.font-small .col-name{
+  font-size:7px;
+}
+
+.att-sheet.font-normal .col-name{
+  font-size:8px;
+}
+
+.att-sheet.font-large .col-name{
+  font-size:9px;
+}
+
+
+.att-footer{
+  margin-top:auto;
+  padding-top:2mm;
+}
+
+.att-legend{
+  display:flex;
+  justify-content:center;
+  gap:17mm;
+
+  padding:1.4mm;
+
+  border:1px solid #111;
+
+  font-size:7.3px;
+}
+
+.att-signatures{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+
+  margin-top:2mm;
+
+  text-align:center;
+  font-size:7.3px;
+}
+
+.att-page-number{
+  margin-top:1.4mm;
+
+  text-align:center;
+
+  font-size:6.8px;
+}
+
+
+/* الرسمي */
+
+.att-sheet.official .att-week{
+  background:#edf1f5;
+}
+
+
+/* البسيط */
+
+.att-sheet.clean .att-sheet-inner{
+  border-color:#64748b;
+}
+
+.att-sheet.clean .att-table th,
+.att-sheet.clean .att-table td,
+.att-sheet.clean .att-meta{
+  border-color:#94a3b8;
+}
+
+.att-sheet.clean .att-week{
+  background:#f8fafc;
+}
+
+
+/* الحديث */
+
+.att-sheet.modern .att-print-header{
+  border-bottom:3px solid #1769e8;
+}
+
+.att-sheet.modern .att-title h2{
+  color:#0d47a1;
+}
+
+.att-sheet.modern .att-week{
+  background:#e7f0ff;
+}
+
+.att-sheet.modern .att-meta{
+  border-color:#557bb0;
+}
+
+
+/* =========================================================
+   Responsive
+========================================================= */
+
+@media(max-width:1000px){
+
+  .attendance-builder{
+    grid-template-columns:1fr;
+  }
+
+  .settings-card{
+    grid-column:auto;
+  }
+
+}
+
+@media(max-width:760px){
+
+  .attendance-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+}
+
+@media(max-width:600px){
+
+  .attendance-hero{
+    padding:24px 20px;
+  }
+
+  .hero-register-icon{
+    display:none;
+  }
+
+  .attendance-grid{
+    grid-template-columns:1fr;
+  }
+
+  .attendance-actions{
+    position:static;
+    flex-wrap:wrap;
+  }
+
+  .attendance-actions button{
+    flex:1 1 45%;
+  }
+
+  .autosave-status{
+    width:100%;
+    margin:0;
+  }
+
+  .attendance-preview{
+    padding:8px;
+  }
+
+}
+
+
+/* =========================================================
+   A4 PRINT
+========================================================= */
+
+@media print{
+
+  @page{
+    size:A4 landscape;
+    margin:0;
+  }
+
+  html,
+  body{
+    width:297mm !important;
+
+    margin:0 !important;
+    padding:0 !important;
+
+    background:#fff !important;
+  }
+
+  .no-print,
+  .sidebar{
+    display:none !important;
+  }
+
+  .dashboard{
+    display:block !important;
+    min-height:0 !important;
+  }
+
+  .main,
+  .attendance-main{
+    width:297mm !important;
+
+    margin:0 !important;
+    padding:0 !important;
+  }
+
+  .preview-section,
+  .attendance-preview{
+    margin:0 !important;
+    padding:0 !important;
+
+    border:0 !important;
+    border-radius:0 !important;
+
+    background:#fff !important;
+
+    overflow:visible !important;
+  }
+
+  .att-sheet{
+    width:297mm !important;
+    height:210mm !important;
+
+    margin:0 !important;
+    padding:7mm !important;
+
+    box-shadow:none !important;
+
+    page-break-after:always;
+    break-after:page;
+  }
+
+  .att-sheet:last-child{
+    page-break-after:auto;
+    break-after:auto;
+  }
+
+}
